@@ -1,0 +1,24 @@
+{
+  "name": "website-sex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "initDb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jimp": "^0.16.13",
+    "potrace": "^2.1.8",
+    "resend": "^6.9.4",
+    "sqlite3": "^6.0.1",
+    "sslcommerz-lts": "^1.2.0"
+  }
+}
