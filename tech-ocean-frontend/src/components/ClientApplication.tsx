@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
 import Footer from './Footer';
-import CompareBar from './CompareBar';
 import { MOCK_CATEGORIES } from '@/data/categories';
 
 interface ClientApplicationProps {
@@ -97,11 +96,7 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
                     {children}
                 </main>
                 <Footer />
-                <CompareBar
-                    items={compareItems}
-                    onRemove={removeFromCompare}
-                    onClear={clearCompare}
-                />
+
                 {toastData && <Toast msg={toastData.msg} type={toastData.type} />}
             </div>
         </CompareContext.Provider>

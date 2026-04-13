@@ -1,6 +1,6 @@
 export const MOCK_CATEGORIES = [
   {
-      id: 1, name: "Laptop", icon: "fas fa-laptop", slug: "laptop",
+      id: 1, name: "Laptop", reactIcon: "FaLaptop", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "laptop",
       children: [
           { id: 101, name: "Gaming Laptop", slug: "gaming-laptop" },
           { id: 102, name: "Business Laptop", slug: "business-laptop" },
@@ -10,7 +10,7 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 2, name: "Desktop PC", icon: "fas fa-desktop", slug: "desktop-pc",
+      id: 2, name: "Desktop PC", reactIcon: "FaDesktop", iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.12)", slug: "desktop-pc",
       children: [
           { id: 201, name: "Custom PC", slug: "custom-pc" },
           { id: 202, name: "Brand PC", slug: "brand-pc" },
@@ -19,7 +19,7 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 3, name: "Gaming PC", icon: "fas fa-gamepad", slug: "gaming-pc",
+      id: 3, name: "Gaming PC", reactIcon: "FaGamepad", iconColor: "#EF4444", iconBg: "rgba(239, 68, 68, 0.12)", slug: "gaming-pc",
       children: [
           { id: 301, name: "Pre-built Gaming PC", slug: "pre-built-gaming-pc" },
           { id: 302, name: "Gaming PC Component", slug: "gaming-pc-component" },
@@ -27,7 +27,7 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 4, name: "CCTV & IP Camera", icon: "fas fa-video", slug: "cctv-ip-camera",
+      id: 4, name: "CCTV & IP Camera", reactIcon: "FaVideo", iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.12)", slug: "cctv-ip-camera",
       children: [
           { id: 401, name: "IP Camera", slug: "ip-camera" },
           { id: 402, name: "Analog Camera", slug: "analog-camera" },
@@ -35,7 +35,7 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 5, name: "Office Equipment", icon: "fas fa-print", slug: "office-equipment",
+      id: 5, name: "Office Equipment", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-equipment",
       children: [
           { id: 501, name: "Printer", slug: "printer" },
           { id: 502, name: "Router & Switch", slug: "router-switch" },
@@ -43,7 +43,7 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 6, name: "Gadget", icon: "fas fa-headphones", slug: "gadget",
+      id: 6, name: "Gadget", reactIcon: "FaHeadphones", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget",
       children: [
           { id: 601, name: "Smart Watch", slug: "smart-watch" },
           { id: 602, name: "Earbuds / Headphone", slug: "earbuds" },
@@ -51,21 +51,21 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 7, name: "Mobile", icon: "fas fa-mobile-alt", slug: "mobile",
+      id: 7, name: "Mobile", reactIcon: "FaMobileAlt", iconColor: "#EC4899", iconBg: "rgba(236, 72, 153, 0.12)", slug: "mobile",
       children: [
           { id: 701, name: "Smartphone", slug: "smartphone" },
           { id: 702, name: "Tablet", slug: "tablet" }
       ]
   },
   {
-      id: 8, name: "Home Appliance", icon: "fas fa-home", slug: "home-appliance",
+      id: 8, name: "Home Appliance", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "home-appliance",
       children: [
           { id: 801, name: "Air Conditioner", slug: "air-conditioner" },
           { id: 802, name: "Washing Machine", slug: "washing-machine" }
       ]
   },
   {
-      id: 9, name: "Brand", icon: "fas fa-tags", slug: "brand",
+      id: 9, name: "Brand", reactIcon: "FaTags", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "brand",
       children: [
           { id: 901, name: "Apple", slug: "apple" },
           { id: 902, name: "Samsung", slug: "samsung" },
@@ -73,3 +73,4 @@ export const MOCK_CATEGORIES = [
       ]
   }
 ];
+

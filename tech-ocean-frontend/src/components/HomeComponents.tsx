@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
+import BrandSectionTitle from '@/components/BrandSectionTitle';
+import * as FaIcons from 'react-icons/fa';
 
 export const HeroBanner = () => (
     <section className="hero-section">
@@ -67,29 +69,32 @@ export const FeaturesBar = () => (
 
 export const CategoryList = ({ categories }: { categories: any[] }) => (
     <section className="categories-section container">
-        <div className="section-header">
-            <h2>Featured Category</h2>
-            <p>Get Your Desired Product from Featured Category!</p>
-        </div>
+        <BrandSectionTitle 
+            title="SHOP BY CATEGORY" 
+            subtitle="Browse our collection"
+        />
         <div className="categories-grid">
-            {categories.map((cat, idx) => (
-                <Link href={`/category/${cat.id}`} key={idx} className="category-card">
-                    <div className="category-icon">
-                        <i className={cat.icon || "fas fa-box"}></i>
-                    </div>
-                    <h4>{cat.name}</h4>
-                </Link>
-            ))}
+            {categories.map((cat, idx) => {
+                const Icon = cat.reactIcon ? (FaIcons as any)[cat.reactIcon] : FaIcons.FaBox;
+                return (
+                    <Link href={`/category/${cat.id}`} key={idx} className="category-card">
+                        <div className="category-icon" style={{ background: cat.iconBg || 'rgba(0,0,0,0.05)' }}>
+                            {Icon && <Icon color={cat.iconColor || '#555'} size={36} />}
+                        </div>
+                        <h4 className="category-name">{cat.name}</h4>
+                    </Link>
+                );
+            })}
         </div>
     </section>
 );
 
 export const LatestBlogs = ({ blogs }: { blogs: any[] }) => (
     <section className="blogs-section container mt-5">
-        <div className="section-header">
-            <h2>Latest Blogs</h2>
-            <p>Catch up on the latest tech news and reviews!</p>
-        </div>
+        <BrandSectionTitle 
+            title="LATEST BLOGS" 
+            subtitle="Catch up on the latest tech news and reviews!"
+        />
         <div className="blogs-grid">
             {blogs.length === 0 && <p style={{textAlign: 'center', gridColumn: '1/-1'}}>Coming soon...</p>}
             {blogs.map(blog => (

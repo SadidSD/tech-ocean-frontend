@@ -26,10 +26,6 @@ export const StarRating = ({ rating = 0, count = 0 }: { rating?: number, count?:
 };
 
 export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: (p: any, q: number, f: boolean) => void }) => {
-    const { addToCompare, removeFromCompare, isInCompare, compareItems } = useContext(CompareContext);
-    const inCompare   = isInCompare(product.id);
-    const compareDisabled = !inCompare && compareItems.length >= 2;
-
     return (
         <div className="product-card">
             <div className={`product-status ${product.status === 'In Stock' || product.status.includes('Stock') ? 'instock' : 'out'}`}>
@@ -47,15 +43,7 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     <button className="btn-icon" title="Add to Cart" onClick={(e) => { e.preventDefault(); if(addToCart) addToCart(product, 1, false); }}>
                         <i className="fas fa-shopping-cart"></i>
                     </button>
-                    <button
-                        className={`btn-icon ${inCompare ? 'btn-icon--active' : ''}`}
-                        title={inCompare ? 'Remove from Compare' : 'Add to Compare'}
-                        onClick={(e) => { e.preventDefault(); inCompare ? removeFromCompare(product.id) : addToCompare(product); }}
-                        disabled={compareDisabled}
-                        style={compareDisabled ? {opacity:0.4, cursor:'not-allowed'} : {}}
-                    >
-                        <i className="fas fa-sync-alt"></i>
-                    </button>
+
                 </div>
             </div>
             <Link href={`/product/${product.id}`} className="product-title">{product.title}</Link>
@@ -70,18 +58,7 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                 </span>
             </div>
 
-            {/* Compare checkbox row */}
-            <div className="product-compare-row">
-                <label className="product-compare-label" style={compareDisabled && !inCompare ? {opacity:0.4, cursor:'not-allowed'} : {}}>
-                    <input
-                        type="checkbox"
-                        checked={inCompare}
-                        disabled={compareDisabled}
-                        onChange={() => inCompare ? removeFromCompare(product.id) : addToCompare(product)}
-                    />
-                    <span>{inCompare ? '✓ Added to Compare' : 'Compare'}</span>
-                </label>
-            </div>
+
         </div>
     );
 };

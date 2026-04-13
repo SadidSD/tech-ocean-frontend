@@ -1,33 +1,48 @@
 'use client';
 
 import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import { useBuilderStorage } from '@/hooks/useBuilderStorage';
 import { MOCK_PC_COMPONENTS } from '@/data/products';
 import { CartContext } from '@/components/ClientApplication';
+import BrandSectionTitle from '@/components/BrandSectionTitle';
+import * as FaIcons from 'react-icons/fa';
+import * as GiIcons from 'react-icons/gi';
+import * as SiIcons from 'react-icons/si';
+import * as BsIcons from 'react-icons/bs';
+
+const getIconComponent = (iconName: string) => {
+    if (!iconName) return FaIcons.FaBox;
+    if (iconName.startsWith('Gi')) return (GiIcons as any)[iconName] || FaIcons.FaBox;
+    if (iconName.startsWith('Si')) return (SiIcons as any)[iconName] || FaIcons.FaBox;
+    if (iconName.startsWith('Bs')) return (BsIcons as any)[iconName] || FaIcons.FaBox;
+    return (FaIcons as any)[iconName] || FaIcons.FaBox;
+};
 
 const PC_BUILDER_CONFIG = [
-    { key: 'cpu',         label: 'CPU',          icon: 'fa-microchip', required: true  },
-    { key: 'motherboard', label: 'Motherboard',   icon: 'fa-server',   required: true  },
-    { key: 'gpu',         label: 'GPU',           icon: 'fa-tv',       required: false },
-    { key: 'ram',         label: 'RAM',           icon: 'fa-memory',   required: true  },
-    { key: 'storage',     label: 'Storage',       icon: 'fa-hdd',      required: true  },
-    { key: 'psu',         label: 'Power Supply',  icon: 'fa-plug',     required: true  },
-    { key: 'cooler',      label: 'CPU Cooler',    icon: 'fa-fan',      required: false },
-    { key: 'casing',      label: 'Casing',        icon: 'fa-desktop',  required: true  },
+    { key: 'cpu',         label: 'CPU',          reactIcon: 'BsCpu',       required: true  },
+    { key: 'motherboard', label: 'Motherboard',  reactIcon: 'GiCircuitry', required: true  },
+    { key: 'gpu',         label: 'GPU',          reactIcon: 'BsGpuCard',   required: false },
+    { key: 'ram',         label: 'RAM',          reactIcon: 'FaMemory',    required: true  },
+    { key: 'storage',     label: 'Storage',      reactIcon: 'FaHdd',       required: true  },
+    { key: 'psu',         label: 'Power Supply', reactIcon: '', imageSrc: '/img/psu_logo.png', required: true  },
+    { key: 'cooler',      label: 'CPU Cooler',   reactIcon: 'GiComputerFan', required: false },
+    { key: 'casing',      label: 'Casing',       reactIcon: 'BsPc',        required: true  },
 ];
 
 const PC_PERIPHERALS_CONFIG = [
-    { key: 'monitor',   label: 'Monitor',   icon: 'fa-tv'         },
-    { key: 'keyboard',  label: 'Keyboard',  icon: 'fa-keyboard'   },
-    { key: 'mouse',     label: 'Mouse',     icon: 'fa-mouse'      },
-    { key: 'headphone', label: 'Headphone', icon: 'fa-headphones' },
+    { key: 'monitor',   label: 'Monitor',   reactIcon: 'FaDesktop'    },
+    { key: 'keyboard',  label: 'Keyboard',  reactIcon: 'FaKeyboard'   },
+    { key: 'mouse',     label: 'Mouse',     reactIcon: 'FaMouse'      },
+    { key: 'headphone', label: 'Headphone', reactIcon: 'FaHeadphones' },
 ];
 
 const REQUIRED_KEYS = PC_BUILDER_CONFIG.filter(c => c.required).map(c => c.key);
 
 export default function PCBuilderPage() {
     const { addToCart } = useContext(CartContext);
-    const [selections, setSelections]       = useState<any>({});
-    const [showSelection, setShowSelection] = useState<string | null>(null);
+    const router = useRouter();
+    const [selections, setSelections] = useBuilderStorage<Record<string, any>>('pcBuilderState', {});
     const [hideEmpty, setHideEmpty]         = useState(false);
 
     const totalPrice      = Object.values(selections).reduce((s: number, i: any) => s + (i?.price   || 0), 0) as number;
@@ -36,12 +51,10 @@ export default function PCBuilderPage() {
     const progressPct      = Math.round((selectedRequired / REQUIRED_KEYS.length) * 100);
     const totalSelectedCount = Object.values(selections).filter(Boolean).length;
 
-    const handleSelect = (category: string, item: any) => {
-        setSelections((prev: any) => ({ ...prev, [category]: item }));
-        setShowSelection(null);
-    };
     const handleRemove = (key: string) => {
-        setSelections((prev: any) => { const n = {...prev}; delete n[key]; return n; });
+        const n = {...selections}; 
+        delete n[key]; 
+        setSelections(n);
     };
     const handleAddToCart = () => {
         Object.values(selections).forEach((item: any) => { if (item) addToCart(item, 1, false); });
@@ -51,14 +64,18 @@ export default function PCBuilderPage() {
     const renderRow = (config: any) => {
         const sel = selections[config.key];
         if (hideEmpty && !sel) return null;
+        const Icon = getIconComponent(config.reactIcon);
         return (
-            <div key={config.key} className={`sr-row ${sel ? 'sr-row--selected' : ''}`}>
+            <div key={config.key} className={`component-row ${sel ? 'sr-row--selected' : ''}`}>
                 {/* Image / Icon column */}
-                <div className="sr-img">
-                    {sel
-                        ? <div className="sr-img-selected"><i className={`fas ${sel.imgIcon || config.icon}`}></i></div>
-                        : <div className="sr-img-placeholder"><i className={`fas ${config.icon}`}></i></div>
-                    }
+                <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
+                    <div className="component-icon">
+                        {config.imageSrc ? (
+                            <img src={config.imageSrc} alt={config.label} style={{width: 28, height: 28, objectFit: 'contain'}} />
+                        ) : (
+                            Icon && <Icon />
+                        )}
+                    </div>
                 </div>
 
                 {/* Details column */}
@@ -66,7 +83,7 @@ export default function PCBuilderPage() {
                     <div className="sr-comp-header">
                         <span className="sr-comp-label">{config.label}</span>
                         {config.required !== undefined && (
-                            <span className={config.required ? 'sr-badge sr-badge--req' : 'sr-badge sr-badge--opt'}>
+                            <span className={config.required ? 'required-badge' : 'optional-badge'}>
                                 {config.required ? 'Required' : 'Optional'}
                             </span>
                         )}
@@ -97,13 +114,13 @@ export default function PCBuilderPage() {
                 <div className="sr-actions">
                     {sel ? (
                         <>
-                            <button className="sr-btn-change" onClick={() => setShowSelection(config.key)}>Change</button>
+                            <button className="change-btn" onClick={() => router.push(`/pc-builder/select/${config.key}`)}>Change</button>
                             <button className="sr-btn-remove" title="Remove" onClick={() => handleRemove(config.key)}>
                                 <i className="fas fa-times"></i>
                             </button>
                         </>
                     ) : (
-                        <button className="sr-btn-select" onClick={() => setShowSelection(config.key)}>Select</button>
+                        <button className="select-btn" onClick={() => router.push(`/pc-builder/select/${config.key}`)}>Select</button>
                     )}
                 </div>
             </div>
@@ -151,16 +168,19 @@ export default function PCBuilderPage() {
             </div>
 
             {/* Core components section */}
-            <div className="sr-section-label">Core Components</div>
+            <BrandSectionTitle 
+                title="CORE COMPONENTS" 
+                subtitle="Select essential parts for your build"
+            />
             <div className="sr-rows">
                 {PC_BUILDER_CONFIG.map(c => renderRow(c))}
             </div>
 
             {/* Peripherals section */}
-            <div className="sr-section-label" style={{marginTop:'24px'}}>
-                Peripherals &amp; Others
-                <span className="sr-section-note">(Optional)</span>
-            </div>
+            <BrandSectionTitle 
+                title="PERIPHERALS & OTHERS" 
+                subtitle="Complete your setup with accessories"
+            />
             <div className="sr-rows">
                 {PC_PERIPHERALS_CONFIG.map(c => renderRow(c))}
             </div>
@@ -195,64 +215,7 @@ export default function PCBuilderPage() {
                 </div>
             </div>
 
-            {/* Modal */}
-            {showSelection && (
-                <div className="sr-modal-overlay" onClick={() => setShowSelection(null)}>
-                    <div className="sr-modal" onClick={e => e.stopPropagation()}>
-                        <div className="sr-modal-hdr">
-                            <div>
-                                <h3 className="sr-modal-title">
-                                    Select {currentConfig.find(c => c.key === showSelection)?.label}
-                                </h3>
-                                <p className="sr-modal-subtitle">
-                                    {((MOCK_PC_COMPONENTS as any)[showSelection] || []).length} options available
-                                </p>
-                            </div>
-                            <button className="sr-modal-close" onClick={() => setShowSelection(null)}>
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div className="sr-modal-list">
-                            {((MOCK_PC_COMPONENTS as any)[showSelection] || []).map((item: any) => {
-                                const isCurrentlySelected = selections[showSelection!]?.id === item.id;
-                                return (
-                                    <div
-                                        key={item.id}
-                                        className={`sr-modal-item ${isCurrentlySelected ? 'sr-modal-item--active' : ''}`}
-                                        onClick={() => handleSelect(showSelection!, item)}
-                                    >
-                                        <div className="sr-modal-item-icon">
-                                            <i className={`fas ${item.imgIcon || 'fa-box'}`}></i>
-                                        </div>
-                                        <div className="sr-modal-item-info">
-                                            <strong>{item.title}</strong>
-                                            {item.specs && <span>{item.specs}</span>}
-                                        </div>
-                                        <div className="sr-modal-item-right">
-                                            {item.wattage > 0 && (
-                                                <div className="sr-modal-item-wattage">
-                                                    <i className="fas fa-bolt"></i> {item.wattage}W
-                                                </div>
-                                            )}
-                                            <div className="sr-modal-item-price">৳{item.price.toLocaleString()}</div>
-                                        </div>
-                                        {isCurrentlySelected
-                                            ? <button className="sr-btn-selected"><i className="fas fa-check"></i> Selected</button>
-                                            : <button className="sr-btn-select" onClick={e => { e.stopPropagation(); handleSelect(showSelection!, item); }}>Select</button>
-                                        }
-                                    </div>
-                                );
-                            })}
-                            {((MOCK_PC_COMPONENTS as any)[showSelection] || []).length === 0 && (
-                                <div style={{textAlign:'center', padding:'50px 20px', color:'#aaa'}}>
-                                    <i className="fas fa-box-open" style={{fontSize:'48px', marginBottom:'12px', display:'block'}}></i>
-                                    No components available for this category.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
+
         </div>
     );
 }

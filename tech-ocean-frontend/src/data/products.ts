@@ -114,3 +114,25 @@ export const MOCK_PC_COMPONENTS = {
         { id: 'pc_hp_2', title: 'Razer BlackShark V2 X Gaming Headset', specs: 'Wired 3.5mm | 7.1 Surround | 50mm Drivers | With Mic', price: 5500, wattage: 0, imgIcon: 'fa-headphones', type: 'Headphone' }
     ]
 };
+
+export const MOCK_CCTV_COMPONENTS = {
+    cameraType: [
+        { id: 'cctv_cam_1', title: 'Dahua HAC-B1A21P 2MP Bullet Camera',          specs: '2MP | HDCVI | IR 20m | IP67 | Bullet Type',           price: 1800,  imgIcon: 'fa-video' },
+        { id: 'cctv_cam_2', title: 'Hikvision DS-2CE56D0T-IRPF 2MP Dome Camera',  specs: '2MP | HDTVI | IR 20m | IP66 | Dome Type',             price: 1600,  imgIcon: 'fa-video' },
+        { id: 'cctv_cam_3', title: 'Dahua SD22204UE-GN 2MP PTZ Camera',           specs: '2MP | IP | 4x Optical Zoom | Pan/Tilt/Zoom',          price: 15500, imgIcon: 'fa-video' }
+    ],
+    recorder: [
+        { id: 'cctv_rec_1', title: 'Dahua XVR1B04-I 4 Channel Penta-brid DVR',   specs: '4 Channel | 5-in-1 | H.265+ | 1x SATA | 1080P',      price: 3500,  imgIcon: 'fa-server' },
+        { id: 'cctv_rec_2', title: 'Hikvision DS-7108HGHI-F1 8 Channel DVR',     specs: '8 Channel | Turbo HD | H.265 | 1x SATA | 1080P',     price: 5500,  imgIcon: 'fa-server' },
+        { id: 'cctv_rec_3', title: 'Dahua NVR4116HS-4KS2 16 Channel NVR',        specs: '16 Channel | H.265+ | 4K | 2x SATA | PoE-capable', price: 12500, imgIcon: 'fa-server' }
+    ],
+    storage: [
+        { id: 'cctv_st_1', title: 'Western Digital Purple 1TB Surveillance HDD', specs: '1TB | SATA 6Gb/s | 5400RPM | 64MB Cache | 24/7',    price: 5500,  imgIcon: 'fa-hdd' },
+        { id: 'cctv_st_2', title: 'Seagate SkyHawk 2TB Surveillance Hard Drive', specs: '2TB | SATA 6Gb/s | 5900RPM | 256MB Cache | 24/7',   price: 7500,  imgIcon: 'fa-hdd' },
+        { id: 'cctv_st_3', title: 'Western Digital Purple 4TB Surveillance HDD', specs: '4TB | SATA 6Gb/s | 5400RPM | 256MB Cache | 24/7',   price: 12000, imgIcon: 'fa-hdd' }
+    ],
+    powerSupply: [
+        { id: 'cctv_ps_1', title: '12V 5A CCTV Power Supply Adapter',            specs: '12V DC | 5A | 60W | Single Output',                  price: 450,   imgIcon: 'fa-plug' },
+        { id: 'cctv_ps_2', title: '12V 10A 9 Channel Central Power Supply Box',  specs: '12V DC | 10A | 9 Channel | Metal Housing',           price: 1500,  imgIcon: 'fa-plug' }
+    ]
+};

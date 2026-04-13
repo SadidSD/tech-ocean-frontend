@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { FaDesktop, FaVideo } from 'react-icons/fa';
 
 interface Category {
   id: number;
@@ -16,34 +17,6 @@ interface NavigationProps {
   compareCount: number;
   categories: Category[];
 }
-
-export const TopBar = () => {
-    return (
-        <div className="top-bar">
-            <div className="container top-bar-inner">
-                <div className="top-bar-left">
-                    <a href="#"><i className="LocationIcon fas fa-map-marker-alt"></i> Find a Store</a>
-                    <a href="#"><i className="fas fa-phone-alt"></i> 16793</a>
-                </div>
-                <div className="top-bar-right">
-                    <a href="#">Account <i className="fas fa-angle-down"></i></a>
-                    <a href="#">Contact Us</a>
-                    <div className="action-dropdown-wrapper right-align">
-                        <a href="#">System Builder <i className="fas fa-angle-down" style={{marginLeft: '2px'}}></i></a>
-                        <div className="system-builder-dropdown" style={{padding: '10px 0'}}>
-                            <Link href="/pc-builder">
-                                <i className="fas fa-desktop" style={{fontSize: '18px', color: '#333'}}></i> PC Builder
-                            </Link>
-                            <Link href="/cctv-builder">
-                                <i className="fas fa-video" style={{fontSize: '18px', color: '#1B5B97'}}></i> CCTV Quotation
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCount: number, compareCount: number, onMenuToggle: () => void }) => {
     return (
@@ -105,14 +78,14 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             border: '1px solid #eaeaea'
                         }}>
                             <Link href="/pc-builder" style={{display:'flex', alignItems:'center', gap:'12px', padding:'14px 18px', color:'#222', textDecoration:'none', borderBottom:'1px solid #f0f0f0', transition:'background 0.2s'}} onMouseOver={e=>(e.currentTarget.style.background='#f8f9fa')} onMouseOut={e=>(e.currentTarget.style.background='transparent')}>
-                                <i className="fas fa-desktop" style={{color:'#1B5B97', fontSize:'18px', width:'22px'}}></i>
+                                <FaDesktop color="#1B5B97" size={18} style={{width: '22px'}} />
                                 <div>
                                     <div style={{fontWeight:600, fontSize:'14px'}}>PC Builder</div>
                                     <div style={{fontSize:'12px', color:'#888'}}>Build your custom PC</div>
                                 </div>
                             </Link>
                             <Link href="/cctv-builder" style={{display:'flex', alignItems:'center', gap:'12px', padding:'14px 18px', color:'#222', textDecoration:'none', transition:'background 0.2s'}} onMouseOver={e=>(e.currentTarget.style.background='#f8f9fa')} onMouseOut={e=>(e.currentTarget.style.background='transparent')}>
-                                <i className="fas fa-video" style={{color:'#1B5B97', fontSize:'18px', width:'22px'}}></i>
+                                <FaVideo color="#1B5B97" size={18} style={{width: '22px'}} />
                                 <div>
                                     <div style={{fontWeight:600, fontSize:'14px'}}>CCTV Quotation</div>
                                     <div style={{fontSize:'12px', color:'#888'}}>Get a security quote</div>
@@ -120,16 +93,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             </Link>
                         </div>
                     </div>
-                    <a href="/compare" className="action-item d-none-mobile">
-                        <div className="action-icon">
-                            <i className="fas fa-sync-alt"></i>
-                            {compareCount > 0 && <span className="badge" style={{background:'#1B5B97'}}>{compareCount}</span>}
-                        </div>
-                        <div className="action-text">
-                            <span className="text-top">Compare</span>
-                            <span className="text-bottom">Product</span>
-                        </div>
-                    </a>
+
                     <a href="#" className="action-item">
                         <div className="action-icon">
                             <i className="fas fa-user"></i>
@@ -189,7 +153,6 @@ export default function Navigation({ cartCount, compareCount, categories }: Navi
 
     return (
         <>
-            <TopBar />
             <MainHeader cartCount={cartCount} compareCount={compareCount} onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
             <MegaMenu isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={() => setIsMobileMenuOpen(false)} categories={categories} />
         </>

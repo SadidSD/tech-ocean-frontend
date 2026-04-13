@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useContext } from 'react';
+import BrandSectionTitle from '@/components/BrandSectionTitle';
 import { HeroBanner, FeaturesBar, CategoryList, LatestBlogs } from '@/components/HomeComponents';
 import { ProductCard } from '@/components/ProductComponents';
 import { MOCK_CATEGORIES } from '@/data/categories';
@@ -17,10 +18,10 @@ export default function Home() {
             <CategoryList categories={MOCK_CATEGORIES} />
             
             <section className="products-section container">
-                <div className="section-header">
-                    <h2>Featured Products</h2>
-                    <p>Check & Get Your Desired Product!</p>
-                </div>
+                <BrandSectionTitle 
+                    title="FEATURED PRODUCTS" 
+                    subtitle="Check & get your desired product"
+                />
                 <div className="products-grid">
                     {MOCK_PRODUCTS.map(prod => (
                         <ProductCard key={prod.id} product={prod} addToCart={addToCart} />

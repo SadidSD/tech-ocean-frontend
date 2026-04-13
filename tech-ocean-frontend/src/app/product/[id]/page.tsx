@@ -3,7 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { useParams } from 'next/navigation';
 import { MOCK_PRODUCTS } from '@/data/products';
-import { CartContext, CompareContext } from '@/components/ClientApplication';
+import { CartContext } from '@/components/ClientApplication';
 import { StarRating } from '@/components/ProductComponents';
 import Link from 'next/link';
 
@@ -38,10 +38,8 @@ const DeliveryEstimator = ({ price = 0 }) => {
 export default function ProductDetail() {
     const params = useParams();
     const { addToCart } = useContext(CartContext);
-    const { addToCompare, removeFromCompare, isInCompare } = useContext(CompareContext);
     const product = MOCK_PRODUCTS.find(p => String(p.id) === String(params.id));
     const [qty, setQty] = useState(1);
-    const inCompare = product ? isInCompare(product.id) : false;
 
     if (!product) {
         return <div className="container" style={{padding:'100px 0', textAlign:'center'}}><h2>Product Not found</h2></div>;
@@ -75,21 +73,7 @@ export default function ProductDetail() {
                         <button className="btn-add-cart" onClick={() => addToCart(product, qty, false)}>Add to Cart</button>
                         <button className="btn-buy-now" onClick={() => addToCart(product, qty, true)}>Buy Now</button>
                     </div>
-                    <div style={{marginTop:'12px', display:'flex', gap:'12px', flexWrap:'wrap'}}>
-                        <button
-                            className="action-icon-btn"
-                            style={inCompare ? {borderColor:'#1B5B97', color:'#1B5B97', background:'#f0f7ff'} : {}}
-                            onClick={() => inCompare ? removeFromCompare(product!.id) : addToCompare(product!)}
-                        >
-                            <i className={`fas ${inCompare ? 'fa-check-circle' : 'fa-sync-alt'}`}></i>
-                            {inCompare ? 'Added to Compare' : '+ Add to Compare'}
-                        </button>
-                        {inCompare && (
-                            <Link href="/compare" className="action-icon-btn" style={{color:'#1B5B97', borderColor:'#1B5B97'}}>
-                                <i className="fas fa-columns"></i> View Comparison
-                            </Link>
-                        )}
-                    </div>
+
                     <DeliveryEstimator price={parseFloat(String(product.price).replace(/,/g,'').replace('৳','')) || 0} />
                 </div>
             </div>

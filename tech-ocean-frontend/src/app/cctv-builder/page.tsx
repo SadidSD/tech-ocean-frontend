@@ -1,7 +1,18 @@
 'use client';
 
 import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import { useBuilderStorage } from '@/hooks/useBuilderStorage';
 import { CartContext } from '@/components/ClientApplication';
+import BrandSectionTitle from '@/components/BrandSectionTitle';
+import * as FaIcons from 'react-icons/fa';
+import * as GiIcons from 'react-icons/gi';
+
+const getIconComponent = (iconName: string) => {
+    if (!iconName) return FaIcons.FaBox;
+    if (iconName.startsWith('Gi')) return (GiIcons as any)[iconName] || FaIcons.FaBox;
+    return (FaIcons as any)[iconName] || FaIcons.FaBox;
+};
 
 const MOCK_CCTV_COMPONENTS = {
     cameraType: [
@@ -26,19 +37,19 @@ const MOCK_CCTV_COMPONENTS = {
 };
 
 const CCTV_CONFIG = [
-    { key: 'cameraType',  label: 'Camera Type',       icon: 'fa-video',  required: true },
-    { key: 'recorder',    label: 'NVR / DVR Recorder', icon: 'fa-server', required: true },
-    { key: 'storage',     label: 'Surveillance HDD',   icon: 'fa-hdd',    required: true },
-    { key: 'powerSupply', label: 'Power Supply',        icon: 'fa-plug',   required: true },
+    { key: 'cameraType',  label: 'Camera Type',        reactIcon: 'FaVideo',  required: true },
+    { key: 'recorder',    label: 'NVR / DVR Recorder', reactIcon: 'GiServerRack', required: true },
+    { key: 'storage',     label: 'Surveillance HDD',   reactIcon: 'FaHdd',    required: true },
+    { key: 'powerSupply', label: 'Power Supply',       reactIcon: 'FaPlug',   required: true },
 ];
 
 const REQUIRED_KEYS = CCTV_CONFIG.filter(c => c.required).map(c => c.key);
 
 export default function CCTVBuilderPage() {
     const { addToCart } = useContext(CartContext);
-    const [selections, setSelections]       = useState<any>({});
+    const router = useRouter();
+    const [selections, setSelections]       = useBuilderStorage<Record<string, any>>('cctvBuilderState', {});
     const [cameraCount, setCameraCount]     = useState(4);
-    const [showSelection, setShowSelection] = useState<string | null>(null);
     const [hideEmpty, setHideEmpty]         = useState(false);
 
     const totalPrice = Object.entries(selections).reduce((sum: number, [key, item]: [string, any]) => {
@@ -50,12 +61,10 @@ export default function CCTVBuilderPage() {
     const progressPct       = Math.round((selectedRequired / REQUIRED_KEYS.length) * 100);
     const totalSelectedCount = Object.values(selections).filter(Boolean).length;
 
-    const handleSelect = (category: string, item: any) => {
-        setSelections((prev: any) => ({ ...prev, [category]: item }));
-        setShowSelection(null);
-    };
     const handleRemove = (key: string) => {
-        setSelections((prev: any) => { const n = {...prev}; delete n[key]; return n; });
+        const n = {...selections}; 
+        delete n[key]; 
+        setSelections(n);
     };
     const handleAddToCart = () => {
         Object.entries(selections).forEach(([key, item]: [string, any]) => {
@@ -70,19 +79,20 @@ export default function CCTVBuilderPage() {
         const finalPrice = sel ? sel.price * multiplier : 0;
         if (hideEmpty && !sel) return null;
 
+        const Icon = getIconComponent(config.reactIcon);
+
         return (
-            <div key={config.key} className={`sr-row ${sel ? 'sr-row--selected' : ''}`}>
-                <div className="sr-img">
-                    {sel
-                        ? <div className="sr-img-selected"><i className={`fas ${sel.imgIcon || config.icon}`}></i></div>
-                        : <div className="sr-img-placeholder"><i className={`fas ${config.icon}`}></i></div>
-                    }
+            <div key={config.key} className={`component-row ${sel ? 'sr-row--selected' : ''}`}>
+                <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
+                    <div className="component-icon">
+                        {Icon && <Icon />}
+                    </div>
                 </div>
 
                 <div className="sr-details">
                     <div className="sr-comp-header">
                         <span className="sr-comp-label">{config.label}</span>
-                        <span className={config.required ? 'sr-badge sr-badge--req' : 'sr-badge sr-badge--opt'}>
+                        <span className={config.required ? 'required-badge' : 'optional-badge'}>
                             {config.required ? 'Required' : 'Optional'}
                         </span>
                     </div>
@@ -111,13 +121,13 @@ export default function CCTVBuilderPage() {
                 <div className="sr-actions">
                     {sel ? (
                         <>
-                            <button className="sr-btn-change" onClick={() => setShowSelection(config.key)}>Change</button>
+                            <button className="change-btn" onClick={() => router.push(`/cctv-builder/select/${config.key}`)}>Change</button>
                             <button className="sr-btn-remove" title="Remove" onClick={() => handleRemove(config.key)}>
                                 <i className="fas fa-times"></i>
                             </button>
                         </>
                     ) : (
-                        <button className="sr-btn-select" onClick={() => setShowSelection(config.key)}>Select</button>
+                        <button className="select-btn" onClick={() => router.push(`/cctv-builder/select/${config.key}`)}>Select</button>
                     )}
                 </div>
             </div>
@@ -158,16 +168,21 @@ export default function CCTVBuilderPage() {
             </div>
 
             {/* Camera count row */}
-            <div className="sr-section-label">System Configuration</div>
+            <BrandSectionTitle 
+                title="CCTV SYSTEM" 
+                subtitle="Design your security solution"
+            />
             <div className="sr-rows">
-                <div className="sr-row" style={{background:'#f8faff', border:'1px dashed #c7d9f0'}}>
-                    <div className="sr-img">
-                        <div className="sr-img-placeholder"><i className="fas fa-video"></i></div>
+                <div className="component-row" style={{background:'#f8faff'}}>
+                    <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
+                        <div className="component-icon">
+                            <FaIcons.FaVideo />
+                        </div>
                     </div>
                     <div className="sr-details">
                         <div className="sr-comp-header">
                             <span className="sr-comp-label">Number of Cameras</span>
-                            <span className="sr-badge sr-badge--req">Configure</span>
+                            <span className="required-badge">Configure</span>
                         </div>
                         <div style={{fontSize:'13px', color:'#888', marginTop:'4px'}}>Set how many cameras you need — price will update automatically</div>
                     </div>
@@ -218,53 +233,7 @@ export default function CCTVBuilderPage() {
                 </div>
             </div>
 
-            {/* Modal */}
-            {showSelection && (
-                <div className="sr-modal-overlay" onClick={() => setShowSelection(null)}>
-                    <div className="sr-modal" onClick={e => e.stopPropagation()}>
-                        <div className="sr-modal-hdr">
-                            <div>
-                                <h3 className="sr-modal-title">
-                                    Select {CCTV_CONFIG.find(c => c.key === showSelection)?.label}
-                                </h3>
-                                <p className="sr-modal-subtitle">
-                                    {((MOCK_CCTV_COMPONENTS as any)[showSelection] || []).length} options available
-                                </p>
-                            </div>
-                            <button className="sr-modal-close" onClick={() => setShowSelection(null)}>
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div className="sr-modal-list">
-                            {((MOCK_CCTV_COMPONENTS as any)[showSelection] || []).map((item: any) => {
-                                const isCurrentlySelected = selections[showSelection!]?.id === item.id;
-                                return (
-                                    <div
-                                        key={item.id}
-                                        className={`sr-modal-item ${isCurrentlySelected ? 'sr-modal-item--active' : ''}`}
-                                        onClick={() => handleSelect(showSelection!, item)}
-                                    >
-                                        <div className="sr-modal-item-icon">
-                                            <i className={`fas ${item.imgIcon || 'fa-box'}`}></i>
-                                        </div>
-                                        <div className="sr-modal-item-info">
-                                            <strong>{item.title}</strong>
-                                            {item.specs && <span>{item.specs}</span>}
-                                        </div>
-                                        <div className="sr-modal-item-right">
-                                            <div className="sr-modal-item-price">৳{item.price.toLocaleString()}</div>
-                                        </div>
-                                        {isCurrentlySelected
-                                            ? <button className="sr-btn-selected"><i className="fas fa-check"></i> Selected</button>
-                                            : <button className="sr-btn-select" onClick={e => { e.stopPropagation(); handleSelect(showSelection!, item); }}>Select</button>
-                                        }
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            )}
+
         </div>
     );
 }
