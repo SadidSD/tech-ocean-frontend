@@ -66,13 +66,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             <span className="text-bottom">Front Page</span>
                         </div>
                     </Link>
-                    <a href="#" className="action-item">
-                        <div className="action-icon"><i className="fas fa-gift"></i></div>
-                        <div className="action-text">
-                            <span className="text-top">Offers</span>
-                            <span className="text-bottom">Latest Promos</span>
-                        </div>
-                    </a>
+
                     <div className="action-item action-pc-builder d-none-mobile" style={{position: 'relative', cursor: 'pointer'}} tabIndex={0}
                         onMouseEnter={e => { const d = e.currentTarget.querySelector('.sys-builder-dropdown') as HTMLElement; if(d) d.style.display='block'; }}
                         onMouseLeave={e => { const d = e.currentTarget.querySelector('.sys-builder-dropdown') as HTMLElement; if(d) d.style.display='none'; }}

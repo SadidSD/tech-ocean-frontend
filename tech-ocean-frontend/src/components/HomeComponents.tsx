@@ -43,13 +43,6 @@ export const FeaturesBar = () => (
                 </div>
             </Link>
             <div className="feature-pill">
-                <div className="icon"><i className="fas fa-store"></i></div>
-                <div className="text">
-                    <span className="title">20+ Physical Stores</span>
-                    <span className="subtitle">Find Store Near You</span>
-                </div>
-            </div>
-            <div className="feature-pill">
                 <div className="icon"><i className="fas fa-headset"></i></div>
                 <div className="text">
                     <span className="title">Reliable Support</span>
