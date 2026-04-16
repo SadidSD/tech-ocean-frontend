@@ -25,40 +25,32 @@ export const StarRating = ({ rating = 0, count = 0 }: { rating?: number, count?:
     );
 };
 
-export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: (p: any, q: number, f: boolean) => void }) => {
+export const ProductCard = ({ product }: { product: any }) => {
     return (
-        <div className="product-card">
-            <div className={`product-status ${product.status === 'In Stock' || product.status.includes('Stock') ? 'instock' : 'out'}`}>
-                {product.status}
-            </div>
-            <div className="product-img-wrap">
-                <Link href={`/product/${product.id}`}>
+        <Link href={`/product/${product.id}`} className="product-card-link" style={{ textDecoration: 'none', color: 'inherit', display: 'block', minHeight: '44px', cursor: 'pointer' }}>
+            <div className="product-card">
+                <div className={`product-status ${product.status === 'In Stock' || product.status.includes('Stock') ? 'instock' : 'out'}`}>
+                    {product.status}
+                </div>
+                <div className="product-img-wrap">
                     {product.imgUrl ? (
                         <img src={product.imgUrl} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     ) : (
                         <i className={`fas ${product.imgIcon || 'fa-box'}`}></i>
                     )}
-                </Link>
-                <div className="actions">
-                    <button className="btn-icon" title="Add to Cart" onClick={(e) => { e.preventDefault(); if(addToCart) addToCart(product, 1, false); }}>
-                        <i className="fas fa-shopping-cart"></i>
-                    </button>
-
+                </div>
+                <div className="product-title">{product.title}</div>
+                <StarRating rating={product.rating} count={product.reviewCount} />
+                <ul className="product-features">
+                    {product.features?.map((f: string, i: number) => <li key={i}>{f}</li>)}
+                </ul>
+                <div className="product-price-box">
+                    <span className="price">
+                        {product.price}
+                        {product.oldPrice && <s>{product.oldPrice}</s>}
+                    </span>
                 </div>
             </div>
-            <Link href={`/product/${product.id}`} className="product-title">{product.title}</Link>
-            <StarRating rating={product.rating} count={product.reviewCount} />
-            <ul className="product-features">
-                {product.features?.map((f: string, i: number) => <li key={i}>{f}</li>)}
-            </ul>
-            <div className="product-price-box">
-                <span className="price">
-                    {product.price}
-                    {product.oldPrice && <s>{product.oldPrice}</s>}
-                </span>
-            </div>
-
-
-        </div>
+        </Link>
     );
 };

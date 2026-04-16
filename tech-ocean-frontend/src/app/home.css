@@ -193,7 +193,16 @@
 }
 
 .product-card:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-4px);
+}
+
+.product-card:hover .product-title {
+    color: var(--primary-color, #0066ff);
+}
+
+.product-card:hover .product-img-wrap img {
+    transform: scale(1.02);
 }
 
 .product-img-wrap {
@@ -214,6 +223,7 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    transition: transform 0.2s ease;
 }
 
 .product-status {
@@ -251,7 +261,6 @@
 }
 
 .product-title:hover {
-    color: var(--primary-color);
     text-decoration: underline;
 }
 
@@ -317,43 +326,7 @@
     margin-left: 5px;
 }
 
-/* Hover Actions overlay inside Product Card */
-.product-card .actions {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition);
-}
 
-.product-card:hover .actions {
-    opacity: 1;
-    visibility: visible;
-}
-
-.btn-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--secondary-color);
-    font-size: 16px;
-}
-
-.btn-icon:hover {
-    background: var(--primary-color);
-    color: #fff;
-}
 
 /* Blogs Section */
 .blogs-section {

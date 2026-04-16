@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Navigation from './Navigation';
 import Footer from './Footer';
 import { MOCK_CATEGORIES } from '@/data/categories';
@@ -19,6 +20,13 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     const [cartItems, setCartItems]       = useState<any[]>([]);
     const [compareItems, setCompareItems] = useState<any[]>([]);
     const [toastData, setToastData]       = useState<{ msg: string, type: string } | null>(null);
+    const [userState, setUserState]       = useState<{ isLoggedIn: boolean, user: any, token: string | null }>({ isLoggedIn: false, user: null, token: null });
+
+    // ── Auth persistence ──────────────────────────────────────────────
+    useEffect(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) { try { setUserState(JSON.parse(savedUser)); } catch {} }
+    }, []);
 
     // ── Cart persistence ──────────────────────────────────────────────
     useEffect(() => {
@@ -44,15 +52,24 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
         setTimeout(() => setToastData(null), 3000);
     };
 
+    const router = useRouter();
+
     // ── Cart actions ──────────────────────────────────────────────────
     const addToCart = (product: any, qty: number = 1, forceCheckout: boolean = false) => {
         setCartItems(prev => {
             const exists = prev.find(p => p.id === product.id);
-            if (exists) return prev.map(p => p.id === product.id ? { ...p, quantity: p.quantity + qty } : p);
-            return [...prev, { ...product, quantity: qty }];
+            const nextList = exists 
+                ? prev.map(p => p.id === product.id ? { ...p, quantity: p.quantity + qty } : p)
+                : [...prev, { ...product, quantity: qty }];
+            
+            if (forceCheckout) {
+               try { localStorage.setItem('techXocean_cart', JSON.stringify(nextList)); } catch {}
+            }
+            return nextList;
         });
+        
         if (forceCheckout) {
-            window.location.href = '/checkout';
+            router.push('/checkout');
         } else {
             showToast(`${qty}x ${product.title.substring(0, 22)}... added!`, 'success');
         }
@@ -88,6 +105,7 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
+        <AuthContext.Provider value={{ userState, setUserState, showToast }}>
         <CartContext.Provider value={{ cartItems, setCartItems, addToCart, cartCount }}>
         <CompareContext.Provider value={{ compareItems, addToCompare, removeFromCompare, clearCompare, isInCompare }}>
             <div className="app-container">
@@ -101,6 +119,7 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
             </div>
         </CompareContext.Provider>
         </CartContext.Provider>
+        </AuthContext.Provider>
     );
 }
 
@@ -130,4 +149,15 @@ export const CompareContext = React.createContext<{
     removeFromCompare: () => {},
     clearCompare: () => {},
     isInCompare: () => false,
+});
+
+// ── Auth Context ─────────────────────────────────────────────────────────────
+export const AuthContext = React.createContext<{
+    userState: { isLoggedIn: boolean, user: any, token: string | null },
+    setUserState: React.Dispatch<React.SetStateAction<{ isLoggedIn: boolean, user: any, token: string | null }>>,
+    showToast: (msg: string, type?: 'success' | 'error') => void
+}>({
+    userState: { isLoggedIn: false, user: null, token: null },
+    setUserState: () => {},
+    showToast: () => {}
 });

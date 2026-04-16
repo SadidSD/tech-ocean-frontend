@@ -51,10 +51,16 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 7, name: "Mobile", reactIcon: "FaMobileAlt", iconColor: "#EC4899", iconBg: "rgba(236, 72, 153, 0.12)", slug: "mobile",
+      id: 7, name: "Components", reactIcon: "FaMicrochip", iconColor: "#EC4899", iconBg: "rgba(236, 72, 153, 0.12)", slug: "components",
       children: [
-          { id: 701, name: "Smartphone", slug: "smartphone" },
-          { id: 702, name: "Tablet", slug: "tablet" }
+          { id: 701, name: "Processor", slug: "processor" },
+          { id: 702, name: "Motherboard", slug: "motherboard" },
+          { id: 703, name: "Graphics Card", slug: "graphics-card" },
+          { id: 704, name: "RAM", slug: "ram" },
+          { id: 705, name: "Power Supply", slug: "power-supply" },
+          { id: 706, name: "UPS", slug: "ups" },
+          { id: 707, name: "Storage (SSD/HDD)", slug: "storage" },
+          { id: 708, name: "Camera Accessories", slug: "camera-accessories" }
       ]
   },
   {

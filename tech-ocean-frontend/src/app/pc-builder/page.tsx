@@ -137,17 +137,7 @@ export default function PCBuilderPage() {
                     <h1 className="sr-title">PC Builder</h1>
                     <p className="sr-subtitle">Build your custom PC — select components below.</p>
                 </div>
-                <div className="sr-header-stats">
-                    <div className="sr-stat-pill">
-                        <i className="fas fa-bolt" style={{color:'#f59e0b'}}></i>
-                        <span className="sr-stat-val">{totalWattage}W</span>
-                        <span className="sr-stat-lbl">Est. Wattage</span>
-                    </div>
-                    <div className="sr-stat-pill sr-stat-pill--price">
-                        <span className="sr-stat-val">৳{totalPrice.toLocaleString()}</span>
-                        <span className="sr-stat-lbl">{totalSelectedCount} item{totalSelectedCount !== 1 ? 's' : ''}</span>
-                    </div>
-                </div>
+
             </div>
 
             {/* Progress + toggle */}

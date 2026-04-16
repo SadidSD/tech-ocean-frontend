@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { AuthContext } from './ClientApplication';
 import { FaDesktop, FaVideo } from 'react-icons/fa';
 
 interface Category {
@@ -19,6 +21,17 @@ interface NavigationProps {
 }
 
 export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCount: number, compareCount: number, onMenuToggle: () => void }) => {
+    const { userState, setUserState, showToast } = useContext(AuthContext);
+    const router = useRouter();
+
+    const handleLogout = (e: React.MouseEvent) => {
+        e.preventDefault();
+        localStorage.removeItem('user');
+        setUserState({ isLoggedIn: false, user: null, token: null });
+        showToast('Logged out successfully', 'success');
+        router.push('/');
+    };
+
     return (
         <header className="main-header" id="mainHeader">
             <div className="container main-header-inner">
@@ -26,11 +39,19 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     <i className="fas fa-bars"></i>
                 </button>
                 <div style={{marginRight: '20px'}}>
-                    <Link href="/" className="logo">
-                        <div className="logo-icon">
-                            <i className="fas fa-water" style={{color: '#fff', fontSize: '18px'}}></i>
-                        </div>
-                        <span className="logo-text">Tech X Ocean</span>
+                    <Link href="/" className="site-logo">
+                        <picture>
+                            <source media="(max-width: 768px)" srcSet="/images/logo/logo-icon.png" />
+                            <img 
+                                src="/images/logo/logo-full.png" 
+                                alt="Tech X Ocean" 
+                                onError={(e: any) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "/images/logo/fallback-logo.png";
+                                    e.target.outerHTML = '<span class="logo-text-fallback">Tech X Ocean</span>';
+                                }}
+                            />
+                        </picture>
                     </Link>
                 </div>
                 <div className="search-wrap">
@@ -94,15 +115,35 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                         </div>
                     </div>
 
-                    <a href="#" className="action-item">
-                        <div className="action-icon">
-                            <i className="fas fa-user"></i>
+                    {userState.isLoggedIn ? (
+                        <div className="action-item">
+                            <div className="action-icon">
+                                <i className="fas fa-user-circle" style={{color: '#1B5B97'}}></i>
+                            </div>
+                            <div className="action-text">
+                                <span className="text-top">Hello,</span>
+                                <span className="text-bottom" style={{textTransform:'capitalize', fontWeight:600}}>{userState.user?.name?.split(' ')[0] || 'User'}</span>
+                            </div>
+                            
+                            {/* Hover Dropdown */}
+                            <div className="user-dropdown">
+                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-tachometer-alt" style={{width:'18px',textAlign:'center'}}></i> Dashboard</Link>
+                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-box" style={{width:'18px',textAlign:'center'}}></i> My Orders</Link>
+                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-heart" style={{width:'18px',textAlign:'center'}}></i> Wishlist</Link>
+                                <a href="#" onClick={handleLogout} className="user-dropdown-item" style={{borderTop:'1px solid #eee'}}><i className="fas fa-sign-out-alt" style={{width:'18px',textAlign:'center'}}></i> Logout</a>
+                            </div>
                         </div>
-                        <div className="action-text">
-                            <span className="text-top">Account</span>
-                            <span className="text-bottom">Login/Register</span>
-                        </div>
-                    </a>
+                    ) : (
+                        <Link href="/account" className="action-item">
+                            <div className="action-icon">
+                                <i className="fas fa-user"></i>
+                            </div>
+                            <div className="action-text">
+                                <span className="text-top">Account</span>
+                                <span className="text-bottom">Login/Register</span>
+                            </div>
+                        </Link>
+                    )}
                     <Link href="/cart" className="action-item cart-item">
                         <div className="action-icon">
                             <i className="fas fa-shopping-bag"></i>

@@ -142,12 +142,7 @@ export default function CCTVBuilderPage() {
                     <h1 className="sr-title">CCTV Quotation</h1>
                     <p className="sr-subtitle">Build your custom surveillance solution and get an instant quote.</p>
                 </div>
-                <div className="sr-header-stats">
-                    <div className="sr-stat-pill sr-stat-pill--price">
-                        <span className="sr-stat-val">৳{totalPrice.toLocaleString()}</span>
-                        <span className="sr-stat-lbl">Total Quotation</span>
-                    </div>
-                </div>
+
             </div>
 
             {/* Progress + toggle */}

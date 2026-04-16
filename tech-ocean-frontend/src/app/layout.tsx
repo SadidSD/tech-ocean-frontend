@@ -22,6 +22,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <link rel="icon" type="image/x-icon" sizes="32x32" href="/images/logo/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/logo-icon.png" />
       </head>
       <body className={inter.className}>
         <ClientApplication>
