@@ -1,24 +1,29 @@
 {
-  "name": "website-sex",
-  "version": "1.0.0",
-  "description": "",
-  "main": "initDb.js",
+  "name": "website-next",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "jimp": "^0.16.13",
-    "potrace": "^2.1.8",
-    "resend": "^6.9.4",
-    "sqlite3": "^6.0.1",
-    "sslcommerz-lts": "^1.2.0"
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.368.0",
+    "next": "14.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.6.0",
+    "recharts": "^2.12.7",
+    "tailwind-merge": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.0",
+    "typescript": "^5.4.5"
   }
 }
