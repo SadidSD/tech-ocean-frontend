@@ -57,19 +57,15 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     <i className="fas fa-bars"></i>
                 </button>
                 <div style={{marginRight: '20px'}}>
-                    <Link href="/" className="site-logo">
-                        <picture>
-                            <source media="(max-width: 768px)" srcSet="/img/website-logo.png?v=3" />
-                            <img 
-                                src="/img/website-logo.png?v=3" 
-                                alt="Tech X Ocean"
-                                style={{ height: '160px', width: 'auto', objectFit: 'contain' }}
-                                onError={(e: any) => {
-                                    e.target.onerror = null;
-                                    e.target.outerHTML = '<span class="logo-text-fallback">Tech X Ocean</span>';
-                                }}
-                            />
-                        </picture>
+                    <Link href="/" className="logo-link">
+                        <img 
+                            src="/img/main website logo.png" 
+                            alt="Tech X Ocean" 
+                            className="site-logo"
+                            onError={(e: any) => {
+                                e.target.src = "/img/logo.png";
+                            }}
+                        />
                     </Link>
                 </div>
                 <div className="search-wrap" style={{position: 'relative'}} ref={searchRef}>
