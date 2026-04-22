@@ -71,9 +71,9 @@ export default function PCBuilderPage() {
                 <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
                     <div className="component-icon">
                         {config.imageSrc ? (
-                            <img src={config.imageSrc} alt={config.label} style={{width: 28, height: 28, objectFit: 'contain'}} />
+                            <img src={config.imageSrc} alt={config.label} style={{width: 28, height: 28, objectFit: 'contain', filter: 'brightness(0) saturate(100%) invert(34%) sepia(92%) saturate(687%) hue-rotate(345deg) brightness(97%) contrast(97%)'}} />
                         ) : (
-                            Icon && <Icon />
+                            Icon && <Icon color="#db4b27" size={28} />
                         )}
                     </div>
                 </div>

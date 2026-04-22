@@ -1147,9 +1147,9 @@ textarea.tech-input {
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 2px solid var(--primary-color);
+  border: 2px solid #db4b27;
   border-radius: 8px;
-  color: var(--primary-color);
+  color: #db4b27;
   font-size: 1.5rem;
 }
 
@@ -1322,11 +1322,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 102, 255, 0.1); /* Fallback */
-  background: rgba(var(--primary-color-rgb), 0.1);
+  background: rgba(219, 75, 39, 0.08);
   border-radius: 50%;
   font-size: 20px;
-  color: var(--primary-color);
+  color: #db4b27;
 }
 
 .component-name {
@@ -2323,20 +2322,20 @@ body {
 }
 
 .component-icon {
-  background: var(--primary-light) !important;
+  background: rgba(219, 75, 39, 0.07) !important;
   border-radius: 12px;
   width: 48px;
   height: 48px;
   display: flex !important;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #111111 !important; /* Forces black border, overriding any old orange borders */
+  border: 1.5px solid #db4b27 !important;
 }
 
 .component-icon svg {
   width: 24px;
   height: 24px;
-  color: var(--primary) !important;
+  color: #db4b27 !important;
 }
 
 .required-badge {

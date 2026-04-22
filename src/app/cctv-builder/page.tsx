@@ -85,7 +85,7 @@ export default function CCTVBuilderPage() {
             <div key={config.key} className={`component-row ${sel ? 'sr-row--selected' : ''}`}>
                 <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
                     <div className="component-icon">
-                        {Icon && <Icon />}
+                        {Icon && <Icon color="#db4b27" size={28} />}
                     </div>
                 </div>
 
@@ -171,7 +171,7 @@ export default function CCTVBuilderPage() {
                 <div className="component-row" style={{background:'#f8faff'}}>
                     <div className="sr-img" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '80px'}}>
                         <div className="component-icon">
-                            <FaIcons.FaVideo />
+                            <FaIcons.FaVideo color="#db4b27" size={28} />
                         </div>
                     </div>
                     <div className="sr-details">
