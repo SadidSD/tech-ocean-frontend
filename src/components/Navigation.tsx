@@ -63,7 +63,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             <img 
                                 src="/img/website-logo.png" 
                                 alt="Tech X Ocean"
-                                style={{ height: '52px', width: 'auto', objectFit: 'contain' }}
+                                style={{ height: '80px', width: 'auto', objectFit: 'contain', mixBlendMode: 'multiply' }}
                                 onError={(e: any) => {
                                     e.target.onerror = null;
                                     e.target.outerHTML = '<span class="logo-text-fallback">Tech X Ocean</span>';
