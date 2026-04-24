@@ -249,36 +249,79 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
         }, 300); // 300ms delay
     };
 
+    // Helper to get brands for a category from COMPONENT_METADATA
+    const getCategoryBrands = (catName: string) => {
+        const metadata = Object.values(COMPONENT_METADATA).find(
+            m => m.name.toLowerCase().includes(catName.toLowerCase()) || 
+                 catName.toLowerCase().includes(m.name.toLowerCase())
+        );
+        return metadata?.brands || [];
+    };
+
     return (
         <>
             <nav className={`mega-menu-wrapper ${isMobileMenuOpen ? 'open' : ''}`} style={{ display: isMobileMenuOpen ? 'block' : '' }}>
                 <div className="container">
                     <ul className="mega-menu" id="megaMenu">
-                        {categories.map((cat) => (
-                            <li 
-                                className={`menu-item ${cat.children && cat.children.length > 0 ? 'has-dropdown' : ''} ${activeId === cat.id ? 'active-dropdown' : ''}`} 
-                                key={cat.id}
-                                onMouseEnter={() => handleMouseEnter(cat.id)}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <Link href={`/category/${cat.id}`}>{cat.name}</Link>
-                                {cat.children && cat.children.length > 0 && (
-                                    <div className="dropdown-content" style={{ 
-                                        opacity: activeId === cat.id ? 1 : 0,
-                                        visibility: activeId === cat.id ? 'visible' : 'hidden',
-                                        transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
-                                        display: 'flex' 
-                                    }}>
-                                        <div className="column">
-                                            <Link href={`/category/${cat.id}`} className="dropdown-heading">All {cat.name}</Link>
-                                            {cat.children.map(subCat => (
-                                                <Link href={`/category/${subCat.id}`} key={subCat.id}>{subCat.name}</Link>
-                                            ))}
+                        {categories.map((cat) => {
+                            const brands = getCategoryBrands(cat.name);
+                            const hasDropdown = brands.length > 0 || (cat.children && cat.children.length > 0);
+                            
+                            return (
+                                <li 
+                                    className={`menu-item ${hasDropdown ? 'has-dropdown' : ''} ${activeId === cat.id ? 'active-dropdown' : ''}`} 
+                                    key={cat.id}
+                                    onMouseEnter={() => handleMouseEnter(cat.id)}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <Link href={`/category/${cat.id}`}>{cat.name}</Link>
+                                    {hasDropdown && (
+                                        <div className="dropdown-content" style={{ 
+                                            opacity: activeId === cat.id ? 1 : 0,
+                                            visibility: activeId === cat.id ? 'visible' : 'hidden',
+                                            transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            minWidth: brands.length > 8 ? '500px' : '300px'
+                                        }}>
+                                            <div style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
+                                                <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase' }}>Shop by Brand</h4>
+                                            </div>
+                                            
+                                            <div style={{ 
+                                                display: 'grid', 
+                                                gridTemplateColumns: brands.length > 8 ? 'repeat(3, 1fr)' : brands.length > 4 ? 'repeat(2, 1fr)' : '1fr',
+                                                gap: '10px'
+                                            }}>
+                                                {brands.map(brand => (
+                                                    <Link 
+                                                        key={brand} 
+                                                        href={`/category/${cat.id}?brand=${brand.toLowerCase()}`}
+                                                        style={{ 
+                                                            fontSize: '13px', 
+                                                            color: '#555', 
+                                                            padding: '6px 10px', 
+                                                            borderRadius: '4px',
+                                                            transition: 'all 0.2s'
+                                                        }}
+                                                        onMouseEnter={(e) => { e.currentTarget.style.background = '#f8f9fa'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
+                                                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                    >
+                                                        {brand}
+                                                    </Link>
+                                                ))}
+                                            </div>
+
+                                            <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid #eee' }}>
+                                                <Link href={`/category/${cat.id}`} style={{ fontSize: '13px', fontWeight: 600, color: '#db4b27', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                    View All {cat.name} <i className="fas fa-arrow-right" style={{ fontSize: '10px' }}></i>
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
+                                    )}
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
             </nav>

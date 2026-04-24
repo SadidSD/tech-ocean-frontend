@@ -109,7 +109,48 @@ export default function AdminComponentsPage() {
 
         {activeTab === 'brands' && (
            <div className="brands-list-wrap">
-             <p style={{ color: '#666', padding: '40px', textAlign: 'center' }}>Brand management interface loading...</p>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+               <h2 style={{ fontSize: '20px', margin: 0 }}>Category Brand Mapping</h2>
+               <p style={{ fontSize: '14px', color: '#666' }}>Manage which brands appear in the Mega Menu dropdowns</p>
+             </div>
+
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {allCategories.map(cat => (
+                  <div key={cat.id} style={{ background: '#fff', border: '1px solid #eee', borderRadius: '12px', padding: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                      <h3 style={{ margin: 0, fontSize: '16px', color: '#333' }}>{cat.name}</h3>
+                      <span style={{ fontSize: '12px', color: '#999' }}>{cat.brands.length} Brands</span>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                      {cat.brands.map(brand => (
+                        <span key={brand} style={{ 
+                          background: '#f0f0f0', 
+                          padding: '6px 12px', 
+                          borderRadius: '20px', 
+                          fontSize: '13px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}>
+                          {brand}
+                          <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#999', padding: 0 }}>✕</button>
+                        </span>
+                      ))}
+                      <button style={{ 
+                        background: 'transparent', 
+                        border: '1px dashed #db4b27', 
+                        color: '#db4b27', 
+                        padding: '6px 12px', 
+                        borderRadius: '20px', 
+                        fontSize: '13px',
+                        cursor: 'pointer' 
+                      }}>
+                        + Add Brand
+                      </button>
+                    </div>
+                  </div>
+                ))}
+             </div>
            </div>
         )}
 

@@ -13,13 +13,13 @@ export interface ComponentCategoryMetadata {
   displayOrder: number;
   brands: string[];
   filterAttributes: FilterAttribute[];
-  builderGroup?: 'core' | 'peripherals' | 'accessories';
+  builderGroup?: 'core' | 'peripherals' | 'accessories' | 'main';
 }
 
 export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
   // --- CORE COMPONENTS ---
   cpu: {
-    id: "cpu",
+    id: "processor",
     name: "Processor (CPU)",
     icon: "BsCpu",
     requiredInBuilder: true,
@@ -87,7 +87,7 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     icon: "FaHdd",
     requiredInBuilder: true,
     displayOrder: 5,
-    brands: ["Samsung", "Western Digital", "Seagate", "Crucial", "Kingston", "Team Group", "ADATA", "Toshiba"],
+    brands: ["Samsung", "Western Digital", "Seagate", "Crucial", "Kingston", "Team Group", "ADATA", "Toshiba", "Colorful", "Corsair"],
     builderGroup: 'core',
     filterAttributes: [
       { id: "type", name: "Type", type: "multiple", options: ["NVMe SSD", "SATA SSD", "HDD"] },
@@ -96,12 +96,12 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     ]
   },
   gpu: {
-    id: "gpu",
+    id: "graphics-card",
     name: "Graphics Card (GPU)",
     icon: "BsGpuCard",
     requiredInBuilder: false,
     displayOrder: 6,
-    brands: ["ASUS", "MSI", "Gigabyte", "Zotac", "Colorful", "PNY", "Sapphire", "XFX", "ASRock"],
+    brands: ["ASUS", "MSI", "Gigabyte", "Zotac", "Colorful", "PNY", "Manli", "Inno3D", "Galax", "Sapphire", "PowerColor", "XFX"],
     builderGroup: 'core',
     filterAttributes: [
       { id: "chipset", name: "Chipset Series", type: "multiple", options: ["RTX 3060", "RTX 4060", "RTX 4070", "RTX 4080", "RTX 4090", "RX 6600", "RX 7600", "RX 7900"] },
@@ -116,7 +116,7 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     icon: "FaPlug",
     requiredInBuilder: true,
     displayOrder: 7,
-    brands: ["Antec", "Corsair", "Cooler Master", "DeepCool", "Thermaltake", "Gamdias"],
+    brands: ["Antec", "Corsair", "Cooler Master", "DeepCool", "Thermaltake", "Gamdias", "EVGA"],
     builderGroup: 'core',
     filterAttributes: [
       { id: "wattage", name: "Wattage", type: "multiple", options: ["450W", "550W", "650W", "750W", "850W", "1000W", "1200W+"] },
@@ -130,7 +130,7 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     icon: "BsPc",
     requiredInBuilder: true,
     displayOrder: 8,
-    brands: ["Antec", "Corsair", "NZXT", "Lian Li", "Cooler Master", "DeepCool", "Gamdias"],
+    brands: ["Antec", "Corsair", "NZXT", "Lian Li", "Cooler Master", "Gamdias", "DeepCool"],
     builderGroup: 'core',
     filterAttributes: [
       { id: "formFactor", name: "Form Factor Support", type: "multiple", options: ["ATX", "Micro-ATX", "Mini-ITX", "E-ATX"] },
@@ -139,42 +139,89 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     ]
   },
 
-  // --- PERIPHERALS ---
+  // --- MAIN CATEGORIES ---
+  laptop: {
+    id: "laptop",
+    name: "Laptop",
+    icon: "FaLaptop",
+    requiredInBuilder: false,
+    displayOrder: 0,
+    brands: ["Apple", "ASUS", "MSI", "Gigabyte", "HP", "Dell", "Lenovo", "Razer", "Acer", "Microsoft Surface", "Xiaomi", "Huawei"],
+    builderGroup: 'main',
+    filterAttributes: []
+  },
   monitor: {
     id: "monitor",
     name: "Monitor",
     icon: "FaDesktop",
     requiredInBuilder: false,
     displayOrder: 20,
-    brands: ["Asus", "LG", "Samsung", "Dell", "HP", "MSI", "Gigabyte"],
-    builderGroup: 'peripherals',
+    brands: ["ASUS", "MSI", "Gigabyte", "Samsung", "LG", "Acer", "Dell", "HP", "Lenovo", "ViewSonic"],
+    builderGroup: 'main',
     filterAttributes: [
       { id: "size", name: "Screen Size", type: "multiple", options: ["22\"", "24\"", "27\"", "32\"", "34\"+"] },
       { id: "panel", name: "Panel Type", type: "select", options: ["IPS", "VA", "TN", "OLED"] },
       { id: "refresh", name: "Refresh Rate", type: "multiple", options: ["60Hz", "75Hz", "144Hz", "165Hz", "240Hz+"] }
     ]
   },
-  keyboard: {
-    id: "keyboard",
-    name: "Keyboard",
-    icon: "FaKeyboard",
+  networking: {
+    id: "networking",
+    name: "Networking",
+    icon: "FaGlobe",
     requiredInBuilder: false,
-    displayOrder: 21,
-    brands: ["Corsair", "Logitech", "Razer", "Keychron", "SteelSeries"],
-    builderGroup: 'peripherals',
-    filterAttributes: [
-      { id: "type", name: "Type", type: "select", options: ["Mechanical", "Membrane"] },
-      { id: "connectivity", name: "Connectivity", type: "select", options: ["Wired", "Wireless", "Bluetooth"] }
-    ]
+    displayOrder: 25,
+    brands: ["TP-Link", "D-Link", "Netgear", "ASUS", "Ubiquiti", "MikroTik", "Starlink"],
+    builderGroup: 'main',
+    filterAttributes: []
   },
-  mouse: {
-    id: "mouse",
-    name: "Mouse",
-    icon: "FaMouse",
+  cctv: {
+    id: "cctv-ip-camera",
+    name: "CCTV Camera",
+    icon: "FaVideo",
     requiredInBuilder: false,
-    displayOrder: 22,
-    brands: ["Logitech", "Razer", "Corsair", "SteelSeries", "Glorious"],
-    builderGroup: 'peripherals',
+    displayOrder: 30,
+    brands: ["Hikvision", "Dahua", "CP Plus", "Uniview", "TP-Link", "Xiaomi"],
+    builderGroup: 'main',
+    filterAttributes: []
+  },
+  mobile: {
+    id: "mobile-phone",
+    name: "Mobile Phone",
+    icon: "FaMobileAlt",
+    requiredInBuilder: false,
+    displayOrder: 35,
+    brands: ["Apple", "Samsung", "Xiaomi", "OPPO", "Realme", "OnePlus", "Nokia", "itel"],
+    builderGroup: 'main',
+    filterAttributes: []
+  },
+  gadget: {
+    id: "gadget",
+    name: "Gadget",
+    icon: "FaCamera",
+    requiredInBuilder: false,
+    displayOrder: 40,
+    brands: ["Apple", "Samsung", "Xiaomi", "DJI", "GoPro", "Anker", "UGREEN", "Baseus"],
+    builderGroup: 'main',
+    filterAttributes: []
+  },
+  office: {
+    id: "office-equipment",
+    name: "Office Equipment",
+    icon: "FaPrint",
+    requiredInBuilder: false,
+    displayOrder: 45,
+    brands: ["HP", "Canon", "Epson", "Brother", "Dell", "Panasonic"],
+    builderGroup: 'main',
+    filterAttributes: []
+  },
+  appliance: {
+    id: "home-appliance",
+    name: "Home Appliance",
+    icon: "FaHome",
+    requiredInBuilder: false,
+    displayOrder: 50,
+    brands: ["Samsung", "LG", "Whirlpool", "Singer", "Haier", "Walton", "Hitachi"],
+    builderGroup: 'main',
     filterAttributes: []
   },
   ups: {
@@ -182,31 +229,9 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     name: "UPS",
     icon: "FaBatteryFull",
     requiredInBuilder: false,
-    displayOrder: 23,
-    brands: ["Apollo", "MaxGreen", "Digital X"],
+    displayOrder: 60,
+    brands: ["PowerGuard", "Microtek", "APC", "Luminous", "Walton"],
     builderGroup: 'peripherals',
-    filterAttributes: []
-  },
-
-  // --- ACCESSORIES ---
-  thermal_paste: {
-    id: "thermal_paste",
-    name: "Thermal Paste",
-    icon: "FaTint",
-    requiredInBuilder: false,
-    displayOrder: 40,
-    brands: ["Arctic", "Thermal Grizzly", "Noctua"],
-    builderGroup: 'accessories',
-    filterAttributes: []
-  },
-  led_strip: {
-    id: "led_strip",
-    name: "LED Strip",
-    icon: "FaLightbulb",
-    requiredInBuilder: false,
-    displayOrder: 41,
-    brands: ["Phanteks", "DeepCool", "Corsair"],
-    builderGroup: 'accessories',
     filterAttributes: []
   }
 };

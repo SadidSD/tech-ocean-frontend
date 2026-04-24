@@ -69,6 +69,24 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
+      id: 7, name: "Networking", reactIcon: "FaGlobe", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "networking",
+      children: [
+          { id: 701, name: "Router", slug: "router" },
+          { id: 702, name: "Switch", slug: "switch" },
+          { id: 703, name: "Access Point", slug: "access-point" },
+          { id: 704, name: "Starlink", slug: "starlink" }
+      ]
+  },
+  {
+      id: 8, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone",
+      children: [
+          { id: 801, name: "iPhone", slug: "iphone" },
+          { id: 802, name: "Samsung", slug: "samsung-mobile" },
+          { id: 803, name: "Xiaomi", slug: "xiaomi" },
+          { id: 804, name: "OnePlus", slug: "oneplus" }
+      ]
+  },
+  {
       id: 9, name: "Office Equipment", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-equipment",
       children: [
           { id: 901, name: "Printer", slug: "printer" },
