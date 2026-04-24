@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { AuthContext, CartContext } from './ClientApplication';
 import { FaDesktop, FaVideo } from 'react-icons/fa';
 import { MOCK_PRODUCTS } from '@/data/products';
+import { COMPONENT_METADATA } from '@/data/component-structure';
 
 interface Category {
   id: number;
