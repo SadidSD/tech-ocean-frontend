@@ -1,112 +1,151 @@
 "use client";
-import React, { useEffect, useState } from "react";
-
-interface IconData {
-  id: number;
-  icon: string;
-  size: number;
-  duration: number;
-  delay: number;
-  animationType: string;
-  top: number;
-  left: number;
-  opacity: number;
-}
-
-const iconsList = [
-  "fa-desktop", "fa-laptop", "fa-computer-mouse", "fa-keyboard",
-  "fa-microchip", "fa-video", "fa-gamepad", "fa-headphones",
-  "fa-mobile-alt", "fa-wifi", "fa-server", "fa-hdd"
-];
+import React, { useState, useEffect, useRef } from 'react';
 
 const FloatingIconsBackground = () => {
-  const [icons, setIcons] = useState<IconData[]>([]);
+  const [icons, setIcons] = useState<any[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const ICON_TYPES = [
+    { class: "fa-desktop", name: "monitor" },
+    { class: "fa-laptop", name: "laptop" },
+    { class: "fa-computer-mouse", name: "mouse" },
+    { class: "fa-keyboard", name: "keyboard" },
+    { class: "fa-microchip", name: "cpu" },
+    { class: "fa-video", name: "cctv" },
+    { class: "fa-gamepad", name: "controller" },
+    { class: "fa-headphones", name: "headphone" },
+    { class: "fa-mobile-alt", name: "mobile" },
+    { class: "fa-wifi", name: "wifi" },
+    { class: "fa-server", name: "server" },
+    { class: "fa-hdd", name: "storage" },
+    { class: "fa-print", name: "printer" },
+    { class: "fa-router", name: "router" },
+    { class: "fa-database", name: "database" }
+  ];
+
+  const getIconSize = () => {
+    const rand = Math.random();
+    if (rand < 0.5) return 12 + Math.random() * 6;   // Small: 12-18px
+    if (rand < 0.8) return 18 + Math.random() * 8;   // Medium: 18-26px
+    return 26 + Math.random() * 8;                    // Large: 26-34px
+  };
+
+  const getIconCount = () => {
+    if (typeof window === 'undefined') return 50;
+    const width = window.innerWidth;
+    if (width >= 1200) return 75 + Math.floor(Math.random() * 15);
+    if (width >= 768) return 50 + Math.floor(Math.random() * 15);
+    return 30 + Math.floor(Math.random() * 10);
+  };
+
+  const generateNonOverlappingPositions = (count: number) => {
+    const gridCols = 24;  // More columns for finer distribution
+    const gridRows = 16;  // More rows
+    const cellWidth = 100 / gridCols;
+    const cellHeight = 100 / gridRows;
+    
+    // Create all possible cells
+    const cells = [];
+    for (let row = 0; row < gridRows; row++) {
+      for (let col = 0; col < gridCols; col++) {
+        cells.push({ row, col });
+      }
+    }
+    
+    // Shuffle
+    for (let i = cells.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cells[i], cells[j]] = [cells[j], cells[i]];
+    }
+    
+    // Take required number of cells
+    const selected = cells.slice(0, count);
+    
+    return selected.map(cell => ({
+      top: Math.min(95, Math.max(2, (cell.row / gridRows) * 100 + (Math.random() - 0.5) * (cellHeight * 0.8))),
+      left: Math.min(95, Math.max(2, (cell.col / gridCols) * 100 + (Math.random() - 0.5) * (cellWidth * 0.8)))
+    }));
+  };
+
+  const getBalancedIcons = (count: number) => {
+    const typesCount = ICON_TYPES.length;
+    const basePerType = Math.floor(count / typesCount);
+    const remainder = count % typesCount;
+    
+    const result = [];
+    for (let i = 0; i < typesCount; i++) {
+      const numToAdd = basePerType + (i < remainder ? 1 : 0);
+      for (let j = 0; j < numToAdd; j++) {
+        result.push(ICON_TYPES[i]);
+      }
+    }
+    
+    // Shuffle
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    
+    return result;
+  };
+
+  const generateIcons = () => {
+    const count = getIconCount();
+    const positions = generateNonOverlappingPositions(count);
+    const iconTypes = getBalancedIcons(count);
+    
+    const newIcons = positions.map((pos, index) => ({
+      ...pos,
+      icon: iconTypes[index],
+      size: getIconSize(),
+      duration: 6 + Math.random() * 10,    // 6-16 seconds (faster)
+      delay: Math.random() * 5,
+      opacity: 0.06 + Math.random() * 0.06, // 0.06-0.12 (subtle)
+      animationType: ['floatUpDown', 'floatLeftRight', 'floatRotate'][
+        Math.floor(Math.random() * 3)
+      ]
+    }));
+    
+    setIcons(newIcons);
+  };
 
   useEffect(() => {
-    const iconCount = 48;
+    generateIcons();
     
-    // Generate evenly distributed positions
-    const generatePositions = () => {
-      const pos: { top: number, left: number }[] = [];
-      const rows = 6;
-      const cols = 8;
-      
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          if (pos.length < iconCount && Math.random() > 0.5) {
-            pos.push({
-              top: (row / rows) * 100 + Math.random() * (100 / rows),
-              left: (col / cols) * 100 + Math.random() * (100 / cols)
-            });
-          }
-        }
-      }
-      
-      // Add edge icons
-      const edges = [
-        { top: 5, left: 5 }, { top: 5, left: 50 }, { top: 5, left: 95 },
-        { top: 50, left: 5 }, { top: 50, left: 95 },
-        { top: 95, left: 5 }, { top: 95, left: 50 }, { top: 95, left: 95 }
-      ];
-      
-      edges.forEach(edge => {
-        if (pos.length < iconCount) {
-          pos.push(edge);
-        }
-      });
-      
-      // If we are still below the count, pad it randomly
-      while (pos.length < iconCount) {
-        pos.push({
-          top: Math.random() * 100,
-          left: Math.random() * 100
-        });
-      }
-      
-      return pos.slice(0, iconCount);
+    let resizeTimeout: any;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(generateIcons, 250);
     };
-
-    const positions = generatePositions();
-
-    const generatedIcons: IconData[] = positions.map((pos, i) => {
-      const size = Math.random() * 40 + 20; // 20px to 60px
-      const duration = Math.random() * 8 + 6; // 6s to 14s (faster)
-      const delay = Math.random() * 5; // 0s to 5s
-      const opacity = 0.08 + Math.random() * 0.08; // 0.08 to 0.16 (more visible)
-      
-      return {
-        id: i,
-        icon: iconsList[Math.floor(Math.random() * iconsList.length)],
-        size,
-        duration,
-        delay,
-        animationType: ["floatUpDown", "floatLeftRight", "floatRotate"][Math.floor(Math.random() * 3)],
-        top: pos.top,
-        left: pos.left,
-        opacity,
-      };
-    });
     
-    setIcons(generatedIcons);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
 
   if (icons.length === 0) return null;
 
   return (
-    <div className="floating-icons-container">
-      {icons.map((item, index) => (
+    <div className="floating-icons-container" ref={containerRef}>
+      {icons.map((icon, index) => (
         <i
-          key={item.id}
-          className={`fas ${item.icon} floating-icon type-${item.animationType} icon-index-${index}`}
+          key={index}
+          className={`fas ${icon.icon.class} floating-icon type-${icon.animationType}`}
           style={{
-            top: `${item.top}%`,
-            left: `${item.left}%`,
-            fontSize: `${item.size}px`,
-            opacity: item.opacity,
-            animationDuration: `${item.duration}s`,
-            animationDelay: `${item.delay}s`,
-            willChange: "transform",
-          }}
+            position: 'fixed',
+            top: `${icon.top}%`,
+            left: `${icon.left}%`,
+            fontSize: `${icon.size}px`,
+            opacity: icon.opacity,
+            animationDuration: `${icon.duration}s`,
+            animationDelay: `${icon.delay}s`,
+            pointerEvents: 'none',
+            zIndex: 0,
+            color: '#db4b27',
+            willChange: 'transform'
+          } as any}
         />
       ))}
     </div>
