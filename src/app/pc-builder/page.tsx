@@ -159,7 +159,7 @@ export default function PCBuilderPage() {
                     )}
                 </div>
                 <div className={`component-status-compact ${sel ? 'selected' : ''}`}>
-                    {sel ? sel.title : 'Choose a ' + config.label}
+                    {sel ? sel.title : 'Select a ' + config.label}
                 </div>
                 <div className="component-price-compact">
                     {sel ? `৳${sel.price.toLocaleString()}` : '—'}
@@ -174,7 +174,7 @@ export default function PCBuilderPage() {
                         className={`choose-btn-compact ${sel ? 'selected' : ''}`}
                         onClick={() => router.push(`/pc-builder/select/${config.key}`)}
                     >
-                        {sel ? 'Change' : 'Choose'}
+                        {sel ? 'Change' : 'Select'}
                     </button>
                 </div>
             </div>

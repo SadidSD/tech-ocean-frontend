@@ -140,7 +140,7 @@ export default function CCTVBuilderPage() {
                             {sel.title}
                             {multiplier > 1 && <span style={{ color: '#1B5B97', marginLeft: '6px', fontWeight: 600 }}>×{multiplier}</span>}
                         </>
-                    ) : 'Choose a ' + config.label}
+                    ) : 'Select a ' + config.label}
                 </div>
                 <div className="component-price-compact">
                     {sel ? `৳${finalPrice.toLocaleString()}` : '—'}
@@ -155,7 +155,7 @@ export default function CCTVBuilderPage() {
                         className={`choose-btn-compact ${sel ? 'selected' : ''}`}
                         onClick={() => router.push(`/cctv-builder/select/${config.key}`)}
                     >
-                        {sel ? 'Change' : 'Choose'}
+                        {sel ? 'Change' : 'Select'}
                     </button>
                 </div>
             </div>
