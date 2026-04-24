@@ -3801,3 +3801,23 @@ body {
     display: none !important;
   }
 }
+
+/* ── Match Mobile Select Button to Desktop ── */
+.choose-btn-compact {
+  background: #F57214 !important;
+  color: white !important;
+  border: none !important;
+  transition: all 0.2s !important;
+}
+
+.choose-btn-compact:hover {
+  background: #E05A00 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* If already selected, maybe keep it different or same? 
+   The user said "same colour and background also for the select button", 
+   referring to the 'Select' state. */
+.choose-btn-compact.selected {
+  background: #1B5B97 !important; /* Keep the 'Change' state blue to distinguish? */
+}
