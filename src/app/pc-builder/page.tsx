@@ -19,7 +19,7 @@ const getIconComponent = (iconName: string) => {
 };
 
 // ── Desktop Config (Original order) ──────────────────────────────────────────
-const PC_BUILDER_CONFIG = [
+const PC_CORE_CONFIG = [
     { key: 'cpu',         label: 'CPU',          reactIcon: 'BsCpu',       required: true  },
     { key: 'motherboard', label: 'Motherboard',  reactIcon: 'GiCircuitry', required: true  },
     { key: 'gpu',         label: 'GPU',          reactIcon: 'BsGpuCard',   required: false },
@@ -28,6 +28,8 @@ const PC_BUILDER_CONFIG = [
     { key: 'psu',         label: 'Power Supply', reactIcon: '', imageSrc: '/img/psu_logo.png', required: true  },
     { key: 'cooler',      label: 'CPU Cooler',   reactIcon: 'GiComputerFan', required: false },
     { key: 'casing',      label: 'Casing',       reactIcon: 'BsPc',        required: true  },
+    { key: 'networkCard', label: 'Network Card',  reactIcon: 'FaWifi',      required: false },
+    { key: 'soundCard',   label: 'Sound Card',    reactIcon: 'FaMusic',     required: false },
 ];
 
 // ── Mobile Config (StarTech order) ──────────────────────────────────────────
@@ -43,27 +45,40 @@ const PC_CORE_CONFIG_MOBILE = [
 ];
 
 const PC_PERIPHERALS_CONFIG = [
-    { key: 'monitor',   label: 'Monitor',   reactIcon: 'FaDesktop'    },
-    { key: 'keyboard',  label: 'Keyboard',  reactIcon: 'FaKeyboard'   },
-    { key: 'mouse',     label: 'Mouse',     reactIcon: 'FaMouse'      },
-    { key: 'headphone', label: 'Headphone', reactIcon: 'FaHeadphones' },
-    { key: 'speaker',   label: 'Speaker',   reactIcon: 'FaVolumeUp'   },
+    { key: 'monitor',    label: 'Monitor',    reactIcon: 'FaDesktop'    },
+    { key: 'keyboard',   label: 'Keyboard',   reactIcon: 'FaKeyboard'   },
+    { key: 'mouse',      label: 'Mouse',      reactIcon: 'FaMouse'      },
+    { key: 'headphone',  label: 'Headphone',  reactIcon: 'FaHeadphones' },
+    { key: 'speaker',    label: 'Speaker',    reactIcon: 'FaVolumeUp'   },
+    { key: 'webcam',     label: 'Webcam',     reactIcon: 'FaVideo'      },
+    { key: 'microphone', label: 'Microphone', reactIcon: 'FaMicrophone' },
+    { key: 'ups',        label: 'UPS',        reactIcon: 'FaBatteryFull'},
 ];
 
-const REQUIRED_KEYS = PC_BUILDER_CONFIG.filter(c => c.required).map(c => c.key);
+const PC_ACCESSORIES_CONFIG = [
+    { key: 'extStorage',  label: 'External Storage', reactIcon: 'FaHdd'        },
+    { key: 'usbHub',      label: 'USB Hub',         reactIcon: 'FaSitemap'    },
+    { key: 'mousepad',    label: 'Mousepad',        reactIcon: 'FaSquare'     },
+    { key: 'gamingChair', label: 'Gaming Chair',    reactIcon: 'FaChair'      },
+    { key: 'thermalPaste',label: 'Thermal Paste',   reactIcon: 'FaTint'       },
+    { key: 'cableMgmt',   label: 'Cable Management',reactIcon: 'FaStream'     },
+    { key: 'ledStrip',    label: 'LED Strip',       reactIcon: 'FaLightbulb'  },
+];
+
+const REQUIRED_KEYS = PC_CORE_CONFIG.filter(c => c.required).map(c => c.key);
 
 export default function PCBuilderPage() {
     const { addToCart } = useContext(CartContext);
     const router = useRouter();
     const [selections, setSelections] = useBuilderStorage<Record<string, any>>('pcBuilderState', {});
     const [peripheralsOpen, setPeripheralsOpen] = useState(false);
+    const [accessoriesOpen, setAccessoriesOpen] = useState(false);
     const [hideEmpty, setHideEmpty] = useState(false);
 
     const totalPrice   = Object.values(selections).reduce((s: number, i: any) => s + (i?.price   || 0), 0) as number;
     const totalWattage = Object.values(selections).reduce((s: number, i: any) => s + (i?.wattage || 0), 0) as number;
     const selectedRequired = REQUIRED_KEYS.filter(k => !!selections[k]).length;
     const progressPct = Math.round((selectedRequired / REQUIRED_KEYS.length) * 100);
-    const selectedPeripheralsCount = PC_PERIPHERALS_CONFIG.filter(p => !!selections[p.key]).length;
     const totalSelectedCount = Object.values(selections).filter(Boolean).length;
 
     const handleRemove = (key: string) => {
@@ -207,14 +222,22 @@ export default function PCBuilderPage() {
                             <span className="sr-toggle-label">Hide Unconfigured</span>
                         </label>
                     </div>
+                    
                     <BrandSectionTitle title="CORE COMPONENTS" subtitle="Select essential parts for your build" />
                     <div className="sr-rows">
-                        {PC_BUILDER_CONFIG.map(c => renderDesktopRow(c))}
+                        {PC_CORE_CONFIG.map(c => renderDesktopRow(c))}
                     </div>
-                    <BrandSectionTitle title="PERIPHERALS & OTHERS" subtitle="Complete your setup with accessories" />
+
+                    <BrandSectionTitle title="PERIPHERALS" subtitle="Monitors, Keyboards, Audio & more" />
                     <div className="sr-rows">
                         {PC_PERIPHERALS_CONFIG.map(c => renderDesktopRow(c))}
                     </div>
+
+                    <BrandSectionTitle title="ACCESSORIES & OTHERS" subtitle="Gaming chairs, Cables & Lighting" />
+                    <div className="sr-rows">
+                        {PC_ACCESSORIES_CONFIG.map(c => renderDesktopRow(c))}
+                    </div>
+
                     <div className="sr-summary-bar">
                         <div className="sr-summary-stats">
                             <div className="sr-summary-stat">
@@ -252,12 +275,14 @@ export default function PCBuilderPage() {
                     <div className="core-components-container">
                         {PC_CORE_CONFIG_MOBILE.map(c => renderMobileRow(c))}
                     </div>
+                    
+                    {/* Peripherals Mobile */}
                     <div className="peripherals-section">
                         <div className="peripherals-header" onClick={() => setPeripheralsOpen(!peripheralsOpen)}>
                             <i className={`fas fa-chevron-${peripheralsOpen ? 'down' : 'right'}`}></i>
-                            <span>Peripherals & Others</span>
+                            <span>Peripherals</span>
                             <span className="peripherals-count">
-                                {selectedPeripheralsCount} / {PC_PERIPHERALS_CONFIG.length} selected
+                                {PC_PERIPHERALS_CONFIG.filter(p => !!selections[p.key]).length} / {PC_PERIPHERALS_CONFIG.length}
                             </span>
                         </div>
                         {peripheralsOpen && (
@@ -266,6 +291,23 @@ export default function PCBuilderPage() {
                             </div>
                         )}
                     </div>
+
+                    {/* Accessories Mobile */}
+                    <div className="peripherals-section" style={{marginTop: '10px'}}>
+                        <div className="peripherals-header" onClick={() => setAccessoriesOpen(!accessoriesOpen)}>
+                            <i className={`fas fa-chevron-${accessoriesOpen ? 'down' : 'right'}`}></i>
+                            <span>Accessories & Others</span>
+                            <span className="peripherals-count">
+                                {PC_ACCESSORIES_CONFIG.filter(p => !!selections[p.key]).length} / {PC_ACCESSORIES_CONFIG.length}
+                            </span>
+                        </div>
+                        {accessoriesOpen && (
+                            <div className="peripherals-list">
+                                {PC_ACCESSORIES_CONFIG.map(c => renderMobileRow(c))}
+                            </div>
+                        )}
+                    </div>
+
                     <div className="summary-bar-compact">
                         <div className="summary-stats">
                             <div className="stat">
@@ -286,7 +328,7 @@ export default function PCBuilderPage() {
                                 <i className="fas fa-print"></i> Print
                             </button>
                             <button className="complete-build-btn" onClick={handleAddToCart} disabled={Object.values(selections).filter(Boolean).length === 0}>
-                                <i className="fas fa-shopping-cart"></i> Complete Build & Add to Cart
+                                <i className="fas fa-shopping-cart"></i> Add to Cart
                             </button>
                         </div>
                     </div>

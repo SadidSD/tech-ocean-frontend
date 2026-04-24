@@ -112,6 +112,58 @@ export const MOCK_PC_COMPONENTS = {
     headphone: [
         { id: 'pc_hp_1', title: 'Havit H2002d Gaming Headset', specs: 'Wired 3.5mm | Stereo | 50mm Drivers | With Mic', price: 1800, wattage: 0, imgIcon: 'fa-headphones', type: 'Headphone' },
         { id: 'pc_hp_2', title: 'Razer BlackShark V2 X Gaming Headset', specs: 'Wired 3.5mm | 7.1 Surround | 50mm Drivers | With Mic', price: 5500, wattage: 0, imgIcon: 'fa-headphones', type: 'Headphone' }
+    ],
+    speaker: [
+        { id: 'pc_sp_1', title: 'Microlab M-108 2.1 Speaker', specs: '11W RMS | 2.1 Channel | Wired', price: 2800, wattage: 10, imgIcon: 'fa-volume-up', type: 'Speaker' },
+        { id: 'pc_sp_2', title: 'Fantech GS202 Sakura Edition RGB Speaker', specs: 'RGB Lighting | 3.5mm Jack | USB Powered', price: 1200, wattage: 5, imgIcon: 'fa-volume-up', type: 'Speaker' }
+    ],
+    ups: [
+        { id: 'pc_ups_1', title: 'MaxGreen 650VA Offline UPS', specs: '650VA | 230V | 15-20 Min Backup', price: 3500, wattage: 0, imgIcon: 'fa-battery-full', type: 'UPS' },
+        { id: 'pc_ups_2', title: 'Apollo 1200VA Offline UPS', specs: '1200VA | 230V | 30-35 Min Backup', price: 8500, wattage: 0, imgIcon: 'fa-battery-full', type: 'UPS' }
+    ],
+    webcam: [
+        { id: 'pc_wc_1', title: 'Logitech C270 HD Webcam', specs: '720p | 30fps | Built-in Mic', price: 2800, wattage: 2, imgIcon: 'fa-video', type: 'Webcam' },
+        { id: 'pc_wc_2', title: 'Logitech C922 Pro Stream Webcam', specs: '1080p | 30fps | 720p | 60fps', price: 9500, wattage: 3, imgIcon: 'fa-video', type: 'Webcam' }
+    ],
+    microphone: [
+        { id: 'pc_mic_1', title: 'Boyaby M1 Lavalier Microphone', specs: 'Omnidirectional | 3.5mm Jack | 6m Cable', price: 850, wattage: 0, imgIcon: 'fa-microphone', type: 'Microphone' },
+        { id: 'pc_mic_2', title: 'Razer Seiren Mini USB Streaming Microphone', specs: 'Supercardioid | USB | Pro Grade', price: 4500, wattage: 0, imgIcon: 'fa-microphone', type: 'Microphone' }
+    ],
+    extStorage: [
+        { id: 'pc_es_1', title: 'Transcend StoreJet 25M3 1TB External HDD', specs: '1TB | USB 3.1 | Military-Grade Resistance', price: 5800, wattage: 0, imgIcon: 'fa-hdd', type: 'External Storage' },
+        { id: 'pc_es_2', title: 'Samsung T7 500GB Portable SSD', specs: '500GB | USB 3.2 Gen 2 | Up to 1050MB/s', price: 8500, wattage: 0, imgIcon: 'fa-hdd', type: 'External Storage' }
+    ],
+    usbHub: [
+        { id: 'pc_uh_1', title: 'ORICO H4019-U3 4 Port USB 3.0 Hub', specs: '4x USB 3.0 Ports | 5Gbps Speed', price: 950, wattage: 0, imgIcon: 'fa-hub', type: 'USB Hub' },
+        { id: 'pc_uh_2', title: 'TP-Link UH700 7-Port USB 3.0 Hub', specs: '7x USB 3.0 Ports | Dedicated Charging', price: 3200, wattage: 0, imgIcon: 'fa-hub', type: 'USB Hub' }
+    ],
+    mousepad: [
+        { id: 'pc_mp_1', title: 'Fantech MP35 Gaming Mousepad', specs: 'Speed Surface | Rubber Base | 350x250mm', price: 350, wattage: 0, imgIcon: 'fa-square', type: 'Mousepad' },
+        { id: 'pc_mp_2', title: 'Razer Goliathus Extended Chroma RGB Mousepad', specs: 'RGB Lighting | Cloth Surface | Large Size', price: 5500, wattage: 5, imgIcon: 'fa-square', type: 'Mousepad' }
+    ],
+    gamingChair: [
+        { id: 'pc_gc_1', title: 'Fantech GC-181 Alpha Gaming Chair', specs: 'PU Leather | Class 4 Gas Lift | 180 Degree Recline', price: 18500, wattage: 0, imgIcon: 'fa-chair', type: 'Gaming Chair' },
+        { id: 'pc_gc_2', title: 'Cougar Armor One Gaming Chair', specs: 'Breathable PVC Leather | High Density Foam', price: 24500, wattage: 0, imgIcon: 'fa-chair', type: 'Gaming Chair' }
+    ],
+    networkCard: [
+        { id: 'pc_nc_1', title: 'TP-Link TL-WN881ND 300Mbps Wireless N PCI Express Adapter', specs: '300Mbps | 2.4GHz | PCIe', price: 1550, wattage: 2, imgIcon: 'fa-wifi', type: 'Network Card' },
+        { id: 'pc_nc_2', title: 'TP-Link Archer TX3000E AX3000 Wi-Fi 6 Bluetooth 5.0 PCIe Adapter', specs: 'AX3000 | Wi-Fi 6 | Bluetooth 5.0', price: 4800, wattage: 3, imgIcon: 'fa-wifi', type: 'Network Card' }
+    ],
+    soundCard: [
+        { id: 'pc_sc_1', title: 'Creative Sound Blaster Audigy Fx 5.1 PCIe Sound Card', specs: '5.1 Channel | 24-bit/192kHz | PCIe', price: 4500, wattage: 5, imgIcon: 'fa-music', type: 'Sound Card' },
+        { id: 'pc_sc_2', title: 'ASUS Essence STX II Hi-Fi Sound Card', specs: '7.1 Channel | 124dB SNR | Audiophile Grade', price: 22500, wattage: 10, imgIcon: 'fa-music', type: 'Sound Card' }
+    ],
+    thermalPaste: [
+        { id: 'pc_tp_1', title: 'Arctic MX-4 4g Thermal Compound', specs: 'Carbon-based | 8.5 W/mK | Non-Conductive', price: 650, wattage: 0, imgIcon: 'fa-tint', type: 'Thermal Paste' },
+        { id: 'pc_tp_2', title: 'Thermal Grizzly Kryonaut 1g', specs: 'Extreme Performance | 12.5 W/mK', price: 1200, wattage: 0, imgIcon: 'fa-tint', type: 'Thermal Paste' }
+    ],
+    cableMgmt: [
+        { id: 'pc_cm_1', title: 'Orico Cable Organizer Silicone 5 Clips', specs: 'Silicone | 5 Clips | Adhesive Base', price: 350, wattage: 0, imgIcon: 'fa-stream', type: 'Cable Management' },
+        { id: 'pc_cm_2', title: 'Ugreen Reusable Cable Ties 10pcs', specs: 'Velcro | 150mm | Black', price: 250, wattage: 0, imgIcon: 'fa-stream', type: 'Cable Management' }
+    ],
+    ledStrip: [
+        { id: 'pc_led_1', title: 'Phanteks Digital-RGB LED Strip Combo Kit', specs: '2x 400mm Strips | ARGB | Magnet/Adhesive', price: 1800, wattage: 5, imgIcon: 'fa-lightbulb', type: 'LED Strip' },
+        { id: 'pc_led_2', title: 'Deepcool RGB 200 PRO Addressable RGB LED Strip', specs: 'Addressable RGB | ASUS Aura Sync Compatible', price: 1200, wattage: 3, imgIcon: 'fa-lightbulb', type: 'LED Strip' }
     ]
 };
 
@@ -143,5 +195,9 @@ export const MOCK_CCTV_COMPONENTS = {
     installKit: [
         { id: 'cctv_kit_1', title: 'Basic CCTV Installation Kit',                specs: 'Wall Mounts, Screws, Cable Clips, Junction Box',      price: 800,   imgIcon: 'fa-toolbox' },
         { id: 'cctv_kit_2', title: 'Professional CCTV Installation Kit',         specs: 'Heavy Duty Mounts, Conduit, Connectors, Full Tools',  price: 2000,  imgIcon: 'fa-toolbox' }
+    ],
+    cable: [
+        { id: 'cctv_cb_1', title: 'Cat6 Full Copper Network Cable (305m)',       specs: '305m Roll | Full Copper | High Speed',               price: 8500,  imgIcon: 'fa-network-wired' },
+        { id: 'cctv_cb_2', title: 'Cat6 High Quality Network Cable (per meter)', specs: 'Price per Meter | White | High Bandwidth',           price: 35,    imgIcon: 'fa-network-wired' }
     ]
 };

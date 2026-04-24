@@ -19,6 +19,7 @@ const CCTV_CORE_CONFIG = [
     { key: 'recorder',    label: 'NVR / DVR Recorder', reactIcon: 'GiServerRack',  required: true  },
     { key: 'storage',     label: 'Surveillance HDD',   reactIcon: 'FaHdd',         required: true  },
     { key: 'powerSupply', label: 'Power Supply',       reactIcon: 'FaPlug',        required: true  },
+    { key: 'cable',       label: 'CCTV Cable',        reactIcon: 'FaNetworkWired',required: true  },
 ];
 
 const CCTV_OPTIONAL_CONFIG = [
