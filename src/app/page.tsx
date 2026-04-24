@@ -24,7 +24,7 @@ export default function Home() {
               </div>
               
               <div className="products-horizontal-scroll">
-                {MOCK_PRODUCTS.slice(0, 6).map(product => (
+                {MOCK_PRODUCTS.slice(0, 6).map((product: any) => (
                   <div className="mobile-product-card" key={product.id}>
                     {product.badge && <div className="product-badge flash-sale" style={{background: product.badgeColor || '#db4b27'}}>{product.badge}</div>}
                     <img src={product.imgUrl} alt={product.title} />
