@@ -235,16 +235,40 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
 };
 
 export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { isMobileMenuOpen: boolean, onCloseMobileMenu: () => void, categories: Category[] }) => {
+    const [activeId, setActiveId] = useState<number | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleMouseEnter = (id: number) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setActiveId(id);
+    };
+
+    const handleMouseLeave = () => {
+        timeoutRef.current = setTimeout(() => {
+            setActiveId(null);
+        }, 300); // 300ms delay
+    };
+
     return (
         <>
             <nav className={`mega-menu-wrapper ${isMobileMenuOpen ? 'open' : ''}`} style={{ display: isMobileMenuOpen ? 'block' : '' }}>
                 <div className="container">
                     <ul className="mega-menu" id="megaMenu">
                         {categories.map((cat) => (
-                            <li className={`menu-item ${cat.children && cat.children.length > 0 ? 'has-dropdown' : ''}`} key={cat.id}>
+                            <li 
+                                className={`menu-item ${cat.children && cat.children.length > 0 ? 'has-dropdown' : ''} ${activeId === cat.id ? 'active-dropdown' : ''}`} 
+                                key={cat.id}
+                                onMouseEnter={() => handleMouseEnter(cat.id)}
+                                onMouseLeave={handleMouseLeave}
+                            >
                                 <Link href={`/category/${cat.id}`}>{cat.name}</Link>
                                 {cat.children && cat.children.length > 0 && (
-                                    <div className="dropdown-content">
+                                    <div className="dropdown-content" style={{ 
+                                        opacity: activeId === cat.id ? 1 : 0,
+                                        visibility: activeId === cat.id ? 'visible' : 'hidden',
+                                        transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
+                                        display: 'flex' 
+                                    }}>
                                         <div className="column">
                                             <Link href={`/category/${cat.id}`} className="dropdown-heading">All {cat.name}</Link>
                                             {cat.children.map(subCat => (

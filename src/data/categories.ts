@@ -69,24 +69,6 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 7, name: "Networking", reactIcon: "FaGlobe", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "networking",
-      children: [
-          { id: 701, name: "Router", slug: "router" },
-          { id: 702, name: "Switch", slug: "switch" },
-          { id: 703, name: "Access Point", slug: "access-point" },
-          { id: 704, name: "Starlink", slug: "starlink" }
-      ]
-  },
-  {
-      id: 8, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone",
-      children: [
-          { id: 801, name: "iPhone", slug: "iphone" },
-          { id: 802, name: "Samsung", slug: "samsung-mobile" },
-          { id: 803, name: "Xiaomi", slug: "xiaomi" },
-          { id: 804, name: "OnePlus", slug: "oneplus" }
-      ]
-  },
-  {
       id: 9, name: "Office Equipment", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-equipment",
       children: [
           { id: 901, name: "Printer", slug: "printer" },
@@ -122,14 +104,6 @@ export const MOCK_CATEGORIES = [
       ]
   },
   {
-      id: 13, name: "Software", reactIcon: "FaCompactDisc", iconColor: "#A855F7", iconBg: "rgba(168, 85, 247, 0.12)", slug: "software",
-      children: [
-          { id: 1301, name: "Operating System", slug: "os" },
-          { id: 1302, name: "Antivirus", slug: "antivirus" },
-          { id: 1303, name: "Office Suite", slug: "office-suite" }
-      ]
-  },
-  {
       id: 14, name: "Server & Storage", reactIcon: "FaServer", iconColor: "#64748B", iconBg: "rgba(100, 116, 139, 0.12)", slug: "server-storage",
       children: [
           { id: 1401, name: "Rack Server", slug: "rack-server" },
@@ -137,14 +111,4 @@ export const MOCK_CATEGORIES = [
           { id: 1403, name: "Network Storage", slug: "network-storage" }
       ]
   },
-  {
-      id: 15, name: "Brand", reactIcon: "FaTags", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "brand",
-      children: [
-          { id: 1501, name: "Apple", slug: "apple" },
-          { id: 1502, name: "Samsung", slug: "samsung" },
-          { id: 1503, name: "Asus", slug: "asus" },
-          { id: 1504, name: "HP", slug: "hp" },
-          { id: 1505, name: "Dell", slug: "dell" }
-      ]
-  }
 ];
