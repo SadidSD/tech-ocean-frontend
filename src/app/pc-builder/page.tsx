@@ -10,6 +10,8 @@ import * as GiIcons from 'react-icons/gi';
 import * as SiIcons from 'react-icons/si';
 import * as BsIcons from 'react-icons/bs';
 
+import { COMPONENT_METADATA } from '@/data/component-structure';
+
 const getIconComponent = (iconName: string) => {
     if (!iconName) return FaIcons.FaBox;
     if (iconName.startsWith('Gi')) return (GiIcons as any)[iconName] || FaIcons.FaBox;
@@ -18,52 +20,23 @@ const getIconComponent = (iconName: string) => {
     return (FaIcons as any)[iconName] || FaIcons.FaBox;
 };
 
-// ── Desktop Config (Original order) ──────────────────────────────────────────
-const PC_CORE_CONFIG = [
-    { key: 'cpu',         label: 'CPU',          reactIcon: 'BsCpu',       required: true  },
-    { key: 'motherboard', label: 'Motherboard',  reactIcon: 'GiCircuitry', required: true  },
-    { key: 'gpu',         label: 'GPU',          reactIcon: 'BsGpuCard',   required: false },
-    { key: 'ram',         label: 'RAM',          reactIcon: 'FaMemory',    required: true  },
-    { key: 'storage',     label: 'Storage',      reactIcon: 'FaHdd',       required: true  },
-    { key: 'psu',         label: 'Power Supply', reactIcon: '', imageSrc: '/img/psu_logo.png', required: true  },
-    { key: 'cooler',      label: 'CPU Cooler',   reactIcon: 'GiComputerFan', required: false },
-    { key: 'casing',      label: 'Casing',       reactIcon: 'BsPc',        required: true  },
-    { key: 'networkCard', label: 'Network Card',  reactIcon: 'FaWifi',      required: false },
-    { key: 'soundCard',   label: 'Sound Card',    reactIcon: 'FaMusic',     required: false },
-];
+// Derive configurations from COMPONENT_METADATA
+const allMeta = Object.values(COMPONENT_METADATA).sort((a, b) => a.displayOrder - b.displayOrder);
 
-// ── Mobile Config (StarTech order) ──────────────────────────────────────────
-const PC_CORE_CONFIG_MOBILE = [
-    { key: 'cpu',         label: 'CPU',           reactIcon: 'BsCpu',         required: true  },
-    { key: 'cooler',      label: 'CPU Cooler',    reactIcon: 'GiComputerFan', required: false },
-    { key: 'motherboard', label: 'Motherboard',   reactIcon: 'GiCircuitry',   required: true  },
-    { key: 'ram',         label: 'RAM',           reactIcon: 'FaMemory',      required: true  },
-    { key: 'storage',     label: 'Storage',       reactIcon: 'FaHdd',         required: true  },
-    { key: 'gpu',         label: 'Graphics Card', reactIcon: 'BsGpuCard',     required: false },
-    { key: 'psu',         label: 'Power Supply',  reactIcon: '',  imageSrc: '/img/psu_logo.png', required: true },
-    { key: 'casing',      label: 'Casing',        reactIcon: 'BsPc',          required: true  },
-];
+const PC_CORE_CONFIG = allMeta
+  .filter(m => m.builderGroup === 'core')
+  .map(m => ({ key: m.id, label: m.name.replace(' (CPU)', '').replace(' (PSU)', ''), reactIcon: m.icon, required: m.requiredInBuilder }));
 
-const PC_PERIPHERALS_CONFIG = [
-    { key: 'monitor',    label: 'Monitor',    reactIcon: 'FaDesktop'    },
-    { key: 'keyboard',   label: 'Keyboard',   reactIcon: 'FaKeyboard'   },
-    { key: 'mouse',      label: 'Mouse',      reactIcon: 'FaMouse'      },
-    { key: 'headphone',  label: 'Headphone',  reactIcon: 'FaHeadphones' },
-    { key: 'speaker',    label: 'Speaker',    reactIcon: 'FaVolumeUp'   },
-    { key: 'webcam',     label: 'Webcam',     reactIcon: 'FaVideo'      },
-    { key: 'microphone', label: 'Microphone', reactIcon: 'FaMicrophone' },
-    { key: 'ups',        label: 'UPS',        reactIcon: 'FaBatteryFull'},
-];
+const PC_PERIPHERALS_CONFIG = allMeta
+  .filter(m => m.builderGroup === 'peripherals')
+  .map(m => ({ key: m.id, label: m.name, reactIcon: m.icon }));
 
-const PC_ACCESSORIES_CONFIG = [
-    { key: 'extStorage',  label: 'External Storage', reactIcon: 'FaHdd'        },
-    { key: 'usbHub',      label: 'USB Hub',         reactIcon: 'FaSitemap'    },
-    { key: 'mousepad',    label: 'Mousepad',        reactIcon: 'FaSquare'     },
-    { key: 'gamingChair', label: 'Gaming Chair',    reactIcon: 'FaChair'      },
-    { key: 'thermalPaste',label: 'Thermal Paste',   reactIcon: 'FaTint'       },
-    { key: 'cableMgmt',   label: 'Cable Management',reactIcon: 'FaStream'     },
-    { key: 'ledStrip',    label: 'LED Strip',       reactIcon: 'FaLightbulb'  },
-];
+const PC_ACCESSORIES_CONFIG = allMeta
+  .filter(m => m.builderGroup === 'accessories')
+  .map(m => ({ key: m.id, label: m.name, reactIcon: m.icon }));
+
+// For mobile, we might want a specific order or subset
+const PC_CORE_CONFIG_MOBILE = [...PC_CORE_CONFIG]; 
 
 const REQUIRED_KEYS = PC_CORE_CONFIG.filter(c => c.required).map(c => c.key);
 

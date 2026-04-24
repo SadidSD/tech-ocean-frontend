@@ -42,11 +42,22 @@ export const MOCK_CATEGORIES = [
           { id: 501, name: "Processor (CPU)", slug: "processor" },
           { id: 502, name: "Motherboard", slug: "motherboard" },
           { id: 503, name: "Graphics Card (GPU)", slug: "graphics-card" },
-          { id: 504, name: "RAM", slug: "ram" },
+          { id: 504, name: "RAM (Desktop)", slug: "ram-desktop" },
           { id: 505, name: "Power Supply (PSU)", slug: "power-supply" },
           { id: 506, name: "Storage (SSD/HDD)", slug: "storage" },
           { id: 507, name: "Casing", slug: "casing" },
-          { id: 508, name: "CPU Cooler", slug: "cooler" }
+          { id: 508, name: "CPU Cooler", slug: "cooler" },
+          { id: 509, name: "RAM (Laptop)", slug: "ram-laptop" },
+          { id: 510, name: "Hard Disk Drive (HDD)", slug: "hdd" },
+          { id: 511, name: "Case Fan", slug: "case-fan" },
+          { id: 512, name: "Liquid Cooling", slug: "liquid-cooling" },
+          { id: 513, name: "Optical Drive", slug: "optical-drive" },
+          { id: 514, name: "Thermal Paste", slug: "thermal-paste" },
+          { id: 515, name: "Network Card", slug: "network-card" },
+          { id: 516, name: "Sound Card", slug: "sound-card" },
+          { id: 517, name: "UPS", slug: "ups" },
+          { id: 518, name: "Monitor Arm", slug: "monitor-arm" },
+          { id: 519, name: "Capture Card", slug: "capture-card" }
       ]
   },
   {
