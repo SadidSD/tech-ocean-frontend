@@ -3788,3 +3788,16 @@ body {
     font-size: 13px !important;
   }
 }
+
+/* ── Visibility Toggles for Desktop/Mobile Builder ── */
+@media (min-width: 769px) {
+  .builder-mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .builder-desktop-only {
+    display: none !important;
+  }
+}
