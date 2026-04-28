@@ -4,6 +4,8 @@
     color: #fff;
     font-size: 13px;
     padding: 7px 0;
+    position: relative;
+    z-index: 1001;
 }
 
 .top-bar-inner {
@@ -39,11 +41,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
+  background: white !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1000; margin-bottom: 0 !important;
 }
 
 .site-logo {
@@ -292,6 +294,8 @@
 .mega-menu-wrapper {
     background-color: var(--secondary-color);
     border-bottom: 2px solid var(--primary-color);
+    position: relative;
+    z-index: 1000;
 }
 
 .mega-menu {
@@ -433,11 +437,11 @@
 .system-builder-dropdown {
   display: none;
   position: absolute;
-  background: white;
+  background: white !important;
   min-width: 220px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.1);
   border-radius: 8px;
-  z-index: 1000;
+  z-index: 1000; margin-bottom: 0 !important;
   top: 100%;
   left: 0;
   padding: 10px 0;
@@ -513,12 +517,12 @@
   left: 0;
   right: 0;
   height: 60px;
-  background: white;
+  background: white !important;
   padding: 0 16px;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  z-index: 1000;
+  z-index: 1000; margin-bottom: 0 !important;
 }
 
 @media (max-width: 768px) {
@@ -581,8 +585,8 @@
   left: 0;
   width: 280px;
   height: 100%;
-  background: white;
-  z-index: 1000;
+  background: white !important;
+  z-index: 1000; margin-bottom: 0 !important;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
@@ -667,7 +671,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: white !important;
   justify-content: space-around;
   padding: 10px 16px;
   border-top: 1px solid #eee;
@@ -730,7 +734,7 @@
 .mobile-search-bar input:focus {
   outline: none;
   border-color: #db4b27;
-  background: white;
+  background: white !important;
 }
 
 .mobile-search-bar .search-submit {
@@ -755,7 +759,7 @@
   display: none;
   position: sticky;
   top: 0;
-  background: white;
+  background: white !important;
   z-index: 100;
   padding: 12px 16px 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -765,6 +769,8 @@
 @media (max-width: 768px) {
   .mobile-header-container {
     display: block !important;
+    background: white !important;
+    z-index: 100 !important;
   }
   .desktop-header {
     display: none !important;
@@ -774,6 +780,8 @@
     padding: 0 !important;
     height: auto !important;
     display: block !important;
+    background: white !important;
+    z-index: 1000; margin-bottom: 0 !important;
   }
 }
 
@@ -849,7 +857,9 @@
 
 /* Search Row - Below Header */
 .mobile-search-row {
-  margin-top: 4px;
+  margin-top: 0;
+  background: white !important;
+  padding-bottom: 12px;
 }
 
 .search-wrapper {
@@ -878,7 +888,7 @@
 .mobile-search-input:focus {
   outline: none;
   border-color: #db4b27;
-  background: white;
+  background: white !important;
 }
 
 /* Bottom Navigation Bar Update */
@@ -892,7 +902,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: white;
+    background: white !important;
     display: flex !important;
     justify-content: space-around;
     align-items: center;
@@ -938,11 +948,11 @@
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
-  z-index: 1000;
+  z-index: 1000; margin-bottom: 0 !important;
 }
 
 .builder-modal {
-  background: white;
+  background: white !important;
   width: 100%;
   border-radius: 24px 24px 0 0;
   animation: slideUp 0.3s ease;

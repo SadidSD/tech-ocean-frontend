@@ -60,6 +60,10 @@
 .section-header {
     text-align: center;
     margin-bottom: 30px;
+    background: white;
+    padding: 20px 0;
+    position: relative;
+    z-index: 3; /* Blocks icons */
 }
 
 .section-header h2 {
@@ -76,10 +80,8 @@
 
 /* Feature Marquee / Store Info */
 .features-bar {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: white;
+    border: 1px solid #eee;
     padding: 15px 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     margin-bottom: 40px;
@@ -135,15 +137,15 @@
 }
 
 .category-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: white; /* Blocks icons */
     border-radius: 10px;
     padding: 20px 10px;
+    position: relative;
+    z-index: 3;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    border: 1px solid #eee;
 }
 
 .category-card:hover {
@@ -186,11 +188,11 @@
 
 
 .product-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: white; /* Blocks icons */
+    border: 1px solid #eee;
     border-radius: 5px;
+    position: relative;
+    z-index: 3;
     padding: 15px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     transition: var(--transition);
@@ -338,6 +340,9 @@
 /* Blogs Section */
 .blogs-section {
     padding: 40px 0;
+    background: transparent; /* Icons show through gaps */
+    position: relative;
+    z-index: 1;
 }
 
 .blogs-grid {
@@ -347,10 +352,10 @@
 }
 
 .blog-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: white; /* Blocks icons */
+    border: 1px solid #eee;
+    position: relative;
+    z-index: 3;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
@@ -570,21 +575,13 @@
 }
 
 .products-horizontal-scroll {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   padding: 0 16px 16px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.products-horizontal-scroll::-webkit-scrollbar {
-  display: none;
 }
 
 .mobile-product-card {
-  flex: 0 0 160px;
-  scroll-snap-align: start;
   background: white;
   border-radius: 12px;
   padding: 12px;
@@ -592,6 +589,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-product-card:active {
+  transform: scale(0.98);
+  background: #fafafa;
 }
 
 .mobile-product-card img {

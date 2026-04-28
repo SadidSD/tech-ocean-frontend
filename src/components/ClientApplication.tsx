@@ -116,9 +116,9 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
         <AuthContext.Provider value={{ userState, setUserState, showToast }}>
         <CartContext.Provider value={{ cartItems, setCartItems, addToCart, cartCount, isCartDrawerOpen, setIsCartDrawerOpen }}>
         <CompareContext.Provider value={{ compareItems, addToCompare, removeFromCompare, clearCompare, isInCompare }}>
-            <div className="app-container" style={{paddingBottom: '60px'}}>
+            <div className="app-container" style={{ position: 'relative', zIndex: 1 }}>
                 <Navigation cartCount={cartCount} compareCount={compareItems.length} categories={MOCK_CATEGORIES} />
-                <main style={{ minHeight: '60vh' }}>
+                <main className="main-content" style={{ minHeight: '60vh', background: 'transparent', position: 'relative', zIndex: 1 }}>
                     {children}
                 </main>
                 <Footer />

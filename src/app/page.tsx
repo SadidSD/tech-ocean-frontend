@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useContext } from 'react';
+import Link from 'next/link';
 import BrandSectionTitle from '@/components/BrandSectionTitle';
 import { HeroBanner, FeaturesBar, CategoryList, LatestBlogs } from '@/components/HomeComponents';
 import { ProductCard } from '@/components/ProductComponents';
@@ -18,14 +19,14 @@ export default function Home() {
             <CategoryList categories={MOCK_CATEGORIES} />
             
             <div className="mobile-products-section">
-              <div className="section-header" style={{display: 'flex', justifyContent: 'space-between', padding: '16px', alignItems: 'center'}}>
+              <div className="section-header" style={{display: 'flex', justifyContent: 'space-between', padding: '16px', alignItems: 'center', background: 'white'}}>
                 <h3 className="section-title" style={{margin: 0}}>Featured Products</h3>
                 <a href="#" className="view-all" style={{color: '#1B5B97', fontSize: '13px', fontWeight: 600, textDecoration: 'none'}}>View All →</a>
               </div>
               
-              <div className="products-horizontal-scroll">
+              <div className="products-grid" style={{ padding: '0 16px 24px' }}>
                 {MOCK_PRODUCTS.slice(0, 6).map((product: any) => (
-                  <div className="mobile-product-card" key={product.id}>
+                  <Link href={`/product/${product.id}`} className="mobile-product-card" key={product.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                     {product.badge && <div className="product-badge flash-sale" style={{background: product.badgeColor || '#db4b27'}}>{product.badge}</div>}
                     <img src={product.imgUrl} alt={product.title} />
                     <h4 className="product-title">{product.title}</h4>
@@ -33,8 +34,8 @@ export default function Home() {
                       <span className="current">{product.price}</span>
                       {product.oldPrice && <span className="old">{product.oldPrice}</span>}
                     </div>
-                    <button className="add-to-cart" onClick={(e) => { e.preventDefault(); addToCart(product); }}>Add to Cart</button>
-                  </div>
+                    <button className="add-to-cart" onClick={(e) => { e.preventDefault(); e.stopPropagation(); addToCart(product); }}>Add to Cart</button>
+                  </Link>
                 ))}
               </div>
             </div>

@@ -237,6 +237,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
 
 export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { isMobileMenuOpen: boolean, onCloseMobileMenu: () => void, categories: Category[] }) => {
     const [activeId, setActiveId] = useState<number | null>(null);
+    const [activeSubId, setActiveSubId] = useState<number | null>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const handleMouseEnter = (id: number) => {
@@ -247,7 +248,17 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
     const handleMouseLeave = () => {
         timeoutRef.current = setTimeout(() => {
             setActiveId(null);
+            setActiveSubId(null);
         }, 300); // 300ms delay
+    };
+
+    const handleSubMouseEnter = (id: number) => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setActiveSubId(id);
+    };
+
+    const handleSubMouseLeave = () => {
+        // No delay for sub-items
     };
 
     // Helper to get brands for a category from COMPONENT_METADATA
@@ -267,55 +278,142 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                         {categories.map((cat) => {
                             const brands = getCategoryBrands(cat.name);
                             const hasDropdown = brands.length > 0 || (cat.children && cat.children.length > 0);
+                            const isComponents = cat.name.toLowerCase().includes('component');
                             
                             return (
                                 <li 
-                                    className={`menu-item ${hasDropdown ? 'has-dropdown' : ''} ${activeId === cat.id ? 'active-dropdown' : ''}`} 
+                                    className={`menu-item ${hasDropdown ? 'has-dropdown' : ''} ${activeId === cat.id ? 'active-dropdown' : ''}`}
                                     key={cat.id}
                                     onMouseEnter={() => handleMouseEnter(cat.id)}
                                     onMouseLeave={handleMouseLeave}
                                 >
-                                    <Link href={`/category/${cat.id}`}>{cat.name}</Link>
-                                    {hasDropdown && (
-                                        <div className="dropdown-content" style={{ 
+                                    <Link href={`/category/${cat.slug || cat.id}`}>{cat.name}</Link>
+
+                                    {/* ── TWO-LEVEL DROPDOWN for Components ── */}
+                                    {isComponents && cat.children && cat.children.length > 0 && (
+                                        <div
+                                            className="dropdown-content two-level-dropdown"
+                                            style={{
+                                                opacity: activeId === cat.id ? 1 : 0,
+                                                visibility: activeId === cat.id ? 'visible' : 'hidden',
+                                                transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                padding: 0,
+                                                gap: 0,
+                                                minWidth: '520px',
+                                            }}
+                                        >
+                                            <div style={{ width: '220px', borderRight: '1px solid #f0f0f0', padding: '8px 0' }}>
+                                                <div style={{ padding: '10px 16px 8px', fontSize: '11px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                                    PC Components
+                                                </div>
+                                                {cat.children.map(sub => (
+                                                    <div
+                                                        key={sub.id}
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            padding: '9px 16px',
+                                                            background: activeSubId === sub.id ? '#fff5f3' : 'transparent',
+                                                            cursor: 'pointer',
+                                                            transition: 'background 0.15s',
+                                                            borderLeft: activeSubId === sub.id ? '3px solid #db4b27' : '3px solid transparent',
+                                                        }}
+                                                        onMouseEnter={() => handleSubMouseEnter(sub.id)}
+                                                        onMouseLeave={handleSubMouseLeave}
+                                                    >
+                                                        <Link
+                                                            href={`/category/${sub.slug}`}
+                                                            style={{ fontSize: '13px', color: activeSubId === sub.id ? '#db4b27' : '#444', fontWeight: activeSubId === sub.id ? 600 : 400 }}
+                                                        >
+                                                            {sub.name}
+                                                        </Link>
+                                                        <i className="fas fa-chevron-right" style={{ fontSize: '10px', color: '#ccc' }}></i>
+                                                    </div>
+                                                ))}
+                                                <div style={{ padding: '10px 16px', marginTop: '4px', borderTop: '1px solid #f0f0f0' }}>
+                                                    <Link href="/category/components" style={{ fontSize: '12px', fontWeight: 600, color: '#db4b27' }}>
+                                                        View All Components →
+                                                    </Link>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ flex: 1, padding: '16px 20px', minWidth: '280px' }}>
+                                                {activeSubId ? (() => {
+                                                    const activeSub = cat.children!.find(s => s.id === activeSubId);
+                                                    const subBrands = activeSub ? getCategoryBrands(activeSub.name) : [];
+                                                    return activeSub ? (
+                                                        <>
+                                                            <div style={{ marginBottom: '12px', paddingBottom: '8px', borderBottom: '2px solid #f0f0f0' }}>
+                                                                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase' }}>
+                                                                    {activeSub.name} — Brands
+                                                                </h4>
+                                                            </div>
+                                                            <div style={{ display: 'grid', gridTemplateColumns: subBrands.length > 6 ? 'repeat(2, 1fr)' : '1fr', gap: '6px' }}>
+                                                                {subBrands.map(brand => (
+                                                                    <Link
+                                                                        key={brand}
+                                                                        href={`/category/${activeSub.slug}?brand=${brand.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', display: 'block', transition: 'all 0.15s' }}
+                                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
+                                                                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                                    >
+                                                                        {brand}
+                                                                    </Link>
+                                                                ))}
+                                                            </div>
+                                                            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #eee' }}>
+                                                                <Link href={`/category/${activeSub.slug}`} style={{ fontSize: '12px', fontWeight: 600, color: '#db4b27' }}>
+                                                                    View All {activeSub.name} →
+                                                                </Link>
+                                                            </div>
+                                                        </>
+                                                    ) : null;
+                                                })() : (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#bbb', textAlign: 'center' }}>
+                                                        <i className="fas fa-mouse-pointer" style={{ fontSize: '28px', marginBottom: '10px' }}></i>
+                                                        <p style={{ fontSize: '13px', margin: 0 }}>Hover a category<br/>to see brands</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* ── STANDARD BRAND DROPDOWN for other categories ── */}
+                                    {!isComponents && brands.length > 0 && (
+                                        <div className="dropdown-content" style={{
                                             opacity: activeId === cat.id ? 1 : 0,
                                             visibility: activeId === cat.id ? 'visible' : 'hidden',
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            minWidth: brands.length > 8 ? '500px' : '300px'
+                                            minWidth: brands.length > 8 ? '480px' : '280px',
                                         }}>
-                                            <div style={{ marginBottom: '15px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
-                                                <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase' }}>Shop by Brand</h4>
+                                            <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
+                                                <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase' }}>Shop by Brand</h4>
                                             </div>
-                                            
-                                            <div style={{ 
-                                                display: 'grid', 
+                                            <div style={{
+                                                display: 'grid',
                                                 gridTemplateColumns: brands.length > 8 ? 'repeat(3, 1fr)' : brands.length > 4 ? 'repeat(2, 1fr)' : '1fr',
-                                                gap: '10px'
+                                                gap: '6px'
                                             }}>
                                                 {brands.map(brand => (
-                                                    <Link 
-                                                        key={brand} 
-                                                        href={`/category/${cat.id}?brand=${brand.toLowerCase()}`}
-                                                        style={{ 
-                                                            fontSize: '13px', 
-                                                            color: '#555', 
-                                                            padding: '6px 10px', 
-                                                            borderRadius: '4px',
-                                                            transition: 'all 0.2s'
-                                                        }}
-                                                        onMouseEnter={(e) => { e.currentTarget.style.background = '#f8f9fa'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
-                                                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                    <Link
+                                                        key={brand}
+                                                        href={`/category/${cat.slug || cat.id}?brand=${brand.toLowerCase().replace(/\s+/g, '-')}`}
+                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
+                                                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
                                                     >
                                                         {brand}
                                                     </Link>
                                                 ))}
                                             </div>
-
-                                            <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px solid #eee' }}>
-                                                <Link href={`/category/${cat.id}`} style={{ fontSize: '13px', fontWeight: 600, color: '#db4b27', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                    View All {cat.name} <i className="fas fa-arrow-right" style={{ fontSize: '10px' }}></i>
+                                            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #eee' }}>
+                                                <Link href={`/category/${cat.slug || cat.id}`} style={{ fontSize: '12px', fontWeight: 600, color: '#db4b27' }}>
+                                                    View All {cat.name} →
                                                 </Link>
                                             </div>
                                         </div>

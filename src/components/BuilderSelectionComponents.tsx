@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 
 // ==========================================
 // Toast Notification
@@ -123,25 +124,27 @@ export const FilterSidebar = ({ filters, onFilterChange, activeFilters, onClearF
 // ==========================================
 export const SelectionProductCard = ({ product, specs, onSelect }: { product: any, specs: string[], onSelect: (product: any) => void }) => {
   return (
-    <div className="product-card">
-      <img src={product.imgUrl || '/img/placeholder.png'} alt={product.title} className="product-image" />
-      <div className="product-info">
-        <h3 className="product-name">{product.title}</h3>
-        <div className="product-specs">
-          {specs.map((spec, i) => (
-            <span key={i} className="spec-badge">{spec}</span>
-          ))}
+    <div className="product-card" style={{ position: 'relative', cursor: 'pointer' }}>
+      <Link href={`/product/${product.id}`} className="product-card-link" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+        <img src={product.imgUrl || '/img/placeholder.png'} alt={product.title} className="product-image" />
+        <div className="product-info">
+          <h3 className="product-name" style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>{product.title}</h3>
+          <div className="product-specs">
+            {specs.slice(0, 3).map((spec, i) => (
+              <span key={i} className="spec-badge" style={{ fontSize: '11px' }}>{spec}</span>
+            ))}
+          </div>
+          <div className="product-price-row" style={{ marginTop: 'auto', paddingTop: '10px' }}>
+            <span className="product-price" style={{ color: '#ef4a23', fontWeight: '700' }}>{product.price} ৳</span>
+            {product.oldPrice && (
+              <span className="product-old-price" style={{ textDecoration: 'line-through', color: '#888', fontSize: '12px', marginLeft: '8px' }}>{product.oldPrice} ৳</span>
+            )}
+          </div>
         </div>
-        <div className="product-price-row">
-          <span className="product-price">{product.price} ৳</span>
-          {product.oldPrice && (
-            <span className="product-old-price">{product.oldPrice} ৳</span>
-          )}
-        </div>
-        <button className="select-product-btn" onClick={() => onSelect(product)}>
-          Select Product
-        </button>
-      </div>
+      </Link>
+      <button className="select-product-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSelect(product); }} style={{ width: '100%', marginTop: '10px' }}>
+        Select Product
+      </button>
     </div>
   );
 };

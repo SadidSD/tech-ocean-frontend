@@ -18,18 +18,23 @@ const DeliveryEstimator = ({ price = 0 }) => {
     const selectedZone = zones.find(z => z.name === zone) || zones[0];
     const shippingCost = price >= 5000 ? 0 : selectedZone.cost;
     return (
-        <div className="delivery-estimator">
-            <h4><i className="fas fa-truck" style={{color: '#ff6b00'}}></i> Delivery Estimator</h4>
+        <div className="delivery-section">
+            <h3 className="delivery-title"><i className="fas fa-truck" style={{color: '#ff6b00', marginRight: '8px'}}></i> Delivery Estimator</h3>
             <div className="delivery-row">
-                <select className="delivery-select" value={zone} onChange={(e) => setZone(e.target.value)}>
+                <span className="delivery-label">Location</span>
+                <select className="delivery-select" value={zone} onChange={(e) => setZone(e.target.value)} style={{ border: 'none', background: 'transparent', fontWeight: 600, color: '#1B5B97', textAlign: 'right', cursor: 'pointer' }}>
                     {zones.map(z => <option key={z.name} value={z.name}>{z.name}</option>)}
                 </select>
             </div>
-            <div className="delivery-result">
-                <div className="delivery-result-item">
-                    <span><i className="fas fa-money-bill-wave"></i> Cost</span>
-                    <strong>{shippingCost === 0 ? <span style={{color:'#00C49F'}}>Free</span> : `৳${shippingCost}`}</strong>
-                </div>
+            <div className="delivery-row">
+                <span className="delivery-label">Cost</span>
+                <span className="delivery-value" style={{ fontWeight: 700, color: shippingCost === 0 ? '#28a745' : '#333' }}>
+                    {shippingCost === 0 ? 'Free' : `৳${shippingCost}`}
+                </span>
+            </div>
+            <div className="delivery-row">
+                <span className="delivery-label">Estimated Delivery</span>
+                <span className="delivery-value">{selectedZone.days}</span>
             </div>
         </div>
     );
@@ -66,7 +71,7 @@ export default function ProductDetail() {
     const mockGallery = [imgUrl, imgUrl, imgUrl, imgUrl];
 
     return (
-        <div className="container mt-4" style={{paddingBottom: '100px'}}>
+        <div className="container product-detail-container" style={{paddingTop: '20px', paddingBottom: '100px'}}>
             <div className="pdp-container">
                 <div className="pdp-left">
                     <div className="pdp-main-media" style={{position:'relative', overflow:'hidden', borderRadius:'12px', border:'1px solid #efefef', padding:'20px'}}>
@@ -82,22 +87,33 @@ export default function ProductDetail() {
                     </div>
                 </div>
                 <div className="pdp-right">
-                    <h1 className="pdp-title" style={{fontSize: '24px', fontWeight:700, marginBottom:'10px'}}>{product.title}</h1>
-                    <div className="pdp-meta">
-                        <StarRating rating={product.rating} count={product.reviewCount || 128} />
+                    <h1 className="product-title">{product.title}</h1>
+                    <div className="product-rating">
+                        <span className="stars">{'★'.repeat(Math.floor(product.rating || 4))}</span>
+                        <span className="review-count">({product.reviewCount || 128} reviews)</span>
                     </div>
-                    <div className="pdp-price-box" style={{margin:'20px 0', padding:'15px', background:'#f8f9fa', borderRadius:'12px'}}>
-                        <span className="pdp-curr-price" style={{fontSize: '28px', color: '#ff6b00', fontWeight:800}}>{product.price}</span>
-                        {product.oldPrice && <span className="pdp-old-price" style={{textDecoration:'line-through', color:'#888', marginLeft:'15px'}}>{product.oldPrice}</span>}
+
+                    <div className="product-price-section">
+                        <span className="current-price">{product.price}</span>
+                        {product.oldPrice && <span className="old-price">{product.oldPrice}</span>}
                     </div>
-                    <div className="pdp-actions" ref={cartTriggerRef}>
-                        <div className="qty-selector">
-                            <button className="qty-btn" onClick={() => setQty(Math.max(1, qty - 1))}>-</button>
-                            <input type="number" className="qty-input" value={qty} readOnly style={{textAlign:'center', width:'50px'}} />
-                            <button className="qty-btn" onClick={() => setQty(qty + 1)}>+</button>
+
+                    <div className="quantity-section">
+                        <label className="quantity-label">Quantity</label>
+                        <div className="quantity-selector" ref={cartTriggerRef}>
+                            <button className="quantity-btn" onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+                            <span className="quantity-value">{qty}</span>
+                            <button className="quantity-btn" onClick={() => setQty(qty + 1)}>+</button>
                         </div>
-                        <button className="btn-add-cart" onClick={() => addToCart(product, qty, false)}><i className="fas fa-shopping-cart"></i> Add to Cart</button>
-                        <button className="btn-buy-now" onClick={() => addToCart(product, qty, true)}><i className="fas fa-bolt"></i> Buy Now</button>
+                    </div>
+
+                    <div className="action-buttons">
+                        <button className="add-to-cart-btn" onClick={() => addToCart(product, qty, false)}>
+                           <i className="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button className="buy-now-btn" onClick={() => addToCart(product, qty, true)}>
+                           <i className="fas fa-bolt"></i> Buy Now
+                        </button>
                     </div>
 
                     <DeliveryEstimator price={parseFloat(String(product.price).replace(/,/g,'').replace('৳','')) || 0} />
@@ -105,16 +121,16 @@ export default function ProductDetail() {
             </div>
 
             {/* Comprehensive Detail Tabs */}
-            <div className="pdp-tabs-container" style={{marginTop:'60px', background:'white', borderRadius:'12px', border:'1px solid #eee', overflow:'hidden'}}>
-                <div className="pdp-tabs-header" style={{display:'flex', borderBottom:'1px solid #eee'}}>
-                    <button onClick={()=>setActiveTab('specs')} className={`pdp-tab-btn ${activeTab==='specs'?'active':''}`}>Specifications</button>
-                    <button onClick={()=>setActiveTab('reviews')} className={`pdp-tab-btn ${activeTab==='reviews'?'active':''}`}>Reviews (128)</button>
-                    <button onClick={()=>setActiveTab('qa')} className={`pdp-tab-btn ${activeTab==='qa'?'active':''}`}>Q&A (15)</button>
+            <div className="product-tabs" style={{marginTop:'60px', background:'white', borderRadius:'12px', border:'1px solid #eee', overflow:'hidden'}}>
+                <div className="tab-headers">
+                    <button onClick={()=>setActiveTab('specs')} className={`tab-header ${activeTab==='specs'?'active':''}`}>Specifications</button>
+                    <button onClick={()=>setActiveTab('reviews')} className={`tab-header ${activeTab==='reviews'?'active':''}`}>Reviews ({product.reviewCount || 128})</button>
+                    <button onClick={()=>setActiveTab('qa')} className={`tab-header ${activeTab==='qa'?'active':''}`}>Q&A (15)</button>
                 </div>
-                <div className="pdp-tabs-content" style={{padding:'30px'}}>
+                <div className="tab-content" style={{padding:'30px'}}>
                     {activeTab === 'specs' && (
-                        <div className="tab-specs">
-                            <h3>Key Specifications</h3>
+                        <div className="specifications">
+                            <h3 className="delivery-title">Key Specifications</h3>
                             <ul style={{lineHeight: 1.8, color:'#555', marginTop:'15px', paddingLeft:'20px'}}>
                                 {product.features?.map((f: string, i: number) => <li key={i}>{f}</li>)}
                                 <li>Warranty: 3 Years Official</li>
@@ -123,24 +139,24 @@ export default function ProductDetail() {
                         </div>
                     )}
                     {activeTab === 'reviews' && (
-                        <div className="tab-reviews" style={{maxWidth:'800px'}}>
-                            <div style={{display:'flex', alignItems:'center', gap:'20px', marginBottom:'30px'}}>
-                                <div><h2 style={{fontSize:'48px', color:'#1B5B97'}}>{product.rating || 4.8}</h2></div>
-                                <div>
-                                    <StarRating rating={product.rating} count={0} />
-                                    <div style={{color:'#666', fontSize:'13px', marginTop:'5px'}}>Based on {product.reviewCount || 128} verified purchases</div>
+                        <div className="reviews-section" style={{maxWidth:'800px'}}>
+                            <div className="review-summary">
+                                <div className="review-score">
+                                    <div className="score">{product.rating || 4.8}</div>
+                                    <div className="stars">{'★'.repeat(Math.floor(product.rating || 4))}</div>
+                                    <div className="count">Based on {product.reviewCount || 128} verified purchases</div>
                                 </div>
-                                <button className="btn-add-cart" style={{marginLeft:'auto'}}>Write a Review</button>
+                                <button className="write-review-btn" style={{marginLeft:'auto'}}>Write a Review</button>
                             </div>
                             
-                            <div className="review-card" style={{padding:'20px', border:'1px solid #eee', borderRadius:'12px', marginBottom:'15px'}}>
+                            <div className="review-card" style={{padding:'20px', border:'1px solid #eee', borderRadius:'12px', marginBottom:'15px', background: 'white'}}>
                                 <div style={{display:'flex', justifyContent:'space-between'}}>
                                     <div>
-                                        <StarRating rating={5} />
-                                        <h4 style={{marginTop:'10px'}}>Great performance for the price!</h4>
+                                        <div className="stars">{'★'.repeat(5)}</div>
+                                        <h4 style={{marginTop:'10px', fontSize: '16px', fontWeight: 600}}>Great performance for the price!</h4>
                                         <p style={{color:'#666', fontSize:'14px', marginTop:'5px'}}>Upgraded from my older setup and saw a massive difference instantly. Highly recommended.</p>
                                     </div>
-                                    <div style={{textAlign:'right', color:'#888', fontSize:'12px'}}>
+                                    <div style={{textAlign:'right', color:'#888', fontSize:'12px', minWidth: '100px'}}>
                                         <div><strong>MD Rahim</strong> (Verified)</div>
                                         <div>2 days ago</div>
                                     </div>
@@ -149,8 +165,8 @@ export default function ProductDetail() {
                         </div>
                     )}
                     {activeTab === 'qa' && (
-                        <div className="tab-qa">
-                            <button className="btn-buy-now" style={{marginBottom:'20px'}}>Ask a Question</button>
+                        <div className="qa-section">
+                            <button className="buy-now-btn" style={{marginBottom:'20px', maxWidth: '200px'}}>Ask a Question</button>
                             <div className="qa-card" style={{padding:'20px', background:'#f8f9fa', borderRadius:'12px'}}>
                                 <h4><span style={{color:'#1B5B97'}}>Q:</span> Is this compatible with older motherboards?</h4>
                                 <p style={{marginTop:'10px', color:'#555'}}><span style={{color:'#ff6b00', fontWeight:'bold'}}>A:</span> It depends on the specific chipset. Please check the specification limits for your exact model.</p>
@@ -169,12 +185,12 @@ export default function ProductDetail() {
                     </div>
                     <div className="sticky-cart-right" style={{display:'flex', alignItems:'center', gap:'20px'}}>
                         <span style={{fontSize:'20px', fontWeight:800, color:'#ff6b00'}}>{product.price}</span>
-                        <div className="qty-selector d-none-mobile" style={{margin:0}}>
-                            <button className="qty-btn" onClick={() => setQty(Math.max(1, qty - 1))}>-</button>
-                            <input type="number" className="qty-input" value={qty} readOnly style={{textAlign:'center', width:'40px', padding:'0'}} />
-                            <button className="qty-btn" onClick={() => setQty(qty + 1)}>+</button>
+                        <div className="quantity-selector d-none-mobile" style={{margin:0, padding: '2px'}}>
+                            <button className="quantity-btn" style={{width: '32px', height: '32px'}} onClick={() => setQty(Math.max(1, qty - 1))}>−</button>
+                            <span className="quantity-value" style={{fontSize: '14px', minWidth: '24px'}}>{qty}</span>
+                            <button className="quantity-btn" style={{width: '32px', height: '32px'}} onClick={() => setQty(qty + 1)}>+</button>
                         </div>
-                        <button className="btn-add-cart" onClick={() => addToCart(product, qty, false)}>Add to Cart</button>
+                        <button className="add-to-cart-btn" onClick={() => addToCart(product, qty, false)} style={{padding: '10px 20px', fontSize: '14px'}}>Add to Cart</button>
                     </div>
                 </div>
             </div>

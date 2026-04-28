@@ -104,7 +104,7 @@ export default function CategoryPage() {
                         </select>
                     </div>
                     
-                    <div className="products-grid" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))'}}>
+                    <div className="products-grid">
                         {filteredProducts.length === 0 ? (
                             <div style={{padding: '50px', textAlign: 'center', gridColumn: '1 / -1'}}>
                                 <i className="fas fa-box-open" style={{fontSize: '40px', color: '#ccc', marginBottom:'15px'}}></i>
