@@ -117,11 +117,9 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
         <CartContext.Provider value={{ cartItems, setCartItems, addToCart, cartCount, isCartDrawerOpen, setIsCartDrawerOpen }}>
         <CompareContext.Provider value={{ compareItems, addToCompare, removeFromCompare, clearCompare, isInCompare }}>
             <div className="app-container" style={{ position: 'relative', zIndex: 1 }}>
-                <Navigation cartCount={cartCount} compareCount={compareItems.length} categories={MOCK_CATEGORIES} />
-                <main className="main-content" style={{ minHeight: '60vh', background: 'transparent', position: 'relative', zIndex: 1 }}>
+                <main className="app-main-wrapper" style={{ minHeight: '60vh', position: 'relative', zIndex: 1 }}>
                     {children}
                 </main>
-                <Footer />
 
                 {/* ─ Global Cart Drawer Overlay ─ */}
                 <div className={`drawer-overlay ${isCartDrawerOpen ? 'visible' : ''}`} onClick={() => setIsCartDrawerOpen(false)}></div>
