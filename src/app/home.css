@@ -904,9 +904,16 @@
   white-space: nowrap;
 }
 
-/* Order Fixes Removed - Using DOM Order */
+/* Strict Mobile Order Fix */
 @media (max-width: 768px) {
   .home-layout-wrapper {
-    display: block;
+    display: flex !important;
+    flex-direction: column !important;
   }
+  .mobile-animated-hero { order: 1 !important; }
+  .mobile-offer-row { order: 2 !important; }
+  .mobile-categories { order: 3 !important; }
+  .mobile-products-section { order: 4 !important; }
+  .mobile-blogs-section { order: 5 !important; }
+  .mobile-contact-section { order: 6 !important; }
 }
