@@ -66,58 +66,58 @@ export const HeroBanner = () => (
     </>
 );
 
-export const FeaturesBar = () => (
-    <>
-        <div className="container desktop-only">
-            <div className="features-bar">
-                <Link href="/cctv-builder" className="feature-pill">
-                    <div className="icon"><i className="fas fa-video"></i></div>
-                    <div className="text">
-                        <span className="title">CCTV Quotation</span>
-                        <span className="subtitle">Build Custom Security</span>
-                    </div>
-                </Link>
-                <div className="feature-pill">
-                    <div className="icon"><i className="fas fa-headset"></i></div>
-                    <div className="text">
-                        <span className="title">Reliable Support</span>
-                        <span className="subtitle">Call 16793 (09AM - 08PM)</span>
-                    </div>
+export const DesktopFeaturesBar = () => (
+    <div className="container desktop-only">
+        <div className="features-bar">
+            <Link href="/cctv-builder" className="feature-pill">
+                <div className="icon"><i className="fas fa-video"></i></div>
+                <div className="text">
+                    <span className="title">CCTV Quotation</span>
+                    <span className="subtitle">Build Custom Security</span>
                 </div>
-                <div className="feature-pill">
-                    <div className="icon"><i className="fas fa-truck"></i></div>
-                    <div className="text">
-                        <span className="title">Fastest Delivery</span>
-                        <span className="subtitle">Inside & Outside Dhaka</span>
-                    </div>
+            </Link>
+            <div className="feature-pill">
+                <div className="icon"><i className="fas fa-headset"></i></div>
+                <div className="text">
+                    <span className="title">Reliable Support</span>
+                    <span className="subtitle">Call 16793 (09AM - 08PM)</span>
+                </div>
+            </div>
+            <div className="feature-pill">
+                <div className="icon"><i className="fas fa-truck"></i></div>
+                <div className="text">
+                    <span className="title">Fastest Delivery</span>
+                    <span className="subtitle">Inside & Outside Dhaka</span>
                 </div>
             </div>
         </div>
+    </div>
+);
 
-        <div className="mobile-contact-bar">
-          <div className="contact-item">
-            <i className="fas fa-phone-alt"></i>
-            <div>
-              <span className="label">Call Us</span>
-              <span className="value">16793</span>
-            </div>
-          </div>
-          <div className="contact-item">
-            <i className="fas fa-clock"></i>
-            <div>
-              <span className="label">Opening Hours</span>
-              <span className="value">09AM - 08PM</span>
-            </div>
-          </div>
-          <div className="contact-item">
-            <i className="fas fa-truck"></i>
-            <div>
-              <span className="label">Delivery</span>
-              <span className="value">Inside & Outside Dhaka</span>
-            </div>
-          </div>
+export const MobileContactBar = () => (
+    <div className="mobile-contact-bar">
+      <div className="contact-item">
+        <i className="fas fa-phone-alt"></i>
+        <div>
+          <span className="label">Call Us</span>
+          <span className="value">16793</span>
         </div>
-    </>
+      </div>
+      <div className="contact-item">
+        <i className="fas fa-clock"></i>
+        <div>
+          <span className="label">Opening Hours</span>
+          <span className="value">09AM - 08PM</span>
+        </div>
+      </div>
+      <div className="contact-item">
+        <i className="fas fa-truck"></i>
+        <div>
+          <span className="label">Delivery</span>
+          <span className="value">Inside & Outside Dhaka</span>
+        </div>
+      </div>
+    </div>
 );
 
 export const CategoryList = ({ categories }: { categories: any[] }) => (

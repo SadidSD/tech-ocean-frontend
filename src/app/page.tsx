@@ -3,7 +3,7 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
 import BrandSectionTitle from '@/components/BrandSectionTitle';
-import { HeroBanner, FeaturesBar, CategoryList, LatestBlogs } from '@/components/HomeComponents';
+import { HeroBanner, DesktopFeaturesBar, MobileContactBar, CategoryList, LatestBlogs } from '@/components/HomeComponents';
 import { ProductCard } from '@/components/ProductComponents';
 import { MOCK_CATEGORIES } from '@/data/categories';
 import { MOCK_PRODUCTS } from '@/data/products';
@@ -15,7 +15,7 @@ export default function Home() {
     return (
         <div className="home-layout-wrapper">
             <HeroBanner />
-            <FeaturesBar />
+            <DesktopFeaturesBar />
             <CategoryList categories={MOCK_CATEGORIES} />
             
             <div className="mobile-products-section">
@@ -53,6 +53,7 @@ export default function Home() {
             </section>
 
             <LatestBlogs blogs={[]} />
-        </div>
+            <MobileContactBar />
+         </div>
     );
 }
