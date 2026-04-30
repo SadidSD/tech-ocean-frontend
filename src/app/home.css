@@ -668,7 +668,6 @@
   background: #f8f9fa;
   padding: 24px 16px;
   margin: 16px 0;
-  order: 10; /* At the bottom */
 }
 
 @media (max-width: 768px) {
@@ -905,16 +904,9 @@
   white-space: nowrap;
 }
 
-/* Order Fixes */
+/* Order Fixes Removed - Using DOM Order */
 @media (max-width: 768px) {
   .home-layout-wrapper {
-    display: flex;
-    flex-direction: column;
+    display: block;
   }
-  .mobile-animated-hero { order: 1; }
-  .mobile-offer-row { order: 2; }
-  .mobile-categories { order: 3; }
-  .mobile-products-section { order: 4; }
-  .mobile-blogs-section { order: 5; }
-  .mobile-contact-section { order: 6; }
 }
