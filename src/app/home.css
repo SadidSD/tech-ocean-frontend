@@ -662,48 +662,129 @@
   opacity: 0.7;
 }
 
-/* Mobile Contact Bar */
-.mobile-contact-bar {
+/* Mobile Contact Section */
+.mobile-contact-section {
   display: none;
   background: #f8f9fa;
-  padding: 16px;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin: 16px;
-  border-radius: 16px;
-  border: 1px solid #eee;
+  padding: 24px 16px;
+  margin: 16px 0;
+  order: 10; /* At the bottom */
 }
 
 @media (max-width: 768px) {
-  .mobile-contact-bar {
-    display: flex;
+  .mobile-contact-section {
+    display: block;
   }
 }
 
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 100px;
+.contact-header {
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-.contact-item i {
-  font-size: 24px;
-  color: #db4b27;
+.contact-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
 }
 
-.contact-item .label {
-  font-size: 11px;
-  color: #999;
-  display: block;
-}
-
-.contact-item .value {
+.contact-header p {
   font-size: 13px;
+  color: #666;
+}
+
+/* Contact Grid - 2 columns on mobile */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Contact Card */
+.contact-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.contact-icon {
+  font-size: 28px;
+}
+
+.contact-details {
+  flex: 1;
+}
+
+.contact-details h4 {
+  font-size: 14px;
   font-weight: 600;
   color: #333;
+  margin-bottom: 6px;
+}
+
+.contact-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #db4b27;
+  margin-bottom: 4px;
+}
+
+.contact-sub {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.4;
+}
+
+.contact-sub.holiday {
+  color: #f5a623;
+  margin-top: 4px;
+}
+
+/* Emergency Support */
+.emergency-support {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.emergency-icon {
+  font-size: 40px;
+}
+
+.emergency-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.emergency-info p {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+}
+
+.emergency-call {
+  font-size: 13px;
+  font-weight: 600;
+  color: #db4b27;
+  text-decoration: none;
+}
+
+/* Single column on smaller screens */
+@media (max-width: 480px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Animated Hero */
@@ -828,26 +909,14 @@
 
 /* Order Fixes */
 @media (max-width: 768px) {
-  .mobile-categories {
-    order: 3;
-    margin-top: 0;
-    margin-bottom: 16px;
-    padding-bottom: 0;
-  }
-  .mobile-products-section {
-    order: 4;
-    margin-top: 0;
-    margin-bottom: 24px;
-  }
-  .mobile-contact-bar {
-    order: 5;
-  }
-}
-
-
-@media (max-width: 768px) {
   .home-layout-wrapper {
     display: flex;
     flex-direction: column;
   }
+  .mobile-animated-hero { order: 1; }
+  .mobile-offer-row { order: 2; }
+  .mobile-categories { order: 3; }
+  .mobile-products-section { order: 4; }
+  .mobile-blogs-section { order: 5; }
+  .mobile-contact-section { order: 6; }
 }

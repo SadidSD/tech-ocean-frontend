@@ -94,31 +94,89 @@ export const DesktopFeaturesBar = () => (
     </div>
 );
 
-export const MobileContactBar = () => (
-    <div className="mobile-contact-bar">
-      <div className="contact-item">
-        <i className="fas fa-phone-alt"></i>
-        <div>
-          <span className="label">Call Us</span>
-          <span className="value">16793</span>
+export const MobileContactSection = () => {
+  return (
+    <div className="mobile-contact-section">
+      <div className="contact-header">
+        <h3>Need Help?</h3>
+        <p>We're here to assist you 7 days a week</p>
+      </div>
+      
+      <div className="contact-grid">
+        {/* Call Us */}
+        <div className="contact-card">
+          <div className="contact-icon">📞</div>
+          <div className="contact-details">
+            <h4>Call Us</h4>
+            <p className="contact-value">16793</p>
+            <p className="contact-sub">Available 09AM - 08PM</p>
+          </div>
+        </div>
+        
+        {/* Opening Hours */}
+        <div className="contact-card">
+          <div className="contact-icon">🕒</div>
+          <div className="contact-details">
+            <h4>Opening Hours</h4>
+            <p className="contact-value">09:00 AM - 08:00 PM</p>
+            <p className="contact-sub">Saturday - Thursday</p>
+            <p className="contact-sub holiday">Friday: 02:00 PM - 08:00 PM</p>
+          </div>
+        </div>
+        
+        {/* Delivery */}
+        <div className="contact-card">
+          <div className="contact-icon">🚚</div>
+          <div className="contact-details">
+            <h4>Delivery Coverage</h4>
+            <p className="contact-value">Inside & Outside Dhaka</p>
+            <p className="contact-sub">Free delivery on orders over ৳5,000</p>
+          </div>
+        </div>
+        
+        {/* Email */}
+        <div className="contact-card">
+          <div className="contact-icon">✉️</div>
+          <div className="contact-details">
+            <h4>Email Us</h4>
+            <p className="contact-value">support@techxocean.com</p>
+            <p className="contact-sub">sales@techxocean.com</p>
+          </div>
+        </div>
+        
+        {/* WhatsApp */}
+        <div className="contact-card">
+          <div className="contact-icon">💬</div>
+          <div className="contact-details">
+            <h4>WhatsApp</h4>
+            <p className="contact-value">+880 16793 00000</p>
+            <p className="contact-sub">24/7 Customer Support</p>
+          </div>
+        </div>
+        
+        {/* Store Location */}
+        <div className="contact-card">
+          <div className="contact-icon">📍</div>
+          <div className="contact-details">
+            <h4>Store Location</h4>
+            <p className="contact-value">Dhaka, Bangladesh</p>
+            <p className="contact-sub">Multi-store across the country</p>
+          </div>
         </div>
       </div>
-      <div className="contact-item">
-        <i className="fas fa-clock"></i>
-        <div>
-          <span className="label">Opening Hours</span>
-          <span className="value">09AM - 08PM</span>
-        </div>
-      </div>
-      <div className="contact-item">
-        <i className="fas fa-truck"></i>
-        <div>
-          <span className="label">Delivery</span>
-          <span className="value">Inside & Outside Dhaka</span>
+      
+      {/* Emergency Support */}
+      <div className="emergency-support">
+        <div className="emergency-icon">🆘</div>
+        <div className="emergency-info">
+          <h4>Emergency Technical Support</h4>
+          <p>For urgent technical assistance outside business hours</p>
+          <a href="tel:01679399999" className="emergency-call">Call Emergency Line →</a>
         </div>
       </div>
     </div>
-);
+  );
+};
 
 export const CategoryList = ({ categories }: { categories: any[] }) => (
     <>
