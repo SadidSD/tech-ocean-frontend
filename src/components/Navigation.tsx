@@ -28,8 +28,32 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
     const router = useRouter();
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [suggestions, setSuggestions] = useState<any[]>([]);
     const [showSearch, setShowSearch] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
+
+    // Debounce effect
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (searchQuery.length >= 2) {
+                setIsLoading(true);
+                try {
+                    const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&limit=6`);
+                    const data = await response.json();
+                    setSuggestions(data.results || []);
+                } catch (error) {
+                    console.error('Search error:', error);
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        }, 300);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -41,14 +65,26 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const filteredProducts = MOCK_PRODUCTS.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 4);
-
     const handleLogout = (e: React.MouseEvent) => {
         e.preventDefault();
         localStorage.removeItem('user');
         setUserState({ isLoggedIn: false, user: null, token: null });
         showToast('Logged out successfully', 'success');
         router.push('/');
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+            setShowSearch(false);
+        }
+    };
+
+    const handleSuggestionClick = (url: string) => {
+        router.push(url);
+        setShowSearch(false);
+        setSearchQuery('');
     };
 
     return (
@@ -77,7 +113,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
               </div>
               
               <div className="mobile-search-row">
-                <div className="search-wrapper">
+                <form onSubmit={handleSearchSubmit} className="search-wrapper">
                   <i className="fas fa-search search-icon-left"></i>
                   <input 
                     type="text" 
@@ -87,7 +123,8 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowSearch(true)}
                   />
-                </div>
+                  {isLoading && <div className="search-loader"></div>}
+                </form>
               </div>
             </div>
 
@@ -106,34 +143,55 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     </Link>
                 </div>
                 <div className="search-wrap" style={{position: 'relative'}} ref={searchRef}>
-                    <input type="text" className="search-input" placeholder="Search for Products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setShowSearch(true)} />
-                    <button className="search-btn"><i className="fas fa-search"></i></button>
+                    <form onSubmit={handleSearchSubmit} style={{display: 'flex', width: '100%'}}>
+                        <input 
+                            type="text" 
+                            className="search-input" 
+                            placeholder="Search for products, categories, blogs..." 
+                            value={searchQuery} 
+                            onChange={(e) => setSearchQuery(e.target.value)} 
+                            onFocus={() => setShowSearch(true)} 
+                        />
+                        <button type="submit" className="search-btn"><i className="fas fa-search"></i></button>
+                        {isLoading && <div className="search-spinner-inline" style={{position: 'absolute', right: '60px', top: '50%', transform: 'translateY(-50%)'}}></div>}
+                    </form>
 
-                    {showSearch && searchQuery.length > 0 && (
-                        <div className="search-autocomplete-dropdown" style={{position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', borderRadius: '8px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', zIndex: 2000, marginTop: '5px', overflow: 'hidden', border: '1px solid #eee'}}>
-                            {filteredProducts.length > 0 ? (
+                    {showSearch && searchQuery.length >= 2 && (
+                        <div className="search-autocomplete-dropdown" style={{position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', zIndex: 2000, marginTop: '5px', overflow: 'hidden', border: '1px solid #eee'}}>
+                            {suggestions.length > 0 ? (
                                 <>
-                                    {filteredProducts.map(p => (
-                                        <Link key={p.id} href={`/product/${p.id}`} onClick={() => setShowSearch(false)} style={{display: 'flex', alignItems: 'center', padding: '10px 15px', borderBottom: '1px solid #f5f5f5', textDecoration: 'none', color: '#333'}}>
-                                            <div style={{width: '40px', height: '40px', background: '#f8f9fa', borderRadius: '4px', overflow: 'hidden', marginRight: '15px'}}>
-                                                <img src={p.imgUrl || '/images/placeholder.png'} alt={p.title} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                                    {suggestions.map((item, index) => (
+                                        <div 
+                                            key={index} 
+                                            onClick={() => handleSuggestionClick(item.url)} 
+                                            style={{display: 'flex', alignItems: 'center', padding: '12px 15px', borderBottom: '1px solid #f5f5f5', cursor: 'pointer', transition: 'background 0.2s'}}
+                                            onMouseEnter={e => e.currentTarget.style.background = '#f8f9fa'}
+                                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                                        >
+                                            <div style={{width: '45px', height: '45px', background: '#f8f9fa', borderRadius: '6px', overflow: 'hidden', marginRight: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                                {item.image ? (
+                                                    <img src={item.image} alt={item.title} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                                                ) : (
+                                                    <span style={{fontSize: '20px'}}>{item.type === 'category' ? '📁' : '📝'}</span>
+                                                )}
                                             </div>
                                             <div style={{flex: 1}}>
-                                                <div style={{fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px'}}>{p.title}</div>
-                                                <div style={{fontSize: '11px', color: '#666'}}>
-                                                    {p.features?.[0]?.substring(0,30)}...
-                                                </div>
+                                                <div style={{fontSize: '14px', fontWeight: 600, color: '#1e293b'}}>{item.title}</div>
+                                                <div style={{fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px'}}>{item.type}</div>
                                             </div>
-                                            <div style={{fontSize: '14px', fontWeight: 800, color: '#ff6b00'}}>{p.price}</div>
-                                        </Link>
+                                            {item.price && <div style={{fontSize: '15px', fontWeight: 800, color: '#ff6b00'}}>{item.price}</div>}
+                                        </div>
                                     ))}
-                                    <div style={{padding: '12px', textAlign: 'center', background: '#f8f9fa', fontSize: '12px', fontWeight: 600, color: '#1B5B97', cursor: 'pointer'}}>
-                                        <i className="fas fa-search"></i> See all {searchQuery} results
+                                    <div 
+                                        onClick={handleSearchSubmit}
+                                        style={{padding: '14px', textAlign: 'center', background: '#f1f5f9', fontSize: '13px', fontWeight: 700, color: '#1B5B97', cursor: 'pointer'}}
+                                    >
+                                        <i className="fas fa-search"></i> See all results for "{searchQuery}"
                                     </div>
                                 </>
-                            ) : (
-                                <div style={{padding: '20px', textAlign: 'center', color: '#888', fontSize: '13px'}}>
-                                    No products found matching "{searchQuery}"
+                            ) : !isLoading && (
+                                <div style={{padding: '20px', textAlign: 'center', color: '#64748b', fontSize: '14px'}}>
+                                    No results found matching "{searchQuery}"
                                 </div>
                             )}
                         </div>
