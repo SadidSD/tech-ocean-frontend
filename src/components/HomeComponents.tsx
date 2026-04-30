@@ -143,36 +143,6 @@ export const MobileContactSection = () => {
             <p className="contact-sub">sales@techxocean.com</p>
           </div>
         </div>
-        
-        {/* WhatsApp */}
-        <div className="contact-card">
-          <div className="contact-icon">💬</div>
-          <div className="contact-details">
-            <h4>WhatsApp</h4>
-            <p className="contact-value">+880 16793 00000</p>
-            <p className="contact-sub">24/7 Customer Support</p>
-          </div>
-        </div>
-        
-        {/* Store Location */}
-        <div className="contact-card">
-          <div className="contact-icon">📍</div>
-          <div className="contact-details">
-            <h4>Store Location</h4>
-            <p className="contact-value">Dhaka, Bangladesh</p>
-            <p className="contact-sub">Multi-store across the country</p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Emergency Support */}
-      <div className="emergency-support">
-        <div className="emergency-icon">🆘</div>
-        <div className="emergency-info">
-          <h4>Emergency Technical Support</h4>
-          <p>For urgent technical assistance outside business hours</p>
-          <a href="tel:01679399999" className="emergency-call">Call Emergency Line →</a>
-        </div>
       </div>
     </div>
   );
