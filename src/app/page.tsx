@@ -52,9 +52,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <div className="desktop-only">
-                <LatestBlogs blogs={[]} />
-            </div>
+            <LatestBlogs blogs={[]} />
         </div>
     );
 }

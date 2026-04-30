@@ -165,31 +165,118 @@ export const CategoryList = ({ categories }: { categories: any[] }) => (
     </>
 );
 
-export const LatestBlogs = ({ blogs }: { blogs: any[] }) => (
-    <section className="blogs-section container mt-5">
-        <BrandSectionTitle 
-            title="LATEST BLOGS" 
-            subtitle="Catch up on the latest tech news and reviews!"
-        />
-        <div className="blogs-grid">
-            {blogs.length === 0 && <p style={{textAlign: 'center', gridColumn: '1/-1'}}>Coming soon...</p>}
-            {blogs.map(blog => (
-                <div className="blog-card" key={blog.id}>
-                    <div className="blog-icon">
-                        <i className={`fas ${blog.imgIcon}`}></i>
-                    </div>
-                    <div className="blog-meta">
-                        <i className="far fa-calendar-alt"></i> {blog.date}
-                    </div>
-                    <h3>
-                        <a href="#">{blog.title}</a>
-                    </h3>
-                    <p>{blog.excerpt}</p>
-                    <a href="#" className="read-more">
-                        Read More <i className="fas fa-arrow-right"></i>
-                    </a>
+export const LatestBlogs = ({ blogs = [] }: { blogs?: any[] }) => {
+    const [realBlogs, setRealBlogs] = React.useState<any[]>(blogs);
+    const [loading, setLoading] = React.useState(blogs.length === 0);
+
+    React.useEffect(() => {
+        // Fetch only if initial blogs are empty
+        if (blogs.length === 0) {
+            const fetchBlogs = async () => {
+                try {
+                    const response = await fetch('/api/blogs');
+                    const data = await response.json();
+                    setRealBlogs(data || []);
+                } catch (error) {
+                    console.error('Error fetching blogs:', error);
+                    setRealBlogs([]); // Empty array on error - NO mock data
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchBlogs();
+        }
+    }, [blogs]);
+
+    if (loading) {
+        return (
+            <div className="mobile-blogs-section">
+                <div className="blogs-header">
+                    <h2 className="blogs-title">LATEST BLOGS</h2>
+                    <p className="blogs-subtitle">Loading...</p>
                 </div>
-            ))}
-        </div>
-    </section>
-);
+            </div>
+        );
+    }
+
+    return (
+        <>
+            {/* Desktop Version */}
+            <section className="blogs-section container mt-5 desktop-only">
+                <BrandSectionTitle 
+                    title="LATEST BLOGS" 
+                    subtitle="Catch up on the latest tech news and reviews!"
+                />
+                <div className="blogs-grid">
+                    {realBlogs.length === 0 ? (
+                        <p style={{textAlign: 'center', gridColumn: '1/-1', color: '#888', padding: '40px'}}>Coming soon...</p>
+                    ) : (
+                        realBlogs.map(blog => (
+                            <div className="blog-card" key={blog.id}>
+                                <div className="blog-icon">
+                                    <i className={`fas ${blog.imgIcon || 'fa-newspaper'}`}></i>
+                                </div>
+                                <div className="blog-meta">
+                                    <i className="far fa-calendar-alt"></i> {blog.date}
+                                </div>
+                                <h3>
+                                    <Link href={`/blog/${blog.id}`}>{blog.title}</Link>
+                                </h3>
+                                <p>{blog.excerpt}</p>
+                                <Link href={`/blog/${blog.id}`} className="read-more">
+                                    Read More <i className="fas fa-arrow-right"></i>
+                                </Link>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </section>
+
+            {/* Mobile Version */}
+            <div className="mobile-blogs-section">
+                <div className="blogs-header">
+                    <h2 className="blogs-title">LATEST BLOGS</h2>
+                    <p className="blogs-subtitle">Catch up on the latest tech news and reviews!</p>
+                </div>
+                
+                {realBlogs.length === 0 ? (
+                    <div className="blogs-empty-state">
+                        <div className="empty-icon">📝</div>
+                        <h3 className="empty-title">Coming Soon</h3>
+                        <p className="empty-text">
+                            Blog posts will appear here once published from the admin panel.
+                        </p>
+                    </div>
+                ) : (
+                    <div className="blogs-grid">
+                        {realBlogs.slice(0, 3).map(blog => (
+                            <Link 
+                                href={`/blog/${blog.id}`} 
+                                key={blog.id} 
+                                className="blog-card"
+                                style={{textDecoration: 'none'}}
+                            >
+                                {blog.image && <img src={blog.image} alt={blog.title} className="blog-image" />}
+                                <h3 className="blog-title">{blog.title}</h3>
+                                <div className="blog-meta">
+                                    <span className="blog-date">📅 {blog.date}</span>
+                                    <span className="blog-read-time">📖 {blog.readTime} min read</span>
+                                </div>
+                                <p className="blog-excerpt">{blog.excerpt}</p>
+                                <div className="read-more">
+                                    Read More →
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+                
+                {realBlogs.length > 3 && (
+                    <Link href="/blogs" className="view-all-blogs">
+                        View All Blogs →
+                    </Link>
+                )}
+            </div>
+        </>
+    );
+};
