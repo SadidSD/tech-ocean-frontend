@@ -4670,3 +4670,25 @@ body {
     word-break: break-word !important;
   }
 }
+
+/* MOBILE CHECKOUT FIXES - max-width 768px */
+@media (max-width: 768px) {
+  .checkout-progress { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; padding: 12px 16px !important; scrollbar-width: none; }
+  .checkout-progress::-webkit-scrollbar { display: none; }
+  .progress-step { flex: 0 0 auto !important; flex-direction: row !important; align-items: center !important; gap: 6px !important; white-space: nowrap !important; font-size: 12px !important; padding: 0 8px 0 0 !important; }
+  .step-number { width: 28px !important; height: 28px !important; font-size: 12px !important; }
+  .step-label { font-size: 12px !important; }
+  .checkout-container { padding: 0 !important; }
+  .checkout-grid { display: flex !important; flex-direction: column !important; padding: 0 16px 100px !important; }
+  .checkout-left, .checkout-right { width: 100% !important; }
+  .checkout-section { padding: 16px !important; margin-bottom: 16px !important; border-radius: 12px !important; }
+  .checkout-section-title { font-size: 16px !important; font-weight: 700 !important; margin-bottom: 16px !important; }
+  .checkout-row { display: flex !important; flex-direction: column !important; gap: 12px !important; }
+  .checkout-input-group { display: flex !important; flex-direction: column !important; width: 100% !important; margin-bottom: 12px !important; }
+  .checkout-input-group label { font-size: 13px !important; font-weight: 500 !important; margin-bottom: 6px !important; }
+  .checkout-input { width: 100% !important; padding: 12px 14px !important; font-size: 15px !important; border: 1px solid #e0e0e0 !important; border-radius: 8px !important; box-sizing: border-box !important; }
+  .order-summary { margin-top: 8px !important; border-radius: 12px !important; }
+  .place-order-btn { width: 100% !important; padding: 16px !important; font-size: 16px !important; border-radius: 10px !important; }
+  .trust-badges { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .trust-item { font-size: 11px !important; padding: 10px 8px !important; text-align: center !important; }
+}
