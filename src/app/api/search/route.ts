@@ -20,8 +20,7 @@ export async function GET(request: Request) {
 
     // Search Products
     const products = MOCK_PRODUCTS.filter(p => 
-        p.title.toLowerCase().includes(q) || 
-        p.description?.toLowerCase().includes(q)
+        p.title.toLowerCase().includes(q)
     ).map(p => ({
         id: p.id,
         title: p.title,
