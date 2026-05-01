@@ -4076,8 +4076,9 @@ body {
     padding: 16px;
   }
   
-  /* Product Title */
-  .product-title {
+  /* Product Detail Page Title ONLY - scoped so it doesn't affect product cards */
+  .product-detail-container .product-title,
+  .pdp-container .product-title {
     font-size: 20px;
     font-weight: 700;
     line-height: 1.3;
@@ -4653,5 +4654,19 @@ body {
   .old-price {
     font-size: 11px !important;
     color: #999999 !important;
+  }
+
+  /* Product card titles on mobile - smaller so more text is visible */
+  .product-card .product-title,
+  .mobile-product-card .product-title {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    margin-bottom: 6px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    word-break: break-word !important;
   }
 }
