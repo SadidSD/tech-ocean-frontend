@@ -108,7 +108,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                 
                 <button className="mobile-cart-icon" onClick={() => setIsCartDrawerOpen(true)}>
                   <i className="fas fa-shopping-cart"></i>
-                  <span className="cart-badge">{cartCount}</span>
+                  {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                 </button>
               </div>
               
@@ -280,7 +280,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     <a href="#" onClick={(e) => { e.preventDefault(); setIsCartDrawerOpen(true); }} className="action-item cart-item">
                         <div className="action-icon" style={{position:'relative'}}>
                             <i className="fas fa-shopping-cart"></i>
-                            <span className="badge cart-badge">{cartCount}</span>
+                            {cartCount > 0 && <span className="cart-badge desktop-cart-badge">{cartCount}</span>}
                         </div>
                     </a>
                 </div>
