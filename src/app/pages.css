@@ -3897,6 +3897,124 @@ body {
 .buy-now-btn:active { background: #b8341a; transform: scale(0.98); }
 
 /* ========================================
+   PRODUCT DETAIL TABS - GLOBAL
+   ======================================== */
+
+.product-tabs {
+  margin-top: 16px;
+}
+
+.tab-headers {
+  display: flex;
+  gap: 20px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+
+.tab-headers::-webkit-scrollbar { display: none; }
+
+.tab-header {
+  padding: 14px 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.tab-header:hover { color: #ef4a23; }
+
+.tab-header.active {
+  color: #ef4a23;
+  border-bottom-color: #ef4a23;
+  font-weight: 600;
+}
+
+/* ========================================
+   PRODUCT DETAIL DELIVERY SECTION - GLOBAL
+   ======================================== */
+
+.delivery-section {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border: 1px solid #eee;
+}
+
+.delivery-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.delivery-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.delivery-row:last-child { border-bottom: none; }
+.delivery-label { font-size: 14px; color: #666; }
+.delivery-value { font-size: 14px; font-weight: 500; color: #333; }
+.delivery-free { color: #28a745; font-weight: 600; }
+
+/* ========================================
+   REVIEW SECTION - GLOBAL
+   ======================================== */
+
+.review-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.review-score { text-align: center; }
+
+.review-score .score {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ef4a23;
+  line-height: 1;
+}
+
+.review-score .stars { color: #f5a623; font-size: 16px; margin: 4px 0; }
+.review-score .count { font-size: 13px; color: #888; }
+
+.write-review-btn {
+  background: transparent;
+  border: 2px solid #ef4a23;
+  color: #ef4a23;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+}
+
+.write-review-btn:hover {
+  background: #ef4a23;
+  color: white;
+}
+
+/* ========================================
    PRODUCT DETAIL QUANTITY SELECTOR - GLOBAL
    ======================================== */
 
