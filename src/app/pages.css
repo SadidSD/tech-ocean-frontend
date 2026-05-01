@@ -447,8 +447,9 @@
 }
 
 .pdp-old-price {
-    font-size: 20px;
-    color: #999;
+    font-size: 14px;
+    font-weight: 400;
+    color: #999999;
     text-decoration: line-through;
 }
 
@@ -4393,4 +4394,43 @@ body {
   border-top: 2px solid #ff6b00;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+}
+/* ============================================
+   Global Old Price Styling Fix
+   Ash gray, smaller than current, strikethrough
+   ============================================ */
+
+/* Product card price box - flex layout */
+.product-price-box {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* Current price - bold orange */
+.current-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #db4b27;
+}
+
+/* Old price - smaller, ash gray, strikethrough */
+.old-price {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #999999 !important;
+  text-decoration: line-through !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .current-price {
+    font-size: 16px;
+  }
+  .old-price {
+    font-size: 11px !important;
+    color: #999999 !important;
+  }
 }

@@ -64,10 +64,8 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     {product.features?.map((f: string, i: number) => <li key={i}>{f}</li>)}
                 </ul>
                 <div className="product-price-box">
-                    <span className="price">
-                        {product.price}
-                        {product.oldPrice && <s>{product.oldPrice}</s>}
-                    </span>
+                    <span className="current-price">{product.price}</span>
+                    {product.oldPrice && <span className="old-price">{product.oldPrice}</span>}
                 </div>
             </Link>
             
