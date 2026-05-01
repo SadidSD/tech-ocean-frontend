@@ -45,7 +45,8 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   position: sticky;
   top: 0;
-  z-index: 1000; margin-bottom: 0 !important;
+  z-index: 1100; /* Higher than mega-menu-wrapper so dropdowns show above nav */
+  margin-bottom: 0 !important;
 }
 
 .site-logo {
@@ -297,7 +298,7 @@
     background-color: var(--secondary-color);
     border-bottom: 2px solid var(--primary-color);
     position: relative;
-    z-index: 1000;
+    z-index: 900; /* Lower than main-header (1100) so header dropdowns appear above it */
 }
 
 .mega-menu {
