@@ -278,13 +278,9 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                         </Link>
                     )}
                     <a href="#" onClick={(e) => { e.preventDefault(); setIsCartDrawerOpen(true); }} className="action-item cart-item">
-                        <div className="action-icon">
-                            <i className="fas fa-shopping-bag"></i>
+                        <div className="action-icon" style={{position:'relative'}}>
+                            <i className="fas fa-shopping-cart"></i>
                             <span className="badge cart-badge">{cartCount}</span>
-                        </div>
-                        <div className="action-text d-none-mobile">
-                            <span className="text-top">Cart</span>
-                            <span className="text-bottom">0৳</span>
                         </div>
                     </a>
                 </div>
