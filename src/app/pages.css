@@ -3844,6 +3844,59 @@ body {
 }
 
 /* ========================================
+   PRODUCT DETAIL ACTION BUTTONS - GLOBAL
+   Applies on both desktop and mobile
+   ======================================== */
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  background: #081621;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-to-cart-btn:hover { background: #0d2a3f; }
+.add-to-cart-btn:active { background: #0d1a26; transform: scale(0.98); }
+
+.buy-now-btn {
+  flex: 1;
+  background: #ef4a23;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.buy-now-btn:hover { background: #d13d1c; }
+.buy-now-btn:active { background: #b8341a; transform: scale(0.98); }
+
+/* ========================================
    MOBILE PRODUCT DETAIL PAGE - FIXED LAYOUT
    ======================================== */
 
