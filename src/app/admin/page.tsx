@@ -260,7 +260,7 @@ const DashboardView = ({ token, onAddProduct, onUnauthorized }: { token: string;
 };
 
 // ─── Inventory ────────────────────────────────────────────────────────────────
-const InventoryView = ({ token, onAddProduct, onUnauthorized }: { token: string; onAddProduct: () => void; onUnauthorized: () => void }) => {
+const InventoryView = ({ token, onAddProduct, onEditProduct, onUnauthorized }: { token: string; onAddProduct: () => void; onEditProduct: (id: number) => void; onUnauthorized: () => void }) => {
   const [products, setProducts] = useState<InventoryProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -268,6 +268,7 @@ const InventoryView = ({ token, onAddProduct, onUnauthorized }: { token: string;
   const [lowOnly, setLowOnly] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true); setError('');
@@ -282,6 +283,18 @@ const InventoryView = ({ token, onAddProduct, onUnauthorized }: { token: string;
   }, [token, page, lowOnly, onUnauthorized]);
 
   useEffect(() => { load(); }, [load]);
+
+  const handleDelete = async (p: InventoryProduct) => {
+    if (!window.confirm(`Delete "${p.title}"?\nThis will remove it from the store.`)) return;
+    setDeletingId(p.id);
+    try {
+      await authFetch(token, `/products/${p.id}`, { method: 'DELETE' });
+      load();
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : 'Delete failed');
+    } finally { setDeletingId(null); }
+  };
+
   const filtered = search ? products.filter(p => p.title.toLowerCase().includes(search.toLowerCase())) : products;
 
   return (
@@ -316,7 +329,16 @@ const InventoryView = ({ token, onAddProduct, onUnauthorized }: { token: string;
                     <TD>
                       <Badge label={p.stock <= 5 ? `Low · ${p.stock}` : String(p.stock)} color={p.stock <= 5 ? C.red : C.green} />
                     </TD>
-                    <TD><Btn size="sm" variant="ghost">Edit</Btn></TD>
+                    <TD>
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <Btn size="sm" variant="ghost" onClick={() => onEditProduct(p.id)}>
+                          <i className="fas fa-edit" style={{ fontSize: '10px' }}></i> Edit
+                        </Btn>
+                        <Btn size="sm" variant="danger" onClick={() => handleDelete(p)} disabled={deletingId === p.id}>
+                          <i className={`fas ${deletingId === p.id ? 'fa-circle-notch fa-spin' : 'fa-trash'}`} style={{ fontSize: '10px' }}></i>
+                        </Btn>
+                      </div>
+                    </TD>
                   </tr>
                 ))}
                 {filtered.length === 0 && <tr><td colSpan={7} style={{ padding: '40px', textAlign: 'center', fontSize: '13px', color: C.faint }}>No products found</td></tr>}
@@ -944,6 +966,226 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
   );
 };
 
+// ─── Edit Product ─────────────────────────────────────────────────────────────
+interface ProductDetail {
+  id: number; title: string; categoryId: number; brand: string | null;
+  price: number; salePrice: number | null; stock: number; featured: boolean;
+  images: string[]; specs: Record<string, string>; componentType: string | null;
+  category: { id: number; name: string };
+}
+
+const EditProductView = ({ token, productId, onDone }: { token: string; productId: number; onDone: () => void }) => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const [title, setTitle] = useState('');
+  const [selectedCatId, setSelectedCatId] = useState<number | null>(null);
+  const [brand, setBrand] = useState('');
+  const [price, setPrice] = useState('');
+  const [salePrice, setSalePrice] = useState('');
+  const [stock, setStock] = useState('');
+  const [featured, setFeatured] = useState(false);
+  const [specs, setSpecs] = useState<Record<string, string>>({});
+
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [newPreviews, setNewPreviews] = useState<string[]>([]);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    Promise.all([
+      authFetch<Category[]>(token, '/categories'),
+      authFetch<ProductDetail>(token, `/products/${productId}`),
+    ]).then(([cats, prod]) => {
+      setCategories(cats);
+      setTitle(prod.title);
+      setSelectedCatId(prod.categoryId ?? prod.category?.id ?? null);
+      setBrand(prod.brand ?? '');
+      setPrice(String(prod.price));
+      setSalePrice(prod.salePrice != null ? String(prod.salePrice) : '');
+      setStock(String(prod.stock));
+      setFeatured(prod.featured);
+      setSpecs((prod.specs as Record<string, string>) ?? {});
+      setExistingImages(prod.images ?? []);
+    }).catch(() => setError('Failed to load product'))
+      .finally(() => setLoading(false));
+  }, [token, productId]);
+
+  const flatCategories = (cats: Category[], depth = 0): { id: number; name: string }[] =>
+    cats.flatMap(c => [{ id: c.id, name: `${'  '.repeat(depth)}${depth > 0 ? '↳ ' : ''}${c.name}` }, ...flatCategories(c.children ?? [], depth + 1)]);
+
+  const addFiles = (files: FileList | null) => {
+    if (!files) return;
+    const valid = Array.from(files).filter(f => f.type.startsWith('image/'));
+    const updated = [...imageFiles, ...valid].slice(0, Math.max(0, 10 - existingImages.length));
+    setImageFiles(updated);
+    setNewPreviews(updated.map(f => URL.createObjectURL(f)));
+  };
+
+  const removeExistingImage = (idx: number) => setExistingImages(prev => prev.filter((_, i) => i !== idx));
+  const removeNewImage = (idx: number) => {
+    const updated = imageFiles.filter((_, i) => i !== idx);
+    setImageFiles(updated);
+    setNewPreviews(updated.map(f => URL.createObjectURL(f)));
+  };
+
+  const specFields = selectedCatId ? (SPEC_FIELDS[getSpecKey(selectedCatId)] ?? SPEC_FIELDS.generic) : [];
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); setSaving(true); setError('');
+    const filteredSpecs = Object.fromEntries(Object.entries(specs).filter(([, v]) => v.trim()));
+    const body: Record<string, unknown> = {
+      title, categoryId: selectedCatId,
+      brand: brand || undefined,
+      price: parseFloat(price),
+      salePrice: salePrice ? parseFloat(salePrice) : null,
+      stock: parseInt(stock),
+      featured,
+      componentType: selectedCatId ? (COMPONENT_TYPE_MAP[selectedCatId] ?? null) : null,
+      specs: filteredSpecs,
+      images: existingImages,
+    };
+    try {
+      await authFetch(token, `/products/${productId}`, { method: 'PUT', body: JSON.stringify(body) });
+      if (imageFiles.length > 0) {
+        const fd = new FormData();
+        imageFiles.forEach(file => fd.append('images', file));
+        await fetch(`${API_BASE}/products/${productId}/images`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
+        });
+      }
+      onDone();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Failed to update product');
+    } finally { setSaving(false); }
+  };
+
+  if (loading) return <Spinner />;
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+        <button onClick={onDone} style={{ background: 'none', border: 'none', cursor: 'pointer', color: C.faint, padding: '4px', display: 'flex' }}>
+          <i className="fas fa-arrow-left" style={{ fontSize: '14px' }}></i>
+        </button>
+        <h1 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: C.text }}>Edit Product #{productId}</h1>
+      </div>
+
+      <Card style={{ padding: '28px', maxWidth: '720px' }}>
+        {error && (
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', padding: '10px 14px', borderRadius: '6px', background: '#fff1f2', border: `1px solid #fecdd3`, marginBottom: '20px' }}>
+            <i className="fas fa-exclamation-circle" style={{ color: C.red, fontSize: '13px' }}></i>
+            <span style={{ fontSize: '13px', color: C.red }}>{error}</span>
+          </div>
+        )}
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <Label>Product title *</Label>
+              <Input value={title} onChange={e => setTitle(e.target.value)} required placeholder="e.g. ASUS ROG Strix B760-F Gaming WiFi" />
+            </div>
+            <div>
+              <Label>Category *</Label>
+              <Select value={selectedCatId ?? ''} required onChange={e => { setSelectedCatId(parseInt(e.target.value) || null); setSpecs({}); }}>
+                <option value="">Select a category…</option>
+                {flatCategories(categories).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </Select>
+            </div>
+            <div>
+              <Label>Brand</Label>
+              <Input value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. ASUS, Intel, Samsung" />
+            </div>
+            <div>
+              <Label>Price (BDT) *</Label>
+              <Input value={price} onChange={e => setPrice(e.target.value)} type="number" min="0" step="0.01" required placeholder="15000" />
+            </div>
+            <div>
+              <Label>Sale price (BDT)</Label>
+              <Input value={salePrice} onChange={e => setSalePrice(e.target.value)} type="number" min="0" step="0.01" placeholder="Leave blank if no sale" />
+            </div>
+            <div>
+              <Label>Stock *</Label>
+              <Input value={stock} onChange={e => setStock(e.target.value)} type="number" min="0" required />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '20px' }}>
+              <input type="checkbox" id="editFeatured" checked={featured} onChange={e => setFeatured(e.target.checked)} style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: C.blue }} />
+              <label htmlFor="editFeatured" style={{ fontSize: '13px', color: C.muted, cursor: 'pointer' }}>Mark as featured</label>
+            </div>
+
+            {specFields.length > 0 && (
+              <div style={{ gridColumn: '1 / -1' }}>
+                <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: '16px', marginTop: '4px' }}>
+                  <p style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 600, color: C.text }}>Specifications</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    {specFields.map(sf => (
+                      <div key={sf.name}>
+                        <Label>{sf.label}</Label>
+                        <Input placeholder={sf.placeholder} value={specs[sf.name] ?? ''} onChange={e => setSpecs(prev => ({ ...prev, [sf.name]: e.target.value }))} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div style={{ gridColumn: '1 / -1', marginTop: '4px' }}>
+              <Label>Product images</Label>
+
+              {existingImages.length > 0 && (
+                <div style={{ marginBottom: '10px' }}>
+                  <p style={{ fontSize: '11px', color: C.faint, margin: '0 0 6px' }}>Current images — click × to remove</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {existingImages.map((src, idx) => (
+                      <div key={idx} style={{ position: 'relative', width: '80px', height: '80px' }}>
+                        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '6px', border: `1px solid ${C.border}` }} />
+                        <button type="button" onClick={() => removeExistingImage(idx)}
+                          style={{ position: 'absolute', top: '-6px', right: '-6px', width: '18px', height: '18px', borderRadius: '50%', background: C.red, border: 'none', color: 'white', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div
+                onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={e => { e.preventDefault(); setDragOver(false); addFiles(e.dataTransfer.files); }}
+                onClick={() => fileInputRef.current?.click()}
+                style={{ border: `2px dashed ${dragOver ? C.blue : C.border}`, borderRadius: '8px', padding: '20px', textAlign: 'center', cursor: 'pointer', background: dragOver ? '#eff6ff' : C.bg, transition: 'all 0.2s' }}>
+                <i className="fas fa-cloud-upload-alt" style={{ fontSize: '20px', color: C.faint, marginBottom: '6px', display: 'block' }}></i>
+                <p style={{ margin: 0, fontSize: '13px', color: C.muted }}>Add more images — <span style={{ color: C.blue, fontWeight: 600 }}>click to browse</span></p>
+              </div>
+              <input ref={fileInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={e => addFiles(e.target.files)} />
+
+              {newPreviews.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '10px' }}>
+                  {newPreviews.map((src, idx) => (
+                    <div key={idx} style={{ position: 'relative', width: '80px', height: '80px' }}>
+                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '6px', border: `1px solid ${C.blue}` }} />
+                      <button type="button" onClick={() => removeNewImage(idx)}
+                        style={{ position: 'absolute', top: '-6px', right: '-6px', width: '18px', height: '18px', borderRadius: '50%', background: C.red, border: 'none', color: 'white', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: `1px solid ${C.border}` }}>
+            <Btn type="button" variant="ghost" onClick={onDone}>Cancel</Btn>
+            <Btn type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save Changes'}</Btn>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
+};
+
 // ─── Banners View ─────────────────────────────────────────────────────────────
 const BannersView = ({ token, onUnauthorized }: { token: string; onUnauthorized: () => void }) => {
   const [saving, setSaving] = useState(false);
@@ -1069,7 +1311,7 @@ const BannersView = ({ token, onUnauthorized }: { token: string; onUnauthorized:
 
 // ─── Sidebar nav item ─────────────────────────────────────────────────────────
 const NavItem = ({ icon, label, section, current, onClick, badge }: { icon: string; label: string; section: string; current: string; onClick: (s: string) => void; badge?: number }) => {
-  const active = current === section || (section === 'inventory' && current === 'add-product');
+  const active = current === section || (section === 'inventory' && (current === 'add-product' || current === 'edit-product'));
   return (
     <div onClick={() => onClick(section)}
       style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 16px', margin: '1px 8px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 500, background: active ? 'rgba(255,255,255,0.1)' : 'transparent', color: active ? '#ffffff' : '#94a3b8', transition: 'all 0.15s' }}
@@ -1087,6 +1329,7 @@ export default function AdminPage() {
   const [token, setToken] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [editingProductId, setEditingProductId] = useState<number | null>(null);
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   const [pendingReviews, setPendingReviews] = useState(0);
@@ -1201,8 +1444,9 @@ export default function AdminPage() {
 
       <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto', maxHeight: '100vh' }}>
         {currentView === 'dashboard' && <DashboardView token={token} onAddProduct={() => setCurrentView('add-product')} onUnauthorized={handleLogout} />}
-        {currentView === 'inventory' && <InventoryView token={token} onAddProduct={() => setCurrentView('add-product')} onUnauthorized={handleLogout} />}
+        {currentView === 'inventory' && <InventoryView token={token} onAddProduct={() => setCurrentView('add-product')} onEditProduct={(id) => { setEditingProductId(id); setCurrentView('edit-product'); }} onUnauthorized={handleLogout} />}
         {currentView === 'add-product' && <AddProductView token={token} onDone={() => setCurrentView('inventory')} />}
+        {currentView === 'edit-product' && editingProductId && <EditProductView token={token} productId={editingProductId} onDone={() => setCurrentView('inventory')} />}
         {currentView === 'orders' && <OrdersView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'reviews' && <ReviewsView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'users' && <UsersView token={token} onUnauthorized={handleLogout} />}
