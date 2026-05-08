@@ -584,6 +584,185 @@ const UsersView = ({ token, onUnauthorized }: { token: string; onUnauthorized: (
 
 // ─── Add Product ──────────────────────────────────────────────────────────────
 interface Category { id: number; name: string; children?: Category[]; }
+// Maps subcategory ID → componentType for PC builder
+const COMPONENT_TYPE_MAP: Record<number, string> = {
+  501: 'cpu', 502: 'motherboard', 503: 'gpu', 504: 'ram', 505: 'psu',
+  506: 'storage', 507: 'casing', 508: 'cooler', 509: 'ram',
+  510: 'storage', 512: 'cooler', 601: 'monitor', 602: 'monitor', 603: 'monitor',
+  1201: 'keyboard', 1202: 'mouse', 1203: 'headphone',
+  401: 'cameraType', 402: 'cameraType', 403: 'recorder',
+};
+
+// Spec fields per subcategory (or parent id range)
+const SPEC_FIELDS: Record<string, { label: string; name: string; placeholder?: string; type?: string; options?: string[] }[]> = {
+  laptop: [
+    { label: 'Processor', name: 'processor', placeholder: 'e.g. Intel Core i7-13700H' },
+    { label: 'RAM', name: 'ram', placeholder: 'e.g. 16GB DDR5' },
+    { label: 'Storage', name: 'storage', placeholder: 'e.g. 512GB NVMe SSD' },
+    { label: 'Display', name: 'display', placeholder: 'e.g. 15.6" FHD IPS 144Hz' },
+    { label: 'GPU', name: 'gpu', placeholder: 'e.g. NVIDIA RTX 4060 8GB' },
+    { label: 'Battery', name: 'battery', placeholder: 'e.g. 72Wh, up to 8hrs' },
+    { label: 'Operating System', name: 'os', placeholder: 'e.g. Windows 11 Home' },
+    { label: 'Weight', name: 'weight', placeholder: 'e.g. 1.8 kg' },
+  ],
+  desktop: [
+    { label: 'Processor', name: 'processor', placeholder: 'e.g. Intel Core i9-14900K' },
+    { label: 'RAM', name: 'ram', placeholder: 'e.g. 32GB DDR5' },
+    { label: 'Storage', name: 'storage', placeholder: 'e.g. 1TB NVMe SSD' },
+    { label: 'GPU', name: 'gpu', placeholder: 'e.g. NVIDIA RTX 4070 Ti' },
+    { label: 'Motherboard', name: 'motherboard', placeholder: 'e.g. ASUS ROG Z790' },
+    { label: 'PSU', name: 'psu', placeholder: 'e.g. 750W 80+ Gold' },
+    { label: 'Operating System', name: 'os', placeholder: 'e.g. Windows 11 Pro' },
+  ],
+  cpu: [
+    { label: 'Socket', name: 'socket', placeholder: 'e.g. LGA1700' },
+    { label: 'Cores / Threads', name: 'cores', placeholder: 'e.g. 24 Cores / 32 Threads' },
+    { label: 'Base / Boost Clock', name: 'clock', placeholder: 'e.g. 3.2GHz / 5.8GHz' },
+    { label: 'Cache', name: 'cache', placeholder: 'e.g. 36MB L3 Cache' },
+    { label: 'TDP', name: 'tdp', placeholder: 'e.g. 125W' },
+    { label: 'Compatible RAM', name: 'ramType', placeholder: 'e.g. DDR5, DDR4' },
+  ],
+  motherboard: [
+    { label: 'Socket', name: 'socket', placeholder: 'e.g. LGA1700' },
+    { label: 'Chipset', name: 'chipset', placeholder: 'e.g. Intel Z790' },
+    { label: 'Form Factor', name: 'formFactor', placeholder: 'e.g. ATX' },
+    { label: 'RAM Slots / Max RAM', name: 'ram', placeholder: 'e.g. 4 slots / 128GB DDR5' },
+    { label: 'PCIe Slots', name: 'pcie', placeholder: 'e.g. 1x PCIe 5.0 x16' },
+    { label: 'Storage Ports', name: 'storage', placeholder: 'e.g. 4x M.2, 6x SATA' },
+  ],
+  gpu: [
+    { label: 'VRAM', name: 'vram', placeholder: 'e.g. 12GB GDDR6X' },
+    { label: 'Core Clock / Boost', name: 'clock', placeholder: 'e.g. 2310MHz / 2610MHz' },
+    { label: 'TDP', name: 'tdp', placeholder: 'e.g. 285W' },
+    { label: 'Display Outputs', name: 'ports', placeholder: 'e.g. 3x DP 1.4, 1x HDMI 2.1' },
+    { label: 'Recommended PSU', name: 'psu', placeholder: 'e.g. 750W' },
+  ],
+  ram: [
+    { label: 'Capacity', name: 'capacity', placeholder: 'e.g. 16GB (2x8GB)' },
+    { label: 'Type / Speed', name: 'type', placeholder: 'e.g. DDR5-6000' },
+    { label: 'CAS Latency', name: 'latency', placeholder: 'e.g. CL36' },
+    { label: 'Voltage', name: 'voltage', placeholder: 'e.g. 1.35V' },
+  ],
+  psu: [
+    { label: 'Wattage', name: 'wattage', placeholder: 'e.g. 750W' },
+    { label: 'Efficiency Rating', name: 'efficiency', placeholder: 'e.g. 80+ Gold' },
+    { label: 'Modular', name: 'modular', placeholder: 'e.g. Fully Modular' },
+    { label: 'Connectors', name: 'connectors', placeholder: 'e.g. 1x 24-pin, 2x EPS 8-pin' },
+  ],
+  storage: [
+    { label: 'Capacity', name: 'capacity', placeholder: 'e.g. 1TB' },
+    { label: 'Type', name: 'type', placeholder: 'e.g. NVMe PCIe 4.0 SSD' },
+    { label: 'Read / Write Speed', name: 'speed', placeholder: 'e.g. 7000 / 6500 MB/s' },
+    { label: 'Form Factor', name: 'formFactor', placeholder: 'e.g. M.2 2280' },
+  ],
+  casing: [
+    { label: 'Form Factor Support', name: 'formFactor', placeholder: 'e.g. ATX, mATX, ITX' },
+    { label: 'Color', name: 'color', placeholder: 'e.g. Black' },
+    { label: 'Side Panel', name: 'sidePanel', placeholder: 'e.g. Tempered Glass' },
+    { label: 'Included Fans', name: 'fans', placeholder: 'e.g. 3x 120mm ARGB' },
+    { label: 'Max GPU Length', name: 'gpuLength', placeholder: 'e.g. 380mm' },
+  ],
+  cooler: [
+    { label: 'Type', name: 'type', placeholder: 'e.g. Air / 240mm AIO Liquid' },
+    { label: 'Socket Support', name: 'socket', placeholder: 'e.g. LGA1700, AM5' },
+    { label: 'Fan Size', name: 'fanSize', placeholder: 'e.g. 2x 120mm' },
+    { label: 'Max TDP', name: 'tdp', placeholder: 'e.g. 250W' },
+    { label: 'Noise Level', name: 'noise', placeholder: 'e.g. 25 dBA' },
+  ],
+  monitor: [
+    { label: 'Screen Size', name: 'size', placeholder: 'e.g. 27"' },
+    { label: 'Resolution', name: 'resolution', placeholder: 'e.g. 2560x1440 QHD' },
+    { label: 'Refresh Rate', name: 'refreshRate', placeholder: 'e.g. 165Hz' },
+    { label: 'Panel Type', name: 'panel', placeholder: 'e.g. IPS' },
+    { label: 'Response Time', name: 'responseTime', placeholder: 'e.g. 1ms GTG' },
+    { label: 'Ports', name: 'ports', placeholder: 'e.g. 2x HDMI 2.0, 1x DP 1.4' },
+  ],
+  cctv: [
+    { label: 'Resolution', name: 'resolution', placeholder: 'e.g. 4MP / 2K' },
+    { label: 'Lens', name: 'lens', placeholder: 'e.g. 2.8mm Fixed' },
+    { label: 'Night Vision', name: 'nightVision', placeholder: 'e.g. 30m IR' },
+    { label: 'Weatherproof', name: 'weatherproof', placeholder: 'e.g. IP67' },
+    { label: 'Power', name: 'power', placeholder: 'e.g. PoE / 12V DC' },
+    { label: 'Storage', name: 'storage', placeholder: 'e.g. MicroSD up to 256GB' },
+  ],
+  nvr: [
+    { label: 'Channels', name: 'channels', placeholder: 'e.g. 8 Channel' },
+    { label: 'Resolution Support', name: 'resolution', placeholder: 'e.g. Up to 4K' },
+    { label: 'HDD Bays', name: 'hddBays', placeholder: 'e.g. 2x HDD Bay' },
+    { label: 'Max Storage', name: 'maxStorage', placeholder: 'e.g. Up to 8TB' },
+    { label: 'Ports', name: 'ports', placeholder: 'e.g. 8x PoE, 1x HDMI' },
+  ],
+  mobile: [
+    { label: 'Processor', name: 'processor', placeholder: 'e.g. Snapdragon 8 Gen 3' },
+    { label: 'RAM / Storage', name: 'ram', placeholder: 'e.g. 12GB / 256GB' },
+    { label: 'Display', name: 'display', placeholder: 'e.g. 6.7" AMOLED 120Hz' },
+    { label: 'Camera', name: 'camera', placeholder: 'e.g. 200MP + 12MP + 10MP' },
+    { label: 'Battery', name: 'battery', placeholder: 'e.g. 5000mAh, 45W fast charge' },
+    { label: 'Operating System', name: 'os', placeholder: 'e.g. Android 14' },
+  ],
+  networking: [
+    { label: 'Speed', name: 'speed', placeholder: 'e.g. WiFi 6 AX3000' },
+    { label: 'Bands', name: 'bands', placeholder: 'e.g. Dual Band 2.4GHz + 5GHz' },
+    { label: 'Ports', name: 'ports', placeholder: 'e.g. 4x Gigabit LAN, 1x WAN' },
+    { label: 'Coverage', name: 'coverage', placeholder: 'e.g. Up to 200 sqm' },
+  ],
+  keyboard: [
+    { label: 'Switch Type', name: 'switch', placeholder: 'e.g. Cherry MX Red' },
+    { label: 'Layout', name: 'layout', placeholder: 'e.g. TKL / Full Size' },
+    { label: 'Connectivity', name: 'connectivity', placeholder: 'e.g. USB-C / Wireless 2.4GHz' },
+    { label: 'Backlight', name: 'backlight', placeholder: 'e.g. RGB Per-key' },
+  ],
+  mouse: [
+    { label: 'DPI', name: 'dpi', placeholder: 'e.g. 100–25600 DPI' },
+    { label: 'Buttons', name: 'buttons', placeholder: 'e.g. 7 Programmable' },
+    { label: 'Connectivity', name: 'connectivity', placeholder: 'e.g. USB / 2.4GHz Wireless' },
+    { label: 'Weight', name: 'weight', placeholder: 'e.g. 75g' },
+  ],
+  headphone: [
+    { label: 'Type', name: 'type', placeholder: 'e.g. Over-ear / In-ear' },
+    { label: 'Connectivity', name: 'connectivity', placeholder: 'e.g. Bluetooth 5.3 / Wired' },
+    { label: 'Driver Size', name: 'driver', placeholder: 'e.g. 40mm' },
+    { label: 'Mic', name: 'mic', placeholder: 'e.g. Detachable / Built-in' },
+    { label: 'Battery Life', name: 'battery', placeholder: 'e.g. 30hrs' },
+  ],
+  printer: [
+    { label: 'Type', name: 'type', placeholder: 'e.g. Inkjet / Laser' },
+    { label: 'Print Speed', name: 'speed', placeholder: 'e.g. 22 ppm Black' },
+    { label: 'Connectivity', name: 'connectivity', placeholder: 'e.g. USB, WiFi, Ethernet' },
+    { label: 'Functions', name: 'functions', placeholder: 'e.g. Print, Scan, Copy, Fax' },
+    { label: 'Paper Size', name: 'paper', placeholder: 'e.g. A4, A3' },
+  ],
+  generic: [
+    { label: 'Key Specification 1', name: 'spec1', placeholder: 'e.g. Model number' },
+    { label: 'Key Specification 2', name: 'spec2', placeholder: '' },
+    { label: 'Key Specification 3', name: 'spec3', placeholder: '' },
+  ],
+};
+
+function getSpecKey(catId: number): string {
+  if ([101,102,103,104,105].includes(catId)) return 'laptop';
+  if ([201,202,203,204,205].includes(catId)) return 'desktop';
+  if ([301,302,303].includes(catId)) return 'desktop';
+  if ([401,402].includes(catId)) return 'cctv';
+  if ([403].includes(catId)) return 'nvr';
+  if (catId === 501) return 'cpu';
+  if (catId === 502) return 'motherboard';
+  if (catId === 503) return 'gpu';
+  if ([504,509].includes(catId)) return 'ram';
+  if (catId === 505) return 'psu';
+  if ([506,510].includes(catId)) return 'storage';
+  if (catId === 507) return 'casing';
+  if ([508,512].includes(catId)) return 'cooler';
+  if ([601,602,603].includes(catId)) return 'monitor';
+  if ([701,702,703,704].includes(catId)) return 'networking';
+  if ([801,802,803,804].includes(catId)) return 'mobile';
+  if ([901,902,903,904].includes(catId)) return 'printer';
+  if (catId === 1201) return 'keyboard';
+  if (catId === 1202) return 'mouse';
+  if (catId === 1203) return 'headphone';
+  return 'generic';
+}
+
 const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [saving, setSaving] = useState(false);
@@ -591,6 +770,8 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [dragOver, setDragOver] = useState(false);
+  const [selectedCatId, setSelectedCatId] = useState<number | null>(null);
+  const [specs, setSpecs] = useState<Record<string, string>>({});
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => { authFetch<Category[]>(token, '/categories').then(setCategories).catch(() => {}); }, [token]);
@@ -612,16 +793,20 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
     setPreviews(updated.map(f => URL.createObjectURL(f)));
   };
 
+  const specFields = selectedCatId ? (SPEC_FIELDS[getSpecKey(selectedCatId)] ?? SPEC_FIELDS.generic) : [];
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); setSaving(true); setError('');
     const f = e.currentTarget;
     const get = (name: string) => (f.elements.namedItem(name) as HTMLInputElement)?.value.trim();
+    const filteredSpecs = Object.fromEntries(Object.entries(specs).filter(([, v]) => v.trim()));
     const body: Record<string, unknown> = {
       title: get('title'), categoryId: parseInt(get('categoryId')),
       brand: get('brand') || undefined, price: parseFloat(get('price')),
       salePrice: get('salePrice') ? parseFloat(get('salePrice')) : undefined,
       stock: parseInt(get('stock')), featured: (f.elements.namedItem('featured') as HTMLInputElement)?.checked,
-      componentType: get('componentType') || undefined,
+      componentType: selectedCatId ? (COMPONENT_TYPE_MAP[selectedCatId] ?? undefined) : undefined,
+      specs: Object.keys(filteredSpecs).length > 0 ? filteredSpecs : undefined,
     };
     try {
       const product = await authFetch<{ id: number }>(token, '/products', { method: 'POST', body: JSON.stringify(body) });
@@ -664,7 +849,7 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
             </div>
             <div>
               <Label>Category *</Label>
-              <Select name="categoryId" required>
+              <Select name="categoryId" required onChange={e => { setSelectedCatId(parseInt(e.target.value) || null); setSpecs({}); }}>
                 <option value="">Select a category…</option>
                 {flatCategories(categories).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </Select>
@@ -685,17 +870,31 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
               <Label>Stock *</Label>
               <Input name="stock" type="number" min="0" required defaultValue="0" />
             </div>
-            <div>
-              <Label>Component type</Label>
-              <Select name="componentType">
-                <option value="">None</option>
-                {['cpu', 'gpu', 'ram', 'storage', 'psu', 'cooler', 'casing', 'motherboard', 'monitor', 'keyboard', 'mouse', 'headphone', 'cameraType', 'recorder', 'powerSupply'].map(t => <option key={t} value={t}>{t}</option>)}
-              </Select>
-            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingTop: '20px' }}>
               <input name="featured" type="checkbox" id="featured" style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: C.blue }} />
               <label htmlFor="featured" style={{ fontSize: '13px', color: C.muted, cursor: 'pointer' }}>Mark as featured</label>
             </div>
+
+            {/* ── Dynamic spec fields ── */}
+            {specFields.length > 0 && (
+              <div style={{ gridColumn: '1 / -1' }}>
+                <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: '16px', marginTop: '4px' }}>
+                  <p style={{ margin: '0 0 14px', fontSize: '13px', fontWeight: 600, color: C.text }}>Specifications</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    {specFields.map(f => (
+                      <div key={f.name}>
+                        <Label>{f.label}</Label>
+                        <Input
+                          placeholder={f.placeholder}
+                          value={specs[f.name] ?? ''}
+                          onChange={e => setSpecs(prev => ({ ...prev, [f.name]: e.target.value }))}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* ── Image upload ── */}
             <div style={{ gridColumn: '1 / -1', marginTop: '4px' }}>
