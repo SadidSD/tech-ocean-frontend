@@ -1,59 +1,74 @@
 'use client';
 
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { MOCK_PRODUCTS } from '@/data/products';
 import { MOCK_CATEGORIES } from '@/data/categories';
 import { ProductCard } from '@/components/ProductComponents';
 import { CartContext } from '@/components/ClientApplication';
 import Link from 'next/link';
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+
 export default function CategoryPage() {
     const params = useParams();
     const { addToCart } = useContext(CartContext);
 
-    // Advanced Filter States
-    const [priceRange, setPriceRange] = useState(100000);
+    const [products, setProducts] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [sort, setSort] = useState('newest');
+    const [priceMax, setPriceMax] = useState(200000);
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
     const [inStockOnly, setInStockOnly] = useState(false);
-    
+    const [allBrands, setAllBrands] = useState<string[]>([]);
+
     const findCategory = (cats: any[], id: string): any => {
-        for (let c of cats) {
+        for (const c of cats) {
             if (String(c.id) === String(id)) return c;
-            if (c.children) {
-                const sub = findCategory(c.children, id);
-                if (sub) return sub;
-            }
+            if (c.children) { const sub = findCategory(c.children, id); if (sub) return sub; }
         }
         return null;
     };
 
     const category = findCategory(MOCK_CATEGORIES, params.id as string);
-    
+
+    const fetchProducts = useCallback(() => {
+        if (!category) return;
+        setLoading(true);
+        const qs = new URLSearchParams({
+            category: category.slug,
+            page: String(page),
+            limit: '20',
+            sort,
+            maxPrice: String(priceMax),
+        });
+        if (inStockOnly) qs.set('inStock', 'true');
+        selectedBrands.forEach(b => qs.append('brand', b));
+
+        fetch(`${API}/products?${qs}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (data) {
+                    setProducts(data.products ?? []);
+                    setTotal(data.total ?? 0);
+                    const brands = Array.from(new Set((data.products ?? []).map((p: any) => p.brand).filter(Boolean))) as string[];
+                    if (allBrands.length === 0 && brands.length > 0) setAllBrands(brands);
+                }
+            })
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, [category, page, sort, priceMax, inStockOnly, selectedBrands]);
+
+    useEffect(() => { fetchProducts(); }, [fetchProducts]);
+
     if (!category) {
         return <div className="container" style={{padding:'100px 0', textAlign:'center'}}><h2>Category Not Found</h2></div>;
     }
 
-    const rawProducts = MOCK_PRODUCTS.filter(p => p.category === category.name);
-    
-    // Dynamically map unique brands based on first word of Title if brand undefined
-    const uniqueBrands = useMemo(() => Array.from(new Set(rawProducts.map(p => p.title.split(' ')[0]))), [rawProducts]);
-
-    const filteredProducts = rawProducts.filter(p => {
-        const rawPrice = parseFloat(String(p.price).replace(/,/g,'').replace('৳',''));
-        if (rawPrice > priceRange) return false;
-        
-        const brand = p.title.split(' ')[0];
-        if (selectedBrands.length > 0 && !selectedBrands.includes(brand)) return false;
-        
-        if (inStockOnly && !(p.status === 'In Stock' || p.status.includes('Stock'))) return false;
-
-        return true;
-    });
-
     const toggleBrand = (b: string) => {
-        if (selectedBrands.includes(b)) setSelectedBrands(selectedBrands.filter(x => x !== b));
-        else setSelectedBrands([...selectedBrands, b]);
+        setSelectedBrands(prev => prev.includes(b) ? prev.filter(x => x !== b) : [...prev, b]);
+        setPage(1);
     };
 
     return (
@@ -63,60 +78,77 @@ export default function CategoryPage() {
                 <h1 className="page-title">{category.name}</h1>
                 <p>Browse the best products in {category.name}</p>
             </div>
-            
+
             <div className="category-layout" style={{display: 'flex', gap: '20px'}}>
                 <aside className="category-sidebar d-none-mobile" style={{width: '250px', background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', height: 'fit-content'}}>
                     <h3 style={{fontSize: '16px', borderBottom: '1px solid #eee', paddingBottom: '10px', marginBottom: '15px'}}>Filters</h3>
-                    
+
                     <div style={{marginBottom: '25px'}}>
-                        <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Price Range</strong>
-                        <input type="range" min="0" max="100000" step="1000" value={priceRange} onChange={(e) => setPriceRange(Number(e.target.value))} style={{width: '100%', accentColor: '#ff6b00'}} />
+                        <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Max Price</strong>
+                        <input type="range" min="0" max="200000" step="1000" value={priceMax} onChange={e => { setPriceMax(Number(e.target.value)); setPage(1); }} style={{width: '100%', accentColor: '#ff6b00'}} />
                         <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#666', marginTop: '5px'}}>
-                            <span>৳0</span>
-                            <span>৳{priceRange.toLocaleString()}</span>
+                            <span>৳0</span><span>৳{priceMax.toLocaleString('en-IN')}</span>
                         </div>
                     </div>
 
-                    <div style={{marginBottom: '25px'}}>
-                        <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Brands</strong>
-                        {uniqueBrands.slice(0, 6).map((brand, i) => (
-                            <div key={i} style={{marginBottom: '8px', fontSize: '13px'}}>
-                                <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}>
-                                    <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => toggleBrand(brand)} /> {brand}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+                    {allBrands.length > 0 && (
+                        <div style={{marginBottom: '25px'}}>
+                            <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Brand</strong>
+                            {allBrands.slice(0, 8).map(brand => (
+                                <div key={brand} style={{marginBottom: '8px', fontSize: '13px'}}>
+                                    <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}>
+                                        <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => toggleBrand(brand)} /> {brand}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <div>
                         <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Availability</strong>
-                        <div style={{fontSize: '13px'}}><label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}><input type="checkbox" checked={inStockOnly} onChange={(e) => setInStockOnly(e.target.checked)}/> In Stock Only</label></div>
+                        <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px'}}>
+                            <input type="checkbox" checked={inStockOnly} onChange={e => { setInStockOnly(e.target.checked); setPage(1); }} /> In Stock Only
+                        </label>
                     </div>
                 </aside>
-                
+
                 <div className="category-main" style={{flex: 1}}>
                     <div style={{background: '#fff', padding:'15px', borderRadius:'8px', marginBottom:'20px', boxShadow:'0 2px 4px rgba(0,0,0,0.05)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                        <span>Showing {filteredProducts.length} products</span>
-                        <select className="form-control" style={{width:'auto', margin:0}}>
-                            <option>Default Sorting</option>
-                            <option>Price (Low &gt; High)</option>
-                            <option>Price (High &gt; Low)</option>
+                        <span>{loading ? 'Loading…' : `Showing ${products.length} of ${total} products`}</span>
+                        <select className="form-control" style={{width:'auto', margin:0}} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+                            <option value="newest">Newest First</option>
+                            <option value="price_asc">Price: Low → High</option>
+                            <option value="price_desc">Price: High → Low</option>
+                            <option value="rating">Top Rated</option>
                         </select>
                     </div>
-                    
-                    <div className="products-grid">
-                        {filteredProducts.length === 0 ? (
-                            <div style={{padding: '50px', textAlign: 'center', gridColumn: '1 / -1'}}>
-                                <i className="fas fa-box-open" style={{fontSize: '40px', color: '#ccc', marginBottom:'15px'}}></i>
-                                <h3>No products found</h3>
-                                <p>We're adding products to this category soon!</p>
+
+                    {loading ? (
+                        <div style={{textAlign:'center', padding:'60px'}}><i className="fas fa-spinner fa-spin" style={{fontSize:'32px', color:'#1B5B97'}}></i></div>
+                    ) : products.length === 0 ? (
+                        <div style={{padding:'50px', textAlign:'center', gridColumn:'1/-1'}}>
+                            <i className="fas fa-box-open" style={{fontSize:'40px', color:'#ccc', marginBottom:'15px'}}></i>
+                            <h3>No products found</h3>
+                            <p>We&apos;re adding products to this category soon!</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="products-grid">
+                                {products.map(prod => (
+                                    <ProductCard key={prod.id} product={prod} addToCart={addToCart} />
+                                ))}
                             </div>
-                        ) : (
-                            filteredProducts.map(prod => (
-                                <ProductCard key={prod.id} product={prod} addToCart={addToCart} />
-                            ))
-                        )}
-                    </div>
+                            {total > 20 && (
+                                <div style={{display:'flex', justifyContent:'center', gap:'8px', marginTop:'30px'}}>
+                                    {Array.from({length: Math.ceil(total / 20)}, (_, i) => i + 1).map(p => (
+                                        <button key={p} onClick={() => setPage(p)} style={{padding:'8px 14px', borderRadius:'6px', border:'1px solid #ddd', background: p === page ? '#1B5B97' : 'white', color: p === page ? 'white' : '#333', cursor:'pointer', fontWeight: p === page ? 600 : 400}}>
+                                            {p}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
         </div>

@@ -25,8 +25,15 @@ export const StarRating = ({ rating = 0, count = 0 }: { rating?: number, count?:
     );
 };
 
+const fmtBDT = (n: number) => `৳${Math.round(n).toLocaleString('en-IN')}`;
+
 export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: (p:any)=>void }) => {
-    // Generate deterministic mock badge tags based on ID
+    // Normalise API shape → display shape
+    const imgUrl = product.imgUrl ?? product.images?.[0] ?? null;
+    const price   = typeof product.price === 'number' ? fmtBDT(product.price) : product.price;
+    const oldPrice = product.oldPrice ?? (product.salePrice ? fmtBDT(product.salePrice) : null);
+    const status  = product.status ?? (product.stock > 0 ? 'In Stock' : 'Out of Stock');
+
     const idNum = parseInt(product.id.toString().replace(/\D/g,'')) || 0;
     
     let badge = null;
@@ -45,15 +52,15 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
     return (
         <div className="product-card" style={{ position: 'relative' }}>
             <Link href={`/product/${product.id}`} className="product-card-link" style={{ textDecoration: 'none', color: 'inherit', display: 'block', minHeight: '44px', cursor: 'pointer', zIndex: 1, position: 'relative' }}>
-                <div className={`product-status ${product.status === 'In Stock' || product.status.includes('Stock') ? 'instock' : 'out'}`} style={{zIndex: 3}}>
-                    {product.status}
+                <div className={`product-status ${status.includes('Stock') ? 'instock' : 'out'}`} style={{zIndex: 3}}>
+                    {status}
                 </div>
-                
+
                 {badge}
 
                 <div className="product-img-wrap">
-                    {product.imgUrl ? (
-                        <img src={product.imgUrl} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    {imgUrl ? (
+                        <img src={imgUrl} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     ) : (
                         <i className={`fas ${product.imgIcon || 'fa-box'}`}></i>
                     )}
@@ -64,8 +71,8 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     {product.features?.map((f: string, i: number) => <li key={i}>{f}</li>)}
                 </ul>
                 <div className="product-price-box">
-                    <span className="current-price">{product.price}</span>
-                    {product.oldPrice && <span className="old-price">{product.oldPrice}</span>}
+                    <span className="current-price">{price}</span>
+                    {oldPrice && <span className="old-price">{oldPrice}</span>}
                 </div>
             </Link>
             
