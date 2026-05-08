@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import BrandSectionTitle from '@/components/BrandSectionTitle';
 import { HeroBanner, DesktopFeaturesBar, MobileContactSection, CategoryList, LatestBlogs } from '@/components/HomeComponents';
@@ -9,12 +9,22 @@ import { MOCK_CATEGORIES } from '@/data/categories';
 import { MOCK_PRODUCTS } from '@/data/products';
 import { CartContext } from '@/components/ClientApplication';
 
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+
 export default function Home() {
     const { addToCart } = useContext(CartContext);
+    const [banners, setBanners] = useState<any>(null);
+
+    useEffect(() => {
+        fetch(`${API}/settings/banners`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => { if (data) setBanners(data); })
+            .catch(() => {});
+    }, []);
 
     return (
         <div className="home-layout-wrapper">
-            <HeroBanner />
+            <HeroBanner banners={banners} />
             <DesktopFeaturesBar />
             <CategoryList categories={MOCK_CATEGORIES} />
             

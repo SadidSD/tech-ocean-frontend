@@ -5,7 +5,31 @@ import Link from 'next/link';
 import BrandSectionTitle from '@/components/BrandSectionTitle';
 import * as FaIcons from 'react-icons/fa';
 
-export const HeroBanner = () => (
+interface BannerData {
+  heroVideoUrl?: string | null;
+  banner1Title: string;
+  banner1Subtitle: string;
+  banner1ImageUrl?: string | null;
+  banner1Link: string;
+  banner2Title: string;
+  banner2Subtitle: string;
+  banner2ImageUrl?: string | null;
+  banner2Link: string;
+}
+
+const DEFAULT_VIDEO = 'https://www.w3schools.com/html/mov_bbb.mp4';
+
+export const HeroBanner = ({ banners }: { banners?: BannerData }) => {
+  const b = banners ?? {
+    heroVideoUrl: null,
+    banner1Title: 'Special Laptop Deals', banner1Subtitle: 'Up to 40% off',
+    banner1ImageUrl: null, banner1Link: '/category/laptop',
+    banner2Title: 'CCTV Build Offers', banner2Subtitle: 'Custom Security System',
+    banner2ImageUrl: null, banner2Link: '/cctv-builder',
+  };
+  const videoUrl = b.heroVideoUrl || DEFAULT_VIDEO;
+
+  return (
     <>
         <section className="hero-section desktop-only">
             <div className="container hero-grid">
@@ -14,7 +38,7 @@ export const HeroBanner = () => (
                         position: 'absolute', right: 0, bottom: 0, minWidth: '100%', minHeight: '100%',
                         width: 'auto', height: 'auto', zIndex: 0, objectFit: 'cover', opacity: 0.8
                     }}>
-                        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                        <source src={videoUrl} type="video/mp4" />
                     </video>
                     <div className="hero-main-content" style={{position: 'relative', zIndex: 1, textShadow: '0 2px 4px rgba(0,0,0,0.8)'}}>
                         <h2>Dive into Tech</h2>
@@ -22,22 +46,38 @@ export const HeroBanner = () => (
                     </div>
                 </div>
                 <div className="hero-side-banners">
-                    <div className="side-banner" style={{background: 'linear-gradient(135deg, #1B5B97, #0d3d6b)', color: 'white'}}>
-                        <h3 style={{color: 'white'}}>Special Laptop Deals</h3>
-                    </div>
-                    <div className="side-banner" style={{background: 'linear-gradient(135deg, #ff6b00, #e05a00)', color: 'white'}}>
-                        <h3 style={{color: 'white'}}>CCTV Build Offers</h3>
-                    </div>
+                    <Link href={b.banner1Link} className="side-banner" style={{
+                        background: b.banner1ImageUrl ? 'none' : 'linear-gradient(135deg, #1B5B97, #0d3d6b)',
+                        backgroundImage: b.banner1ImageUrl ? `url(${b.banner1ImageUrl})` : undefined,
+                        backgroundSize: 'cover', backgroundPosition: 'center',
+                        color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'flex-end', padding: '20px',
+                    }}>
+                        <div style={{background: 'rgba(0,0,0,0.45)', borderRadius: '8px', padding: '8px 14px'}}>
+                            <h3 style={{color: 'white', margin: 0}}>{b.banner1Title}</h3>
+                            <p style={{color: 'rgba(255,255,255,0.85)', margin: 0, fontSize: '13px'}}>{b.banner1Subtitle}</p>
+                        </div>
+                    </Link>
+                    <Link href={b.banner2Link} className="side-banner" style={{
+                        background: b.banner2ImageUrl ? 'none' : 'linear-gradient(135deg, #ff6b00, #e05a00)',
+                        backgroundImage: b.banner2ImageUrl ? `url(${b.banner2ImageUrl})` : undefined,
+                        backgroundSize: 'cover', backgroundPosition: 'center',
+                        color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'flex-end', padding: '20px',
+                    }}>
+                        <div style={{background: 'rgba(0,0,0,0.45)', borderRadius: '8px', padding: '8px 14px'}}>
+                            <h3 style={{color: 'white', margin: 0}}>{b.banner2Title}</h3>
+                            <p style={{color: 'rgba(255,255,255,0.85)', margin: 0, fontSize: '13px'}}>{b.banner2Subtitle}</p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </section>
-        
+
         <div className="mobile-animated-hero">
             <video autoPlay loop muted playsInline style={{
                 position: 'absolute', right: 0, bottom: 0, minWidth: '100%', minHeight: '100%',
                 width: 'auto', height: 'auto', zIndex: 0, objectFit: 'cover', opacity: 0.4
             }}>
-                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+                <source src={videoUrl} type="video/mp4" />
             </video>
             <div className="hero-overlay" style={{position: 'relative', zIndex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', textShadow: '0 2px 4px rgba(0,0,0,0.8)'}}>
                 <h1 style={{fontSize: '24px', fontWeight: 800, textAlign: 'center'}}>Ocean of IT Products</h1>
@@ -45,26 +85,35 @@ export const HeroBanner = () => (
         </div>
 
         <div className="mobile-offer-row">
-          <div className="offer-card half laptop-deal">
+          <Link href={b.banner1Link} className="offer-card half laptop-deal" style={{
+              textDecoration: 'none',
+              backgroundImage: b.banner1ImageUrl ? `url(${b.banner1ImageUrl})` : undefined,
+              backgroundSize: 'cover', backgroundPosition: 'center',
+          }}>
             <div className="offer-content">
-              <h4>Special Laptop Deals</h4>
-              <p>Up to 40% off</p>
+              <h4>{b.banner1Title}</h4>
+              <p>{b.banner1Subtitle}</p>
               <button>Shop Now →</button>
             </div>
             <div className="offer-icon">💻</div>
-          </div>
-          
-          <div className="offer-card half cctv-offer">
+          </Link>
+
+          <Link href={b.banner2Link} className="offer-card half cctv-offer" style={{
+              textDecoration: 'none',
+              backgroundImage: b.banner2ImageUrl ? `url(${b.banner2ImageUrl})` : undefined,
+              backgroundSize: 'cover', backgroundPosition: 'center',
+          }}>
             <div className="offer-content">
-              <h4>CCTV Build Offers</h4>
-              <p>Custom Security System</p>
+              <h4>{b.banner2Title}</h4>
+              <p>{b.banner2Subtitle}</p>
               <button>Build Now →</button>
             </div>
             <div className="offer-icon">📹</div>
-          </div>
+          </Link>
         </div>
     </>
-);
+  );
+};
 
 export const DesktopFeaturesBar = () => (
     <div className="container desktop-only">
@@ -204,7 +253,7 @@ export const LatestBlogs = ({ blogs = [] }: { blogs?: any[] }) => {
                 try {
                     const response = await fetch('/api/blogs');
                     const data = await response.json();
-                    setRealBlogs(data || []);
+                    setRealBlogs(Array.isArray(data) ? data : (data.blogs || []));
                 } catch (error) {
                     console.error('Error fetching blogs:', error);
                     setRealBlogs([]); // Empty array on error - NO mock data

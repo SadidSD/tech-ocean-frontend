@@ -677,6 +677,129 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
   );
 };
 
+// ─── Banners View ─────────────────────────────────────────────────────────────
+const BannersView = ({ token, onUnauthorized }: { token: string; onUnauthorized: () => void }) => {
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [form, setForm] = useState({
+    heroVideoUrl: '', banner1Title: '', banner1Subtitle: '', banner1Link: '', banner1ImageUrl: '',
+    banner2Title: '', banner2Subtitle: '', banner2Link: '', banner2ImageUrl: '',
+  });
+  const [previews, setPreviews] = useState<{ b1?: string; b2?: string }>({});
+  const [files, setFiles] = useState<{ b1?: File; b2?: File }>({});
+
+  useEffect(() => {
+    fetch(`${API_BASE}/settings/banners`)
+      .then(r => r.json())
+      .then(d => setForm({
+        heroVideoUrl: d.heroVideoUrl ?? '',
+        banner1Title: d.banner1Title ?? '', banner1Subtitle: d.banner1Subtitle ?? '',
+        banner1Link: d.banner1Link ?? '', banner1ImageUrl: d.banner1ImageUrl ?? '',
+        banner2Title: d.banner2Title ?? '', banner2Subtitle: d.banner2Subtitle ?? '',
+        banner2Link: d.banner2Link ?? '', banner2ImageUrl: d.banner2ImageUrl ?? '',
+      }))
+      .catch(() => {});
+  }, []);
+
+  const pickFile = (which: 'b1' | 'b2') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setFiles(prev => ({ ...prev, [which]: f }));
+    setPreviews(prev => ({ ...prev, [which]: URL.createObjectURL(f) }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true); setMsg(null);
+    try {
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      if (files.b1) fd.append('banner1Image', files.b1);
+      if (files.b2) fd.append('banner2Image', files.b2);
+      const res = await fetch(`${API_BASE}/settings/banners`, {
+        method: 'PUT', credentials: 'include',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (res.status === 401) { onUnauthorized(); return; }
+      if (!res.ok) throw new Error('Failed to save');
+      const updated = await res.json();
+      setForm(f => ({ ...f, banner1ImageUrl: updated.banner1ImageUrl ?? f.banner1ImageUrl, banner2ImageUrl: updated.banner2ImageUrl ?? f.banner2ImageUrl }));
+      setFiles({});
+      setMsg({ text: 'Banners saved successfully', ok: true });
+    } catch {
+      setMsg({ text: 'Failed to save banners', ok: false });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const BannerCard = ({ which, label, emoji, defaultGradient }: { which: 'b1' | 'b2'; label: string; emoji: string; defaultGradient: string }) => {
+    const titleKey = which === 'b1' ? 'banner1Title' : 'banner2Title';
+    const subtitleKey = which === 'b1' ? 'banner1Subtitle' : 'banner2Subtitle';
+    const linkKey = which === 'b1' ? 'banner1Link' : 'banner2Link';
+    const imgKey = which === 'b1' ? 'banner1ImageUrl' : 'banner2ImageUrl';
+    const preview = previews[which] ?? (form[imgKey] || null);
+    return (
+      <Card style={{ overflow: 'hidden' }}>
+        <div style={{ padding: '16px 20px', borderBottom: `1px solid ${C.border}`, fontWeight: 600, fontSize: '14px', color: C.text }}>{emoji} {label}</div>
+        <div style={{ padding: '20px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          {/* Preview */}
+          <div style={{ width: '240px', height: '130px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, background: defaultGradient, position: 'relative', border: `1px solid ${C.border}` }}>
+            {preview
+              ? <img src={preview} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px' }}>{emoji}</div>
+            }
+            <label style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', cursor: 'pointer', opacity: 0, transition: 'opacity 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '1')} onMouseLeave={e => (e.currentTarget.style.opacity = '0')}>
+              <span style={{ color: 'white', fontSize: '13px', fontWeight: 600, background: 'rgba(0,0,0,0.5)', padding: '6px 12px', borderRadius: '6px' }}>📁 Upload Image</span>
+              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={pickFile(which)} />
+            </label>
+          </div>
+          {/* Fields */}
+          <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div>
+              <Label>Title</Label>
+              <Input value={form[titleKey]} onChange={e => setForm(f => ({ ...f, [titleKey]: e.target.value }))} placeholder="e.g. Special Laptop Deals" />
+            </div>
+            <div>
+              <Label>Subtitle</Label>
+              <Input value={form[subtitleKey]} onChange={e => setForm(f => ({ ...f, [subtitleKey]: e.target.value }))} placeholder="e.g. Up to 40% off" />
+            </div>
+            <div>
+              <Label>Link</Label>
+              <Input value={form[linkKey]} onChange={e => setForm(f => ({ ...f, [linkKey]: e.target.value }))} placeholder="/category/laptop" />
+            </div>
+            <div>
+              <Label>Or paste image URL</Label>
+              <Input value={form[imgKey]} onChange={e => setForm(f => ({ ...f, [imgKey]: e.target.value }))} placeholder="https://..." />
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  };
+
+  return (
+    <div>
+      <PageHeader title="Hero Banners">
+        <Btn onClick={handleSave} disabled={saving}>{saving ? 'Saving…' : 'Save Changes'}</Btn>
+      </PageHeader>
+      {msg && <div style={{ marginBottom: '16px', padding: '10px 16px', borderRadius: '6px', fontSize: '13px', background: msg.ok ? '#f0fdf4' : '#fff1f2', color: msg.ok ? C.green : C.red, border: `1px solid ${msg.ok ? '#bbf7d0' : '#fecdd3'}` }}>{msg.text}</div>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <Card>
+          <div style={{ padding: '16px 20px', borderBottom: `1px solid ${C.border}`, fontWeight: 600, fontSize: '14px', color: C.text }}>🎬 Main Hero Video</div>
+          <div style={{ padding: '20px' }}>
+            <Label>Video URL (mp4)</Label>
+            <Input value={form.heroVideoUrl} onChange={e => setForm(f => ({ ...f, heroVideoUrl: e.target.value }))} placeholder="https://... (leave blank for default)" />
+          </div>
+        </Card>
+        <BannerCard which="b1" label="Banner 1 — Left" emoji="💻" defaultGradient="linear-gradient(135deg, #1B5B97, #0d3d6b)" />
+        <BannerCard which="b2" label="Banner 2 — Right" emoji="📹" defaultGradient="linear-gradient(135deg, #ff6b00, #e05a00)" />
+      </div>
+    </div>
+  );
+};
+
 // ─── Sidebar nav item ─────────────────────────────────────────────────────────
 const NavItem = ({ icon, label, section, current, onClick, badge }: { icon: string; label: string; section: string; current: string; onClick: (s: string) => void; badge?: number }) => {
   const active = current === section || (section === 'inventory' && current === 'add-product');
@@ -784,6 +907,7 @@ export default function AdminPage() {
     { icon: 'fa-shopping-bag', label: 'Orders', section: 'orders' },
     { icon: 'fa-star', label: 'Reviews', section: 'reviews', badge: pendingReviews > 0 ? pendingReviews : undefined },
     { icon: 'fa-users', label: 'Users', section: 'users' },
+    { icon: 'fa-images', label: 'Banners', section: 'banners' },
   ];
 
   return (
@@ -815,6 +939,7 @@ export default function AdminPage() {
         {currentView === 'orders' && <OrdersView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'reviews' && <ReviewsView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'users' && <UsersView token={token} onUnauthorized={handleLogout} />}
+        {currentView === 'banners' && <BannersView token={token} onUnauthorized={handleLogout} />}
       </main>
     </div>
   );
