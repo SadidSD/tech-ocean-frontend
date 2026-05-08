@@ -588,11 +588,29 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
   const [categories, setCategories] = useState<Category[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => { authFetch<Category[]>(token, '/categories').then(setCategories).catch(() => {}); }, [token]);
 
   const flatCategories = (cats: Category[], depth = 0): { id: number; name: string }[] =>
     cats.flatMap(c => [{ id: c.id, name: `${'  '.repeat(depth)}${depth > 0 ? '↳ ' : ''}${c.name}` }, ...flatCategories(c.children ?? [], depth + 1)]);
+
+  const addFiles = (files: FileList | null) => {
+    if (!files) return;
+    const valid = Array.from(files).filter(f => f.type.startsWith('image/'));
+    const newFiles = [...imageFiles, ...valid].slice(0, 10);
+    setImageFiles(newFiles);
+    setPreviews(newFiles.map(f => URL.createObjectURL(f)));
+  };
+
+  const removeImage = (idx: number) => {
+    const updated = imageFiles.filter((_, i) => i !== idx);
+    setImageFiles(updated);
+    setPreviews(updated.map(f => URL.createObjectURL(f)));
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); setSaving(true); setError('');
@@ -605,7 +623,19 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
       stock: parseInt(get('stock')), featured: (f.elements.namedItem('featured') as HTMLInputElement)?.checked,
       componentType: get('componentType') || undefined,
     };
-    try { await authFetch(token, '/products', { method: 'POST', body: JSON.stringify(body) }); onDone(); }
+    try {
+      const product = await authFetch<{ id: number }>(token, '/products', { method: 'POST', body: JSON.stringify(body) });
+      if (imageFiles.length > 0 && product?.id) {
+        const fd = new FormData();
+        imageFiles.forEach(file => fd.append('images', file));
+        await fetch(`${API_BASE}/products/${product.id}/images`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
+        });
+      }
+      onDone();
+    }
     catch (err) { setError(err instanceof ApiError ? err.message : 'Failed to create product'); }
     finally { setSaving(false); }
   };
@@ -666,7 +696,45 @@ const AddProductView = ({ token, onDone }: { token: string; onDone: () => void }
               <input name="featured" type="checkbox" id="featured" style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: C.blue }} />
               <label htmlFor="featured" style={{ fontSize: '13px', color: C.muted, cursor: 'pointer' }}>Mark as featured</label>
             </div>
+
+            {/* ── Image upload ── */}
+            <div style={{ gridColumn: '1 / -1', marginTop: '4px' }}>
+              <Label>Product images (up to 10)</Label>
+              <div
+                onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={e => { e.preventDefault(); setDragOver(false); addFiles(e.dataTransfer.files); }}
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  border: `2px dashed ${dragOver ? C.blue : C.border}`,
+                  borderRadius: '8px', padding: '24px', textAlign: 'center',
+                  cursor: 'pointer', background: dragOver ? '#eff6ff' : C.bg,
+                  transition: 'all 0.2s',
+                }}
+              >
+                <i className="fas fa-cloud-upload-alt" style={{ fontSize: '24px', color: C.faint, marginBottom: '8px', display: 'block' }}></i>
+                <p style={{ margin: 0, fontSize: '13px', color: C.muted }}>Drag & drop images here or <span style={{ color: C.blue, fontWeight: 600 }}>click to browse</span></p>
+                <p style={{ margin: '4px 0 0', fontSize: '11px', color: C.faint }}>JPG, PNG, WebP — max 5 MB each</p>
+              </div>
+              <input ref={fileInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={e => addFiles(e.target.files)} />
+
+              {previews.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }}>
+                  {previews.map((src, idx) => (
+                    <div key={idx} style={{ position: 'relative', width: '80px', height: '80px' }}>
+                      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '6px', border: `1px solid ${C.border}` }} />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        style={{ position: 'absolute', top: '-6px', right: '-6px', width: '18px', height: '18px', borderRadius: '50%', background: C.red, border: 'none', color: 'white', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}
+                      >✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
+
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', paddingTop: '16px', borderTop: `1px solid ${C.border}` }}>
             <Btn type="button" variant="ghost" onClick={onDone}>Cancel</Btn>
             <Btn type="submit" disabled={saving}>{saving ? 'Creating…' : 'Create Product'}</Btn>
