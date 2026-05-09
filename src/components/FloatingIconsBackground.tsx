@@ -62,8 +62,8 @@ const FloatingIconsBackground = () => {
     const selected = cells.slice(0, count);
     
     return selected.map(cell => ({
-      top: Math.min(95, Math.max(2, (cell.row / gridRows) * 100 + (Math.random() - 0.5) * (cellHeight * 0.8))),
-      left: Math.min(95, Math.max(2, (cell.col / gridCols) * 100 + (Math.random() - 0.5) * (cellWidth * 0.8)))
+      top: Math.min(95, Math.max(2, (cell.row / gridRows) * 100 + (cellHeight / 2) + (Math.random() - 0.5) * (cellHeight * 0.2))),
+      left: Math.min(95, Math.max(2, (cell.col / gridCols) * 100 + (cellWidth / 2) + (Math.random() - 0.5) * (cellWidth * 0.2)))
     }));
   };
 

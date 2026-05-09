@@ -80,22 +80,22 @@ h4, .h4 { font-size: 18px; font-weight: 500; line-height: 1.4; }
   filter: blur(0.3px); /* Slight blur for softer appearance */
 }
 
-/* Faster animations with larger movement */
+/* Faster animations with smaller movement to prevent overlapping */
 @keyframes floatUpDown {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
 
 @keyframes floatLeftRight {
   0% { transform: translateX(0px); }
-  50% { transform: translateX(25px); }
+  50% { transform: translateX(8px); }
   100% { transform: translateX(0px); }
 }
 
 @keyframes floatRotate {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(5deg); }
+  50% { transform: translateY(-5px) rotate(5deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
