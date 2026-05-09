@@ -31,11 +31,11 @@ const FloatingIconsBackground = () => {
   };
 
   const getIconCount = () => {
-    if (typeof window === 'undefined') return 50;
+    if (typeof window === 'undefined') return 100;
     const width = window.innerWidth;
-    if (width >= 1200) return 75 + Math.floor(Math.random() * 15);
-    if (width >= 768) return 50 + Math.floor(Math.random() * 15);
-    return 30 + Math.floor(Math.random() * 10);
+    if (width >= 1200) return 150 + Math.floor(Math.random() * 30);
+    if (width >= 768) return 100 + Math.floor(Math.random() * 30);
+    return 60 + Math.floor(Math.random() * 20);
   };
 
   const generateNonOverlappingPositions = (count: number) => {
