@@ -4863,3 +4863,54 @@ body {
     gap: 12px;
   }
 }
+
+/* ============================================
+   DESKTOP LAYOUT - STRETCH FIXES
+   ============================================ */
+@media (min-width: 769px) {
+  /* Override container restrictions */
+  .mega-menu-wrapper .container,
+  .hero-section .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 40px !important;
+  }
+  
+  /* Make hero grid utilize full width */
+  .hero-grid {
+    display: grid !important;
+    grid-template-columns: 3fr 1fr !important;
+    gap: 30px !important;
+    width: 100% !important;
+  }
+  
+  .hero-main-banner {
+    width: 100% !important;
+    min-height: 550px !important;
+    border-radius: 12px;
+  }
+  
+  .hero-side-banners {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 30px !important;
+    height: 100% !important;
+  }
+  
+  .hero-side-banners .side-banner {
+    flex: 1 !important;
+    border-radius: 12px;
+  }
+  
+  /* Ensure mega menu items stretch perfectly */
+  .mega-menu {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  
+  .mega-menu .menu-item {
+    flex: 1 !important;
+    text-align: center !important;
+  }
+}
