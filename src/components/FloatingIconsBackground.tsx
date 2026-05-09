@@ -31,16 +31,16 @@ const FloatingIconsBackground = () => {
   };
 
   const getIconCount = () => {
-    if (typeof window === 'undefined') return 100;
+    if (typeof window === 'undefined') return 150;
     const width = window.innerWidth;
-    if (width >= 1200) return 150 + Math.floor(Math.random() * 30);
-    if (width >= 768) return 100 + Math.floor(Math.random() * 30);
-    return 60 + Math.floor(Math.random() * 20);
+    if (width >= 1200) return 250 + Math.floor(Math.random() * 50);
+    if (width >= 768) return 150 + Math.floor(Math.random() * 40);
+    return 80 + Math.floor(Math.random() * 20);
   };
 
   const generateNonOverlappingPositions = (count: number) => {
-    const gridCols = 24;  // More columns for finer distribution
-    const gridRows = 16;  // More rows
+    const gridCols = 32;  // Increased for denser distribution
+    const gridRows = 20;  // Increased for denser distribution
     const cellWidth = 100 / gridCols;
     const cellHeight = 100 / gridRows;
     
