@@ -4879,7 +4879,7 @@ body {
   /* Make hero grid utilize full width */
   .hero-grid {
     display: grid !important;
-    grid-template-columns: 2.7fr 1.3fr !important;
+    grid-template-columns: 2.4fr 1.2fr !important;
     gap: 30px !important;
     width: 100% !important;
   }
@@ -4895,10 +4895,12 @@ body {
     flex-direction: column !important;
     gap: 30px !important;
     height: 100% !important;
+    width: 100% !important;
   }
   
   .hero-side-banners .side-banner {
     flex: 1 !important;
+    width: 100% !important;
     border-radius: 12px;
   }
   
