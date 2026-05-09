@@ -4900,6 +4900,7 @@ body {
   
   .hero-side-banners .side-banner {
     flex: 1 !important;
+    height: auto !important;
     width: 100% !important;
     border-radius: 12px;
   }
