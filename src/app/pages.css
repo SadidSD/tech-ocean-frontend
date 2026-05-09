@@ -4692,3 +4692,174 @@ body {
   .trust-badges { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
   .trust-item { font-size: 11px !important; padding: 10px 8px !important; text-align: center !important; }
 }
+
+/* ============================================
+   DESKTOP LAYOUT REDISTRIBUTION - 768px AND ABOVE
+   ============================================ */
+@media (min-width: 769px) {
+  
+  /* Category navigation container */
+  .category-nav,
+  .categories-bar,
+  .mega-menu-container,
+  .mega-menu-wrapper,
+  [class*="category-nav"],
+  [class*="categories"]:not(.mobile-categories) {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 24px;
+    overflow-x: visible;
+  }
+  
+  /* Category list - full width distribution */
+  .category-list,
+  .menu-categories,
+  .mega-menu,
+  [class*="category-list"] {
+    display: flex;
+    justify-content: space-between;  /* Evenly distribute space */
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Individual category items */
+  .category-item,
+  .menu-category,
+  .mega-menu .menu-item,
+  [class*="category-item"] {
+    flex: 1;  /* Equal width distribution */
+    text-align: center;
+    white-space: nowrap;
+    padding: 12px 8px;
+  }
+  
+  /* Category links */
+  .category-item a,
+  .menu-category a,
+  .mega-menu .menu-item > a {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  /* ========================================
+     LANDING PAGE / HERO SECTION - LARGER
+     ======================================== */
+  
+  /* Hero / Landing section container */
+  .hero-section,
+  .landing-section,
+  .main-banner,
+  .hero-banner,
+  [class*="hero"],
+  [class*="landing"] {
+    min-height: 500px;  /* Taller landing area */
+    padding: 60px 24px;
+    margin-bottom: 40px;
+  }
+  
+  /* Hero content wrapper */
+  .hero-content,
+  .landing-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  /* Hero title */
+  .hero-title,
+  .landing-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+  
+  /* Hero subtitle */
+  .hero-subtitle,
+  .landing-subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 32px;
+  }
+  
+  /* Hero CTA buttons */
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  /* ========================================
+     EMPTY SPACE FILLERS
+     ======================================== */
+  
+  /* Main container - ensure full width */
+  .main-container,
+  .desktop-layout,
+  .app-container,
+  .home-layout-wrapper {
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  /* Content wrapper - wider */
+  .content-wrapper,
+  .page-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  
+  /* Featured products section - utilize space */
+  .featured-products,
+  .products-section {
+    padding: 40px 24px;
+  }
+  
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+  
+  /* Shop by category section - full width */
+  .categories-section {
+    width: 100%;
+    padding: 40px 24px;
+  }
+  
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+  
+  /* Remove any max-width restrictions that cause side empty space */
+  .container,
+  [class*="container"]:not(.mobile-*) {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Ensure NO changes to mobile */
+@media (max-width: 768px) {
+  /* Preserve all existing mobile styles - DO NOT MODIFY */
+  .category-list,
+  .category-nav,
+  .mega-menu {
+    /* Keep original mobile behavior */
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+  
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
