@@ -4879,7 +4879,7 @@ body {
   /* Make hero grid utilize full width */
   .hero-grid {
     display: grid !important;
-    grid-template-columns: 3fr 1fr !important;
+    grid-template-columns: 2.7fr 1.3fr !important;
     gap: 30px !important;
     width: 100% !important;
   }
