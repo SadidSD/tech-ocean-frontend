@@ -4742,9 +4742,9 @@ body {
   .menu-category a,
   .mega-menu .menu-item > a {
     display: block;
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: -0.2px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
   }
   
   /* ========================================
@@ -4870,7 +4870,12 @@ body {
    ============================================ */
 @media (min-width: 769px) {
   /* Override container restrictions */
-  .mega-menu-wrapper .container,
+  .mega-menu-wrapper .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 15px !important;
+  }
+  
   .hero-section .container {
     max-width: 100% !important;
     width: 100% !important;
