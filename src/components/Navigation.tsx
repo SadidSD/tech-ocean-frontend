@@ -447,20 +447,24 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             minWidth: '500px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: '200px' }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '180px' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <Link href={`/category/${cat.slug || cat.id}?group=${group.slug || group.name.toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                                                             <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#db4b27'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>{group.name}</h4>
                                                         </Link>
                                                     </div>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <div style={{ 
+                                                        display: 'grid', 
+                                                        gridTemplateColumns: (group.subItems || []).length > 15 ? 'repeat(3, 1fr)' : (group.subItems || []).length > 7 ? 'repeat(2, 1fr)' : '1fr', 
+                                                        gap: '4px 12px'
+                                                    }}>
                                                         {(group.subItems || []).map((item, idx) => {
                                                             if (typeof item === 'string') {
                                                                 return (
                                                                     <Link
                                                                         key={item}
                                                                         href={`/category/${cat.slug || cat.id}?filter=${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s', display: 'block' }}
+                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s', display: 'block', textAlign: 'center' }}
                                                                         onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
                                                                         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
                                                                     >
