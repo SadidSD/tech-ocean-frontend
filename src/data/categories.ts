@@ -689,7 +689,26 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 16, name: "Appliances", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "appliances", children: [] },
+  { 
+    id: 16, 
+    name: "Appliances", 
+    reactIcon: "FaHome", 
+    iconColor: "#EAB308", 
+    iconBg: "rgba(234, 179, 8, 0.12)", 
+    slug: "appliances", 
+    children: [
+      { id: 1601, name: "Television", slug: "television", subItems: ["Smart TV", "Smart TV Stick", "TV Accessories"] },
+      { id: 1602, name: "Fridge", slug: "fridge", subItems: ["Refrigerator", "Freezer"] },
+      { id: 1603, name: "Air Conditioner", slug: "air-conditioner", subItems: ["Split AC", "Cassette AC", "Portable AC", "Air Cooler", "Air Purifier", "De/Humidifier"] },
+      { id: 1604, name: "Personal Care", slug: "personal-care", subItems: ["Hair Dryer", "Hair Straightener", "Shaver & Trimmer"] },
+      { id: 1605, name: "Kitchen", slug: "kitchen", subItems: ["Oven", "Blender", "Mixer Grinder", "Dishwasher", "Toaster", "Sandwich Maker", "Fryer", "Coffee Machine/Maker", "Rice Cooker", "Electric Kettle", "Induction Cooker"] },
+      { id: 1606, name: "Water Care", slug: "water-care", subItems: ["Water Purifier", "Water Heater/Geyser"] },
+      { id: 1607, name: "Home Care", slug: "home-care", subItems: ["Vacuum Cleaner", "Iron / Steamer", "Washing Machine", "Sewing Machine"] },
+      { id: 1608, name: "FAN", slug: "fan", subItems: ["Ceiling Fan", "Stand/Table Fan", "Portable Fan", "Exhaust Fan"] },
+      { id: 1609, name: "Light", slug: "light", subItems: ["Bulb", "Tube Light"] },
+      { id: 1610, name: "Automation/iOT", slug: "automation-iot", subItems: ["Smart Switch", "Smart Plug"] }
+    ]
+  },
   { 
     id: 17, 
     name: "TV", 
