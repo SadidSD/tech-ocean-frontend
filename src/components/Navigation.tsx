@@ -495,6 +495,22 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                                         menu.style.visibility = 'hidden';
                                                                                         menu.style.transform = 'translateY(5px)';
                                                                                     } else {
+                                                                                        // Calculate position to prevent screen overflow
+                                                                                        const rect = e.currentTarget.getBoundingClientRect();
+                                                                                        if (rect.left < window.innerWidth / 2) {
+                                                                                            // Button is on left half of screen -> open menu to the right
+                                                                                            menu.style.right = 'auto';
+                                                                                            menu.style.left = '100%';
+                                                                                            menu.style.marginLeft = '5px';
+                                                                                            menu.style.marginRight = '0';
+                                                                                        } else {
+                                                                                            // Button is on right half of screen -> open menu to the left
+                                                                                            menu.style.left = 'auto';
+                                                                                            menu.style.right = '100%';
+                                                                                            menu.style.marginRight = '5px';
+                                                                                            menu.style.marginLeft = '0';
+                                                                                        }
+
                                                                                         menu.style.opacity = '1';
                                                                                         menu.style.visibility = 'visible';
                                                                                         menu.style.transform = 'translateY(0)';
