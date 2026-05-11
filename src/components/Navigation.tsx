@@ -470,32 +470,37 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                         key={item.name} 
                                                                         className="nested-dropdown-wrapper" 
                                                                         style={{ position: 'relative' }}
-                                                                        onMouseEnter={e => { 
-                                                                            const btn = e.currentTarget.querySelector('.nested-btn') as HTMLElement;
-                                                                            if (btn) { btn.style.background = '#fff5f3'; btn.style.color = '#db4b27'; btn.style.paddingLeft = '14px'; }
-                                                                            const menu = e.currentTarget.querySelector('.nested-menu') as HTMLElement;
-                                                                            if (menu) { menu.style.opacity = '1'; menu.style.visibility = 'visible'; menu.style.transform = 'translateY(0)'; }
-                                                                        }}
-                                                                        onMouseLeave={e => { 
-                                                                            const btn = e.currentTarget.querySelector('.nested-btn') as HTMLElement;
-                                                                            if (btn) { btn.style.background = 'transparent'; btn.style.color = '#555'; btn.style.paddingLeft = '10px'; }
-                                                                            const menu = e.currentTarget.querySelector('.nested-menu') as HTMLElement;
-                                                                            if (menu) { menu.style.opacity = '0'; menu.style.visibility = 'hidden'; menu.style.transform = 'translateY(5px)'; }
-                                                                        }}
                                                                     >
                                                                         <Link
-                                                                            href={`/category/${cat.slug || cat.id}?filter=${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                            href="#"
                                                                             className="nested-btn"
-                                                                            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                                            style={{ display: 'block', textAlign: 'center', position: 'relative', fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                                            onClick={e => {
+                                                                                e.preventDefault();
+                                                                                const menu = e.currentTarget.nextElementSibling as HTMLElement;
+                                                                                if (menu) {
+                                                                                    if (menu.style.visibility === 'visible') {
+                                                                                        menu.style.opacity = '0';
+                                                                                        menu.style.visibility = 'hidden';
+                                                                                        menu.style.transform = 'translateY(5px)';
+                                                                                    } else {
+                                                                                        menu.style.opacity = '1';
+                                                                                        menu.style.visibility = 'visible';
+                                                                                        menu.style.transform = 'translateY(0)';
+                                                                                    }
+                                                                                }
+                                                                            }}
+                                                                            onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; }}
+                                                                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; }}
                                                                         >
                                                                             {item.name}
-                                                                            <i className="fas fa-chevron-right" style={{ fontSize: '10px', color: '#ccc' }}></i>
+                                                                            <i className="fas fa-chevron-right" style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', fontSize: '10px', color: '#ccc' }}></i>
                                                                         </Link>
                                                                         
                                                                         <div 
                                                                             className="nested-menu"
                                                                             style={{ 
-                                                                                position: 'absolute', top: 0, left: '100%', marginLeft: '5px',
+                                                                                position: 'absolute', top: 0, right: '100%', marginRight: '5px',
                                                                                 background: 'white', borderRadius: '8px', padding: '10px',
                                                                                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)', border: '1px solid #eee',
                                                                                 opacity: 0, visibility: 'hidden', transform: 'translateY(5px)',
@@ -508,7 +513,7 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                                 <Link
                                                                                     key={subItem}
                                                                                     href={`/category/${cat.slug || cat.id}?brand=${subItem.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                                    style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '4px', transition: 'all 0.15s', display: 'block' }}
+                                                                                    style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '4px', transition: 'all 0.15s', display: 'block', textAlign: 'center' }}
                                                                                     onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; }}
                                                                                     onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; }}
                                                                                 >
