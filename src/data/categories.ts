@@ -665,7 +665,30 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 15, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone", children: [] },
+  { 
+    id: 15, 
+    name: "Mobile Phone", 
+    reactIcon: "FaMobileAlt", 
+    iconColor: "#F43F5E", 
+    iconBg: "rgba(244, 63, 94, 0.12)", 
+    slug: "mobile-phone", 
+    children: [
+      {
+        id: 1501,
+        name: "Devices",
+        slug: "mobile-devices",
+        subItems: ["Smart Phone", "Feature Phone"]
+      },
+      {
+        id: 1502,
+        name: "Mobile Accessories",
+        slug: "mobile-accessories",
+        subItems: [
+          "Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner", "Audio Cable", "USB Cable", "Audio Converter", "USB Converter", "Type-C Converter", "Lightning Converter", "Gimbal"
+        ]
+      }
+    ]
+  },
   { id: 16, name: "Appliances", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "appliances", children: [] },
   { 
     id: 17, 
