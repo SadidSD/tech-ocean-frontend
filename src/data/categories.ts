@@ -241,7 +241,43 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 6, name: "Printer", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "printer", children: [] },
+  { 
+    id: 6, 
+    name: "Printer", 
+    reactIcon: "FaPrint", 
+    iconColor: "#F59E0B", 
+    iconBg: "rgba(245, 158, 11, 0.12)", 
+    slug: "printer", 
+    children: [
+      {
+        id: 601,
+        name: "Document Printer",
+        slug: "document-printer",
+        subItems: [
+          { name: "Laser Printer", dropdown: ["All Brands", "Brother", "Canon", "Fujifilm", "HP", "Pantum"] },
+          { name: "Ink Printer", dropdown: ["All Brands", "Brother", "Canon", "Deli", "Epson", "HP"] },
+          "Dot Matrix Printer",
+          { name: "Label Printer", dropdown: ["All Brands", "Brother", "Canon", "Deli", "Epson", "HP"] },
+          { name: "Card Printer", dropdown: ["All Brands", "Evolis", "HiTi", "Zebra"] },
+          { name: "POS Printer", dropdown: ["All Brands", "Deli", "Epson", "Rongta", "SEWOO", "Sunmi", "Xprinter", "ZKTeco"] },
+          { name: "Large Format Printer", dropdown: ["All Brands", "Canon", "Epson", "HP"] },
+          "Printer Paper"
+        ]
+      },
+      {
+        id: 602,
+        name: "Consumable",
+        slug: "consumable",
+        subItems: ["Toner", "Cartridge", "Ribbon", "Refill", "Drum Unit", "Print Head"]
+      },
+      {
+        id: 603,
+        name: "Accessories",
+        slug: "printer-accessories",
+        subItems: []
+      }
+    ]
+  },
   { id: 7, name: "Camera", reactIcon: "FaCamera", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "camera", children: [] },
   { id: 8, name: "Security", reactIcon: "FaShieldAlt", iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.12)", slug: "security", children: [] },
   { id: 9, name: "Network", reactIcon: "FaNetworkWired", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "network", children: [] },
