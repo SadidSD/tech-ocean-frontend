@@ -432,7 +432,48 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 10, name: "Sound", reactIcon: "FaVolumeUp", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "sound", children: [] },
+  { 
+    id: 10, 
+    name: "Sound", 
+    reactIcon: "FaVolumeUp", 
+    iconColor: "#F43F5E", 
+    iconBg: "rgba(244, 63, 94, 0.12)", 
+    slug: "sound", 
+    children: [
+      {
+        id: 1001,
+        name: "Audio Equipment",
+        slug: "audio-equipment",
+        subItems: [
+          { name: "Speaker", dropdown: ["All Brands", "Ahuja", "Amazon", "Anker", "AULA", "Bose", "BWOO", "CMX", "Dell", "Digital X", "Edifier", "EMEET", "F&D", "Fantech", "FIFINE", "Focusrite", "Grandstream", "Harman Kardon", "Havit", "HTDZ", "Jabra", "JBL", "Logitech", "Maono", "Marshall", "Microlab", "Micropack", "Monster", "ONIKUMA", "Oraimo", "PC Power", "Rapoo", "Redragon", "Revenger", "Samsung", "Sonos", "Sony", "SteelSeries", "T-WOLF", "TEV", "Value Top", "WiWU", "X Lab", "Xtreme", "Yamaha"] },
+          { name: "Home Theater Systems", dropdown: ["All Brands", "Edifier", "F&D", "JBL", "Logitech", "Samsung", "Sonos", "Sony", "WiWU", "Xtreme", "Yamaha"] },
+          { name: "PA System", dropdown: ["All Brands", "Ahuja", "CMX", "Edifier", "F&D", "Focusrite", "HTDZ", "JBL", "TEV", "Xtreme", "Yamaha"] },
+          { name: "Amplifier", dropdown: ["All Brands", "Ahuja", "CMX", "FIFINE", "Focusrite", "HTDZ", "Maono", "Yamaha"] },
+          "Music Player"
+        ]
+      },
+      {
+        id: 1002,
+        name: "Headphones & Earwear",
+        slug: "headphones-earwear",
+        subItems: [
+          { name: "Headphone", dropdown: ["All Brands", "A4TECH", "Anker", "ASUS", "AULA", "Baseus", "Beats", "Bose", "BWOO", "CORSAIR", "Edifier", "EKSA", "EMEET", "Fantech", "Fastrack", "FIFINE", "Gigabyte", "Havit", "Haylou", "Hoco", "HyperX", "Inbertec", "Jabra", "JBL", "Logitech", "Maono", "Microlab", "Micropack", "Monster", "MSI", "OneOdio", "ONIKUMA", "Oraimo", "Rapoo", "Razer", "Redragon", "Sonos", "Sony", "SteelSeries", "UGREEN", "Vention", "WiWU", "Xtreme"] },
+          { name: "Earphone", dropdown: ["All Brands", "ASUS", "Baseus", "Edifier", "Havit", "JBL", "META", "Oraimo", "SteelSeries", "WiWU", "Xiaomi"] },
+          { name: "Earbuds", dropdown: ["All Brands", "A4TECH", "Anker", "Baseus", "Blisbond", "Bose", "BWOO", "Dareu", "Edifier", "EMEET", "Energizer", "F&D", "Fastrack", "Havit", "Haylou", "HiFuture", "Hoco", "HONOR", "IMILAB", "Jabra", "JBL", "LDNIO", "Mibro", "Microlab", "Monster", "Nothing", "OnePlus", "ONIKUMA", "Onten", "Oraimo", "Rapoo", "Realme", "Sony", "SteelSeries", "UGREEN", "Vention", "WiWU", "Xiaomi", "XTRA"] },
+          { name: "Neckband", dropdown: ["All Brands", "Energizer", "Havit", "Jabra", "JBL", "Microlab", "Nothing", "OnePlus", "Oraimo", "WiWU", "XTRA"] }
+        ]
+      },
+      {
+        id: 1003,
+        name: "Recording & Instruments",
+        slug: "recording-instruments",
+        subItems: [
+          { name: "Microphone", dropdown: ["All Brands", "Ahuja", "ASUS", "BOYA", "CMX", "CORSAIR", "DJI", "FIFINE", "Havit", "Hoco", "Hohem", "HTDZ", "HyperX", "JBL", "K2", "Maono", "MSI", "ONIKUMA", "Rapoo", "Redragon", "RODE", "Saramonic", "SteelSeries", "SYNCO", "TEV", "UGREEN", "Ulanzi", "WiWU", "Yamaha"] },
+          "Sound Card", "Voice Recorder", "Radio", "Musical Instrument", "Sound System Accessories"
+        ]
+      }
+    ]
+  },
   { id: 11, name: "Office Items", reactIcon: "FaBriefcase", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-items", children: [] },
   { id: 12, name: "Accessories", reactIcon: "FaKeyboard", iconColor: "#F97316", iconBg: "rgba(249, 115, 22, 0.12)", slug: "accessories", children: [] },
   { id: 13, name: "Software", reactIcon: "FaCode", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "software", children: [] },
