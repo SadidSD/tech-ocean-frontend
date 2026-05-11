@@ -119,7 +119,52 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 3, name: "Gaming", reactIcon: "FaGamepad", iconColor: "#EF4444", iconBg: "rgba(239, 68, 68, 0.12)", slug: "gaming", children: [] },
+  { 
+    id: 3, 
+    name: "Gaming", 
+    reactIcon: "FaGamepad", 
+    iconColor: "#EF4444", 
+    iconBg: "rgba(239, 68, 68, 0.12)", 
+    slug: "gaming", 
+    children: [
+      {
+        id: 301,
+        name: "Gaming Component",
+        slug: "gaming-component",
+        subItems: [
+          { name: "Gaming Console", dropdown: ["All Brands", "ASUS", "META", "Nintendo", "PICO", "PlayStation"] },
+          { name: "Gaming Controller", dropdown: ["All Brands", "A4TECH", "Havit", "Logitech", "MSI", "ONIKUMA", "PlayStation", "Rapoo", "Redragon", "SteelSeries", "Xbox"] },
+          { name: "Virtual Reality (VR)", dropdown: ["All Brands", "META", "PICO", "PlayStation"] },
+          "Game Streaming",
+          "Games",
+          "Gaming Chair",
+          "Gaming Desk",
+          "Gaming Sofa",
+          "Gaming Component Accessories",
+          "Ryans PC",
+          "Gaming Desktop Component",
+          "Motherboard",
+          "Desktop Ram",
+          "Graphics Card",
+          "Power Supply",
+          "Casing",
+          "CPU Cooler",
+          "Keyboard",
+          "Mouse",
+          "Keyboard and Mouse Combo",
+          "Mouse Pad",
+          "LED Strip",
+          "Gaming Monitor",
+          "Sound System",
+          "Speaker",
+          "Headphone",
+          "Microphone",
+          "Earphone",
+          "Gaming Network Router"
+        ]
+      }
+    ]
+  },
   { id: 4, name: "Monitor", reactIcon: "FaDesktop", iconColor: "#14B8A6", iconBg: "rgba(20, 184, 166, 0.12)", slug: "monitor", children: [] },
   { id: 5, name: "Tablet PC", reactIcon: "FaTabletAlt", iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.12)", slug: "tablet-pc", children: [] },
   { id: 6, name: "Printer", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "printer", children: [] },
