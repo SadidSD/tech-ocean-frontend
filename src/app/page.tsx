@@ -23,8 +23,32 @@ export default function Home() {
 
         fetch(`${API}/products?limit=20&sort=newest`)
             .then(r => r.ok ? r.json() : null)
-            .then(data => { if (data?.products) setProducts(data.products); })
-            .catch(() => {});
+            .then(data => { 
+                if (data?.products && data.products.length > 0) {
+                    setProducts(data.products); 
+                } else {
+                    // Fallback demo product
+                    setProducts([{
+                        id: 'demo-product-1',
+                        title: 'Demo Featured Product',
+                        price: 5000,
+                        salePrice: 4500,
+                        images: ['/img/placeholder.png'],
+                        status: 'In Stock'
+                    }]);
+                }
+            })
+            .catch(() => {
+                // Fallback demo product on error
+                setProducts([{
+                    id: 'demo-product-1',
+                    title: 'Demo Featured Product',
+                    price: 5000,
+                    salePrice: 4500,
+                    images: ['/img/placeholder.png'],
+                    status: 'In Stock'
+                }]);
+            });
     }, []);
 
     return (

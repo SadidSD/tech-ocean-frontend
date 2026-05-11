@@ -253,10 +253,29 @@ export const LatestBlogs = ({ blogs = [] }: { blogs?: any[] }) => {
                 try {
                     const response = await fetch('/api/blogs');
                     const data = await response.json();
-                    setRealBlogs(Array.isArray(data) ? data : (data.blogs || []));
+                    const fetchedBlogs = Array.isArray(data) ? data : (data.blogs || []);
+                    if (fetchedBlogs.length > 0) {
+                        setRealBlogs(fetchedBlogs);
+                    } else {
+                        setRealBlogs([{
+                            id: 'demo-blog-1',
+                            title: 'Demo Blog Post',
+                            image: '/img/placeholder.png',
+                            date: '2026-05-11',
+                            excerpt: 'This is a demo blog post so you can see the layout and make changes.',
+                            slug: 'demo-blog'
+                        }]);
+                    }
                 } catch (error) {
                     console.error('Error fetching blogs:', error);
-                    setRealBlogs([]); // Empty array on error - NO mock data
+                    setRealBlogs([{
+                        id: 'demo-blog-1',
+                        title: 'Demo Blog Post',
+                        image: '/img/placeholder.png',
+                        date: '2026-05-11',
+                        excerpt: 'This is a demo blog post so you can see the layout and make changes.',
+                        slug: 'demo-blog'
+                    }]);
                 } finally {
                     setLoading(false);
                 }
