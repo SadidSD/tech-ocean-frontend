@@ -165,7 +165,24 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 4, name: "Monitor", reactIcon: "FaDesktop", iconColor: "#14B8A6", iconBg: "rgba(20, 184, 166, 0.12)", slug: "monitor", children: [] },
+  { 
+    id: 4, 
+    name: "Monitor", 
+    reactIcon: "FaDesktop", 
+    iconColor: "#14B8A6", 
+    iconBg: "rgba(20, 184, 166, 0.12)", 
+    slug: "monitor", 
+    children: [
+      {
+        id: 401,
+        name: "All Monitor",
+        slug: "all-monitor",
+        subItems: [
+          "Acer", "AOC", "Apple", "Arzopa", "ASUS", "BenQ", "Dahua", "Dell", "Gigabyte", "Hikvision", "HP", "Lenovo", "LG", "MSI", "PC Power", "Philips", "Samsung", "Value Top", "ViewSonic", "Xiaomi", "Monitor Mounts and Brackets"
+        ]
+      }
+    ]
+  },
   { id: 5, name: "Tablet PC", reactIcon: "FaTabletAlt", iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.12)", slug: "tablet-pc", children: [] },
   { id: 6, name: "Printer", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "printer", children: [] },
   { id: 7, name: "Camera", reactIcon: "FaCamera", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "camera", children: [] },
