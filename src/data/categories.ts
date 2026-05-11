@@ -17,7 +17,13 @@ export const MOCK_CATEGORIES = [
         id: 102,
         name: "Accessories",
         slug: "laptop-accessories",
-        subItems: ["Laptop Ram", "Laptop Cooler", "Caddy", "Laptop Bag", "Stand", "Battery", "Adapter"]
+        subItems: [
+          {
+            name: "Laptop Ram",
+            dropdown: ["All Brands", "ADATA", "Apacer", "CORSAIR", "Crucial", "G.SKILL", "Neo Forza", "Netac", "OCPC", "OSCOO", "Patriot", "Smart", "TEAM", "Transcend", "TwinMOS"]
+          },
+          "Laptop Cooler", "Caddy", "Laptop Bag", "Stand", "Battery", "Adapter"
+        ]
       }
     ]
   },

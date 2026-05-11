@@ -12,7 +12,7 @@ interface Category {
   name: string;
   icon?: string;
   slug: string;
-  children?: { id: number; name: string; slug: string; subItems?: string[] }[];
+  children?: { id: number; name: string; slug: string; subItems?: (string | { name: string; dropdown: string[] })[] }[];
 }
 
 interface NavigationProps {
@@ -451,17 +451,75 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                         <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333' }}>{group.name}</h4>
                                                     </div>
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                        {(group.subItems || []).map(item => (
-                                                            <Link
-                                                                key={item}
-                                                                href={`/category/${cat.slug || cat.id}?filter=${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
-                                                                onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
-                                                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
-                                                            >
-                                                                {item}
-                                                            </Link>
-                                                        ))}
+                                                        {(group.subItems || []).map((item, idx) => {
+                                                            if (typeof item === 'string') {
+                                                                return (
+                                                                    <Link
+                                                                        key={item}
+                                                                        href={`/category/${cat.slug || cat.id}?filter=${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s', display: 'block' }}
+                                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
+                                                                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                                    >
+                                                                        {item}
+                                                                    </Link>
+                                                                );
+                                                            } else {
+                                                                return (
+                                                                    <div 
+                                                                        key={item.name} 
+                                                                        className="nested-dropdown-wrapper" 
+                                                                        style={{ position: 'relative' }}
+                                                                        onMouseEnter={e => { 
+                                                                            const btn = e.currentTarget.querySelector('.nested-btn') as HTMLElement;
+                                                                            if (btn) { btn.style.background = '#fff5f3'; btn.style.color = '#db4b27'; btn.style.paddingLeft = '14px'; }
+                                                                            const menu = e.currentTarget.querySelector('.nested-menu') as HTMLElement;
+                                                                            if (menu) { menu.style.opacity = '1'; menu.style.visibility = 'visible'; menu.style.transform = 'translateY(0)'; }
+                                                                        }}
+                                                                        onMouseLeave={e => { 
+                                                                            const btn = e.currentTarget.querySelector('.nested-btn') as HTMLElement;
+                                                                            if (btn) { btn.style.background = 'transparent'; btn.style.color = '#555'; btn.style.paddingLeft = '10px'; }
+                                                                            const menu = e.currentTarget.querySelector('.nested-menu') as HTMLElement;
+                                                                            if (menu) { menu.style.opacity = '0'; menu.style.visibility = 'hidden'; menu.style.transform = 'translateY(5px)'; }
+                                                                        }}
+                                                                    >
+                                                                        <Link
+                                                                            href={`/category/${cat.slug || cat.id}?filter=${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                            className="nested-btn"
+                                                                            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                                        >
+                                                                            {item.name}
+                                                                            <i className="fas fa-chevron-right" style={{ fontSize: '10px', color: '#ccc' }}></i>
+                                                                        </Link>
+                                                                        
+                                                                        <div 
+                                                                            className="nested-menu"
+                                                                            style={{ 
+                                                                                position: 'absolute', top: 0, left: '100%', marginLeft: '5px',
+                                                                                background: 'white', borderRadius: '8px', padding: '10px',
+                                                                                boxShadow: '0 4px 20px rgba(0,0,0,0.1)', border: '1px solid #eee',
+                                                                                opacity: 0, visibility: 'hidden', transform: 'translateY(5px)',
+                                                                                transition: 'all 0.2s', minWidth: '180px', zIndex: 100,
+                                                                                display: 'flex', flexDirection: 'column', gap: '4px',
+                                                                                maxHeight: '300px', overflowY: 'auto'
+                                                                            }}
+                                                                        >
+                                                                            {item.dropdown.map(subItem => (
+                                                                                <Link
+                                                                                    key={subItem}
+                                                                                    href={`/category/${cat.slug || cat.id}?brand=${subItem.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                                    style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '4px', transition: 'all 0.15s', display: 'block' }}
+                                                                                    onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; }}
+                                                                                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; }}
+                                                                                >
+                                                                                    {subItem}
+                                                                                </Link>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                        })}
                                                     </div>
                                                 </div>
                                             ))}
