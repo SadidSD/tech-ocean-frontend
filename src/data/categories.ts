@@ -474,7 +474,73 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 11, name: "Office Items", reactIcon: "FaBriefcase", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-items", children: [] },
+  { 
+    id: 11, 
+    name: "Office Items", 
+    reactIcon: "FaBriefcase", 
+    iconColor: "#F59E0B", 
+    iconBg: "rgba(245, 158, 11, 0.12)", 
+    slug: "office-items", 
+    children: [
+      {
+        id: 1101,
+        name: "Photocopier & Scanner",
+        slug: "photocopier-scanner",
+        subItems: [
+          { name: "Photocopier", dropdown: ["All Brands", "Canon", "HP", "KYOCERA", "Ricoh", "Sharp", "Toshiba"] },
+          "Photocopier Accessories", "Scanner",
+          { name: "Flatbed Scanner", dropdown: ["All Brands", "Canon", "Epson", "Plustek"] },
+          { name: "Sheetfed and Flatbed Scanner", dropdown: ["All Brands", "AVISION", "Brother", "Canon", "Epson", "HP", "Kodak", "Plustek"] },
+          "Document and Book Scanner", "Cheque Scanner", "Large Format Scanner"
+        ]
+      },
+      {
+        id: 1102,
+        name: "Projector & Presentation",
+        slug: "projector-presentation",
+        subItems: [
+          { name: "Projector", dropdown: ["All Brands", "BenQ", "Blisbond", "Boxlight", "Epson", "Havit", "HP", "Magcubic", "Optoma", "ViewSonic", "Vivitek", "Xiaomi"] },
+          "Projector Screen", "Projector Accessories", "Ceiling Mount kit",
+          { name: "Presenter", dropdown: ["All Brands", "A4TECH", "Baseus", "Logitech", "Micropack", "Rapoo", "Targus", "UGREEN", "Vention"] },
+          { name: "Conference System", dropdown: ["All Brands", "BenQ", "Cisco", "EMEET", "Grandstream", "Jabra", "Logitech", "Polycom", "Rapoo"] }
+        ]
+      },
+      {
+        id: 1103,
+        name: "Digital Display",
+        slug: "digital-display",
+        subItems: [
+          "Digital Display",
+          { name: "Interactive Panel", dropdown: ["All Brands", "Armor", "BenQ", "Boxlight", "Dahua", "Hikvision", "LG", "METZ", "Optoma", "ViewSonic", "ZKTeco"] },
+          { name: "Digital Signage", dropdown: ["All Brands", "Hikvision", "LG", "Philips", "Samsung", "Value Top"] },
+          { name: "Digital Kiosk", dropdown: ["All Brands", "Armor", "Artive", "Hikvision", "InnovTech"] },
+          "Video Wall", "Commercial Display", "OPS", "Digital Display Accessories"
+        ]
+      },
+      {
+        id: 1104,
+        name: "POS System",
+        slug: "pos-system",
+        subItems: [
+          "POS System",
+          { name: "POS Terminals", dropdown: ["All Brands", "Queue Pro", "Ryans", "Sunmi"] },
+          { name: "POS Printers", dropdown: ["All Brands", "Deli", "Epson", "G&G", "Rongta", "SEWOO", "Sunmi", "Xprinter", "ZKTeco"] },
+          { name: "Label Printers", dropdown: ["All Brands", "Brother", "Deli", "G&G", "Rongta", "SEWOO", "TSC", "Xprinter", "Zebra"] },
+          "Barcode and QR Scanner", "Weighing Scale", "Cash Register Machine and Drawer", "POS and Label Supplies", "POS Accessories"
+        ]
+      },
+      {
+        id: 1105,
+        name: "Communication & Tools",
+        slug: "communication-tools",
+        subItems: [
+          "Telephone Set", "Land Phone Set",
+          { name: "IP Phone Set", dropdown: ["All Brands", "Fanvil", "Grandstream", "SNOM"] },
+          "Telephone & Fax Accessories", "Money Counting Machine", "Laminating and Binding Machine", "Paper Shredder", "Safe Box / Locker / Vault", "Office Accessories", "Power Station", "Calculator", "Intercom Packages"
+        ]
+      }
+    ]
+  },
   { id: 12, name: "Accessories", reactIcon: "FaKeyboard", iconColor: "#F97316", iconBg: "rgba(249, 115, 22, 0.12)", slug: "accessories", children: [] },
   { id: 13, name: "Software", reactIcon: "FaCode", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "software", children: [] },
   { id: 14, name: "Gadget", reactIcon: "FaCubes", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget", children: [] },
