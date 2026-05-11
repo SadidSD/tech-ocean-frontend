@@ -708,9 +708,10 @@ export const MobileDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                 <ul className="drawer-menu">
                     <li><Link href="/account"><i className="fas fa-user-circle"></i> Login / Register</Link></li>
                     <li><Link href="/"><i className="fas fa-home"></i> Home</Link></li>
-                    <li><Link href="/cart"><i className="fas fa-shopping-cart"></i> Cart</Link></li>
-                    <li><Link href="/pc-builder"><i className="fas fa-tools"></i> PC Builder</Link></li>
-                    <li><Link href="/cctv-builder"><i className="fas fa-video"></i> CCTV Builder</Link></li>
+                    <li><Link href="/cart" onClick={onClose}><i className="fas fa-shopping-cart"></i> Cart</Link></li>
+                    <li><Link href="/compare" onClick={onClose}><i className="fas fa-copy"></i> Compare</Link></li>
+                    <li><Link href="/pc-builder" onClick={onClose}><i className="fas fa-tools"></i> PC Builder</Link></li>
+                    <li><Link href="/cctv-builder" onClick={onClose}><i className="fas fa-video"></i> CCTV Builder</Link></li>
                     <li><Link href="/categories"><i className="fas fa-box"></i> Products</Link></li>
                     <li><Link href="/offers"><i className="fas fa-tags"></i> Offers</Link></li>
                     <li><Link href="/contact"><i className="fas fa-phone"></i> Contact Us</Link></li>

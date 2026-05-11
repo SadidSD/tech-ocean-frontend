@@ -5244,16 +5244,66 @@ body {
 }
 
 @media (max-width: 768px) {
-  .compare-label-cell {
-    width: 120px;
-    min-width: 120px;
-    padding: 12px;
-    font-size: 12px;
+  .compare-page {
+    padding: 0 10px;
+    margin: 20px auto;
   }
-  .compare-value-cell {
-    padding: 12px;
+  
+  .compare-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .compare-header h1 {
+    font-size: 22px;
+  }
+  
+  .compare-controls {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  
+  .compare-label-cell {
+    width: 130px;
+    min-width: 130px;
+    padding: 12px 10px;
     font-size: 12px;
-    min-width: 160px;
+    line-height: 1.4;
+  }
+  
+  .compare-value-cell {
+    padding: 12px 10px;
+    font-size: 12px;
+    min-width: 180px;
+    line-height: 1.4;
+  }
+  
+  .compare-product-img {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .compare-product-title {
+    font-size: 12px;
+    height: 34px;
+    margin-bottom: 8px;
+  }
+  
+  .compare-product-price {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .compare-view-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .compare-spec-header {
+    font-size: 11px;
+    padding: 10px;
   }
 }
 
