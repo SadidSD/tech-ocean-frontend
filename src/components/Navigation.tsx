@@ -727,7 +727,7 @@ export const MobileDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                     <li><Link href="/contact"><i className="fas fa-phone"></i> Contact Us</Link></li>
                 </ul>
                 <div className="drawer-footer">
-                    <i className="fas fa-phone-alt"></i> Call 16793 (09AM-08PM)
+                    <i className="fas fa-phone-alt"></i> Call +8801332437029 (09AM-08PM)
                 </div>
             </div>
         </>

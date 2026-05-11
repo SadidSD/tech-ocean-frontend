@@ -54,7 +54,7 @@ export default function Footer() {
             <div className="footer-contact-bar">
               <div className="contact-item">
                 <i className="fas fa-phone-alt"></i>
-                <span>Call: 16793 (09AM - 08PM)</span>
+                <span>Call: +8801332437029 (09AM - 08PM)</span>
               </div>
               <div className="contact-item">
                 <i className="fas fa-envelope"></i>
