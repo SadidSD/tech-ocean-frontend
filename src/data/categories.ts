@@ -195,4 +195,24 @@ export const MOCK_CATEGORIES = [
   { id: 14, name: "Gadget", reactIcon: "FaCubes", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget", children: [] },
   { id: 15, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone", children: [] },
   { id: 16, name: "Appliances", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "appliances", children: [] },
+  { 
+    id: 17, 
+    name: "TV", 
+    reactIcon: "FaTv", 
+    iconColor: "#3B82F6", 
+    iconBg: "rgba(59, 130, 246, 0.12)", 
+    slug: "tv", 
+    children: [
+      {
+        id: 1701,
+        name: "Smart TV",
+        slug: "smart-tv",
+        subItems: [
+          "Beko", "Haier", "Sony", "TCL", "Xiaomi",
+          { name: "Smart TV Stick", dropdown: ["All brands", "Xiaomi"] },
+          { name: "TV Accessories", dropdown: ["All brands", "k2"] }
+        ]
+      }
+    ]
+  },
 ];
