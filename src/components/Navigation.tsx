@@ -442,11 +442,12 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
                                             display: 'flex',
                                             flexDirection: 'row',
+                                            flexWrap: 'wrap',
                                             gap: '40px',
                                             minWidth: '500px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: '200px' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333' }}>{group.name}</h4>
                                                     </div>
@@ -477,6 +478,16 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                             style={{ display: 'block', textAlign: 'center', position: 'relative', fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
                                                                             onClick={e => {
                                                                                 e.preventDefault();
+                                                                                // Close all other nested menus in this dropdown
+                                                                                const allMenus = e.currentTarget.closest('.dropdown-content')?.querySelectorAll('.nested-menu') as NodeListOf<HTMLElement>;
+                                                                                allMenus?.forEach(m => {
+                                                                                    if (m !== e.currentTarget.nextElementSibling) {
+                                                                                        m.style.opacity = '0';
+                                                                                        m.style.visibility = 'hidden';
+                                                                                        m.style.transform = 'translateY(5px)';
+                                                                                    }
+                                                                                });
+                                                                                
                                                                                 const menu = e.currentTarget.nextElementSibling as HTMLElement;
                                                                                 if (menu) {
                                                                                     if (menu.style.visibility === 'visible') {
