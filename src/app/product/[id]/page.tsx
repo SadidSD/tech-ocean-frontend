@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { CartContext } from '@/components/ClientApplication';
 import { StarRating } from '@/components/ProductComponents';
 import Link from 'next/link';
+import { MOCK_PRODUCTS } from '@/data/mockProducts';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 const fmtBDT = (n: number) => `৳${Math.round(n).toLocaleString('en-IN')}`;
@@ -49,15 +50,30 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const [qty, setQty] = useState(1);
     const [showStickyCart, setShowStickyCart] = useState(false);
-    const [activeTab, setActiveTab] = useState<'specs'|'reviews'|'qa'>('reviews');
+    const [activeTab, setActiveTab] = useState<'specs'|'reviews'|'qa'>('specs');
     const [activeImage, setActiveImage] = useState(0);
     const cartTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Try API first
         fetch(`${API}/products/${params.id}`)
             .then(r => r.ok ? r.json() : null)
-            .then(data => { setProduct(data); setLoading(false); })
-            .catch(() => setLoading(false));
+            .then(data => { 
+                if (data) {
+                    setProduct(data);
+                    setLoading(false);
+                } else {
+                    // Check MOCK_PRODUCTS
+                    const mock = MOCK_PRODUCTS.find(p => p.id === params.id);
+                    setProduct(mock || null);
+                    setLoading(false);
+                }
+            })
+            .catch(() => {
+                const mock = MOCK_PRODUCTS.find(p => p.id === params.id);
+                setProduct(mock || null);
+                setLoading(false);
+            });
     }, [params.id]);
 
     useEffect(() => {

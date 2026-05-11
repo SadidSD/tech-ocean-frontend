@@ -8,12 +8,14 @@ import { ProductCard } from '@/components/ProductComponents';
 import { MOCK_CATEGORIES } from '@/data/categories';
 import { CartContext } from '@/components/ClientApplication';
 
+import { MOCK_PRODUCTS } from '@/data/mockProducts';
+
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 export default function Home() {
     const { addToCart } = useContext(CartContext);
     const [banners, setBanners] = useState<any>(null);
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<any[]>(MOCK_PRODUCTS); // Default to mock products
 
     useEffect(() => {
         fetch(`${API}/settings/banners`)
@@ -26,28 +28,10 @@ export default function Home() {
             .then(data => { 
                 if (data?.products && data.products.length > 0) {
                     setProducts(data.products); 
-                } else {
-                    // Fallback demo product
-                    setProducts([{
-                        id: 'demo-product-1',
-                        title: 'Demo Featured Product',
-                        price: 5000,
-                        salePrice: 4500,
-                        images: ['/img/placeholder.png'],
-                        status: 'In Stock'
-                    }]);
                 }
             })
             .catch(() => {
-                // Fallback demo product on error
-                setProducts([{
-                    id: 'demo-product-1',
-                    title: 'Demo Featured Product',
-                    price: 5000,
-                    salePrice: 4500,
-                    images: ['/img/placeholder.png'],
-                    status: 'In Stock'
-                }]);
+                // Keep default MOCK_PRODUCTS
             });
     }, []);
 
