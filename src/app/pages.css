@@ -4924,6 +4924,28 @@ body {
   }
 }
 
+/* ── PRODUCT HOVER ACTIONS ── */
+.product-card .hover-actions {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .hover-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .product-card .hover-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+
 /* ── PRODUCT COMPARISON STYLES ── */
 .compare-badge-desktop {
   position: absolute;
