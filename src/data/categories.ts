@@ -278,7 +278,61 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 7, name: "Camera", reactIcon: "FaCamera", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "camera", children: [] },
+  { 
+    id: 7, 
+    name: "Camera", 
+    reactIcon: "FaCamera", 
+    iconColor: "#06B6D4", 
+    iconBg: "rgba(6, 182, 212, 0.12)", 
+    slug: "camera", 
+    children: [
+      {
+        id: 701,
+        name: "Digital SLR Camera",
+        slug: "dslr-camera",
+        subItems: ["DSLR Camera", "Mirrorless Camera", "DSLR Camera Accessories", "DSLR Camera Lens"]
+      },
+      {
+        id: 702,
+        name: "Digital Compact Camera",
+        slug: "compact-camera",
+        subItems: [
+          "Compact Camera", 
+          { name: "Action Camera", dropdown: ["All Brands", "Blisbond", "DJI", "GoPro", "Insta360"] },
+          "Compact Camera Accessories"
+        ]
+      },
+      {
+        id: 703,
+        name: "Video Camera",
+        slug: "video-camera",
+        subItems: [
+          { name: "Video Conferencing", dropdown: ["All Brands", "BenQ", "EMEET", "Grandstream", "Jabra", "Logitech", "Rapoo"] },
+          { name: "Webcam", dropdown: ["All Brands", "A4TECH", "ASUS", "BenQ", "CORSAIR", "EMEET", "FIFINE", "Grandstream", "Havit", "Jabra", "Logitech", "Micropack", "Rapoo", "Redragon", "Revenger", "UGREEN"] }
+        ]
+      },
+      {
+        id: 704,
+        name: "Drone",
+        slug: "drone",
+        subItems: ["Drone Accessories"]
+      },
+      {
+        id: 705,
+        name: "Gimbal",
+        slug: "gimbal",
+        subItems: [
+          { name: "Gimbal Brands", dropdown: ["All Brands", "Baseus", "DJI", "Hohem", "WiWU", "Zhiyun"] }
+        ]
+      },
+      {
+        id: 706,
+        name: "Studio Equipments",
+        slug: "studio-equipments",
+        subItems: ["Tripod", "Umbrella", "Flash and Ring Light", "Mixer", "Studio Headphone", "Studio Microphone", "Audio Interface"]
+      }
+    ]
+  },
   { id: 8, name: "Security", reactIcon: "FaShieldAlt", iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.12)", slug: "security", children: [] },
   { id: 9, name: "Network", reactIcon: "FaNetworkWired", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "network", children: [] },
   { id: 10, name: "Sound", reactIcon: "FaVolumeUp", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "sound", children: [] },
