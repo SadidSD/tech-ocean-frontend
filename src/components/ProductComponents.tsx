@@ -68,13 +68,13 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     {/* Modern Action Overlay */}
                     <div className="product-card-actions">
                         <button 
-                            className="modern-action-btn" 
+                            className="modern-action-btn big-btn" 
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); const event = new CustomEvent('openQuickView', { detail: product }); window.dispatchEvent(event); }}
-                            title="Quick Look"
                         >
-                            <i className="fas fa-search-plus"></i>
+                            <i className="fas fa-eye"></i>
+                            <span>Quick Look</span>
                         </button>
-                        <CompareIconButton product={product} />
+                        <CompareBigButton product={product} />
                     </div>
                 </div>
                 <div className="product-title">{product.title}</div>
@@ -107,7 +107,7 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
     );
 };
 
-const CompareIconButton = ({ product }: { product: any }) => {
+const CompareBigButton = ({ product }: { product: any }) => {
     const { isInCompare, addToCompare, removeFromCompare } = useContext(CompareContext);
     const selected = isInCompare(product.id);
 
@@ -123,11 +123,11 @@ const CompareIconButton = ({ product }: { product: any }) => {
 
     return (
         <button 
-            className={`modern-action-btn ${selected ? 'active' : ''}`} 
+            className={`modern-action-btn big-btn ${selected ? 'active' : ''}`} 
             onClick={handleToggle}
-            title={selected ? "Remove from Compare" : "Add to Compare"}
         >
-            <i className={selected ? "fas fa-check" : "fas fa-exchange-alt"}></i>
+            <i className={selected ? "fas fa-check" : "fas fa-copy"}></i>
+            <span>{selected ? 'Added' : 'Compare'}</span>
         </button>
     );
 };
