@@ -333,7 +333,57 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 8, name: "Security", reactIcon: "FaShieldAlt", iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.12)", slug: "security", children: [] },
+  { 
+    id: 8, 
+    name: "Security", 
+    reactIcon: "FaShieldAlt", 
+    iconColor: "#10B981", 
+    iconBg: "rgba(16, 185, 129, 0.12)", 
+    slug: "security", 
+    children: [
+      {
+        id: 801,
+        name: "Camera System",
+        slug: "camera-system",
+        subItems: [
+          { name: "CC Camera", dropdown: ["All Brands", "Dahua", "Hikvision"] },
+          { name: "IP Camera", dropdown: ["All Brands", "Armor", "Dahua", "EZVIZ", "Grandstream", "Hikvision", "Imou", "Tenda", "TP-Link", "Uniview"] },
+          { name: "Wireless / Wi-Fi Camera", dropdown: ["All Brands", "Dahua", "EZVIZ", "Google", "Havit", "IMILAB", "Imou", "ORVIBO", "Tenda", "TP-Link", "Uniview", "ZKTeco"] }
+        ]
+      },
+      {
+        id: 802,
+        name: "Recording Device",
+        slug: "recording-device",
+        subItems: [
+          "DVR",
+          { name: "NVR", dropdown: ["All Brands", "Dahua", "EZVIZ", "Hikvision", "Synology", "TP-Link"] },
+          { name: "XVR", dropdown: ["All Brands", "Armor", "Dahua"] }
+        ]
+      },
+      {
+        id: 803,
+        name: "CCTV Accessories",
+        slug: "cctv-accessories",
+        subItems: [
+          "CC/IP Camera Accessories",
+          { name: "CCTV Package", dropdown: ["All Brands", "Dahua", "EZVIZ", "Hikvision", "Imou", "TP-Link"] }
+        ]
+      },
+      {
+        id: 804,
+        name: "Home Security",
+        slug: "home-security",
+        subItems: ["Smart Lock", "Smart Door Bell"]
+      },
+      {
+        id: 805,
+        name: "Entrance Control",
+        slug: "entrance-control",
+        subItems: ["Time Attendance System", "Access Control", "Access Control Accessories", "Access Control Software"]
+      }
+    ]
+  },
   { id: 9, name: "Network", reactIcon: "FaNetworkWired", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "network", children: [] },
   { id: 10, name: "Sound", reactIcon: "FaVolumeUp", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "sound", children: [] },
   { id: 11, name: "Office Items", reactIcon: "FaBriefcase", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-items", children: [] },
