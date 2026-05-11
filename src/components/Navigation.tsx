@@ -3,7 +3,7 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { AuthContext, CartContext } from './ClientApplication';
+import { AuthContext, CartContext, CompareContext } from './ClientApplication';
 import { FaDesktop, FaVideo } from 'react-icons/fa';
 import { COMPONENT_METADATA } from '@/data/component-structure';
 
@@ -24,6 +24,7 @@ interface NavigationProps {
 export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCount: number, compareCount: number, onMenuToggle: () => void }) => {
     const { userState, setUserState, showToast } = useContext(AuthContext);
     const { setIsCartDrawerOpen } = useContext(CartContext);
+    const { compareItems } = useContext(CompareContext);
     const router = useRouter();
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -276,10 +277,24 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             </div>
                         </Link>
                     )}
+                    <Link href="/compare" className="action-item compare-item">
+                        <div className="action-icon" style={{position:'relative'}}>
+                            <i className="fas fa-copy"></i>
+                            {compareItems.length > 0 && <span className="cart-badge compare-badge-desktop">{compareItems.length}</span>}
+                        </div>
+                        <div className="action-text">
+                            <span className="text-top">Compare</span>
+                            <span className="text-bottom">Product</span>
+                        </div>
+                    </Link>
                     <a href="#" onClick={(e) => { e.preventDefault(); setIsCartDrawerOpen(true); }} className="action-item cart-item">
                         <div className="action-icon" style={{position:'relative'}}>
                             <i className="fas fa-shopping-cart"></i>
                             {cartCount > 0 && <span className="cart-badge desktop-cart-badge">{cartCount}</span>}
+                        </div>
+                        <div className="action-text">
+                            <span className="text-top">Cart</span>
+                            <span className="text-bottom">Details</span>
                         </div>
                     </a>
                 </div>

@@ -76,18 +76,30 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     // ── Compare actions ───────────────────────────────────────────────
     const addToCompare = (product: any) => {
         setCompareItems(prev => {
+            // 1. Check for duplicate
             if (prev.find(p => p.id === product.id)) {
-                showToast('Already in compare list', 'error');
+                showToast('Product already in comparison list', 'error');
                 return prev;
             }
-            if (prev.length >= 2) {
-                showToast('Maximum 2 products. Remove one to add another.', 'error');
+            // 2. Check max limit
+            if (prev.length >= 4) {
+                showToast('Maximum 4 products can be compared. Remove one to add another.', 'error');
                 return prev;
             }
-            if (prev.length > 0 && prev[0].category !== product.category) {
-                showToast('Cannot compare. Products must be from the same category.', 'error');
-                return prev;
+            // 3. Check category compatibility
+            // Note: product.category might be an object {id, name} or just a name. 
+            // We should compare the name or ID consistently.
+            const getCatName = (c: any) => typeof c === 'string' ? c : (c?.name || c?.id || 'Unknown');
+            const newCat = getCatName(product.category);
+            
+            if (prev.length > 0) {
+                const existingCat = getCatName(prev[0].category);
+                if (newCat !== existingCat) {
+                    showToast(`Cannot compare ${newCat} with ${existingCat}. Please remove existing selection first.`, 'error');
+                    return prev;
+                }
             }
+            
             showToast(`${product.title.substring(0,24)}... added to compare`, 'success');
             return [...prev, product];
         });
@@ -95,9 +107,13 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
 
     const removeFromCompare = (productId: any) => {
         setCompareItems(prev => prev.filter(p => p.id !== productId));
+        showToast('Product removed from comparison', 'success');
     };
 
-    const clearCompare = () => setCompareItems([]);
+    const clearCompare = () => {
+        setCompareItems([]);
+        showToast('Comparison list cleared', 'success');
+    };
     const isInCompare  = (productId: any) => compareItems.some(p => p.id === productId);
 
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -173,7 +189,26 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
                                 <ul style={{color: '#555', lineHeight: 1.8, marginBottom: '30px', paddingLeft: '20px', fontSize: '14px'}}>
                                     {quickViewItem.features?.map((f:string, i:number) => <li key={i}>{f}</li>)}
                                 </ul>
-                                <button className="btn-add-cart" onClick={() => {addToCart(quickViewItem, 1, false); setQuickViewItem(null);}} style={{width: '100%'}}>Add to Cart</button>
+                                <div style={{ display: 'flex', gap: '10px' }}>
+                                    <button className="btn-add-cart" onClick={() => {addToCart(quickViewItem, 1, false); setQuickViewItem(null);}} style={{flex: 2}}>Add to Cart</button>
+                                    <button 
+                                        onClick={() => {
+                                            if (compareItems.some(p => p.id === quickViewItem.id)) {
+                                                removeFromCompare(quickViewItem.id);
+                                            } else {
+                                                addToCompare(quickViewItem);
+                                            }
+                                        }}
+                                        style={{
+                                            flex: 1, padding: '12px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer',
+                                            background: compareItems.some(p => p.id === quickViewItem.id) ? '#fff5f2' : '#f8f9fa',
+                                            color: compareItems.some(p => p.id === quickViewItem.id) ? '#db4b27' : '#555',
+                                            border: '1px solid ' + (compareItems.some(p => p.id === quickViewItem.id) ? '#db4b27' : '#ddd')
+                                        }}
+                                    >
+                                        {compareItems.some(p => p.id === quickViewItem.id) ? 'Selected' : 'Compare'}
+                                    </button>
+                                </div>
                                 <div style={{textAlign: 'center', marginTop: '15px'}}><Link href={`/product/${quickViewItem.id}`} onClick={() => setQuickViewItem(null)} style={{color: '#1B5B97', fontSize: '14px', fontWeight: 600, textDecoration: 'none'}}>View Full Details &rarr;</Link></div>
                             </div>
                         </div>
