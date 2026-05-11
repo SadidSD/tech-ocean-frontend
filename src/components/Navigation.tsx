@@ -12,7 +12,7 @@ interface Category {
   name: string;
   icon?: string;
   slug: string;
-  children?: { id: number; name: string; slug: string }[];
+  children?: { id: number; name: string; slug: string; subItems?: string[] }[];
 }
 
 interface NavigationProps {
@@ -434,8 +434,42 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                         </div>
                                     )}
 
+                                    {/* ── CUSTOM GROUP DROPDOWN (For categories like Laptop with subItems) ── */}
+                                    {!isComponents && cat.children && cat.children.length > 0 && cat.children.some(c => c.subItems) && (
+                                        <div className="dropdown-content" style={{
+                                            opacity: activeId === cat.id ? 1 : 0,
+                                            visibility: activeId === cat.id ? 'visible' : 'hidden',
+                                            transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            gap: '40px',
+                                            minWidth: '500px',
+                                        }}>
+                                            {cat.children.map(group => (
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                                                    <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
+                                                        <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333' }}>{group.name}</h4>
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                        {(group.subItems || []).map(item => (
+                                                            <Link
+                                                                key={item}
+                                                                href={`/category/${cat.slug || cat.id}?filter=${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                                                style={{ fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                                onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
+                                                                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                            >
+                                                                {item}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
                                     {/* ── STANDARD BRAND DROPDOWN for other categories ── */}
-                                    {!isComponents && brands.length > 0 && (
+                                    {!isComponents && brands.length > 0 && (!cat.children || !cat.children.some(c => c.subItems)) && (
                                         <div className="dropdown-content" style={{
                                             opacity: activeId === cat.id ? 1 : 0,
                                             visibility: activeId === cat.id ? 'visible' : 'hidden',

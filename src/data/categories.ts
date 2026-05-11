@@ -1,5 +1,26 @@
 export const MOCK_CATEGORIES = [
-  { id: 1, name: "Laptop", reactIcon: "FaLaptop", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "laptop", children: [] },
+  { 
+    id: 1, 
+    name: "Laptop", 
+    reactIcon: "FaLaptop", 
+    iconColor: "#3B82F6", 
+    iconBg: "rgba(59, 130, 246, 0.12)", 
+    slug: "laptop", 
+    children: [
+      {
+        id: 101,
+        name: "All Laptop",
+        slug: "all-laptop",
+        subItems: ["Acer", "Apple", "ASUS", "CHUWI", "Dell", "Gigabyte", "HP", "Lenovo", "Microsoft", "MSI", "Smart", "TECNO"]
+      },
+      {
+        id: 102,
+        name: "Accessories",
+        slug: "laptop-accessories",
+        subItems: ["Laptop Ram", "Laptop Cooler", "Caddy", "Laptop Bag", "Stand", "Battery", "Adapter"]
+      }
+    ]
+  },
   { id: 2, name: "Desktop and Server", reactIcon: "FaDesktop", iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.12)", slug: "desktop-and-server", children: [] },
   { id: 3, name: "Gaming", reactIcon: "FaGamepad", iconColor: "#EF4444", iconBg: "rgba(239, 68, 68, 0.12)", slug: "gaming", children: [] },
   { id: 4, name: "Monitor", reactIcon: "FaDesktop", iconColor: "#14B8A6", iconBg: "rgba(20, 184, 166, 0.12)", slug: "monitor", children: [] },
