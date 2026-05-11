@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '@/components/ClientApplication';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -25,6 +25,20 @@ export default function AccountPage() {
     const [signupPassword, setSignupPassword] = useState('');
     const [signupConfirm, setSignupConfirm] = useState('');
     const [agreeTerms, setAgreeTerms] = useState(false);
+
+    // ── Dashboard States ──────────────────────────────────────────────────────────
+    const [activeSubTab, setActiveSubTab] = useState<'dash' | 'orders' | 'wishlist' | 'pc' | 'cctv' | 'address' | 'profile'>('dash');
+
+    // Handle query params for direct tab access
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+            if (tab && ['dash', 'orders', 'wishlist', 'pc', 'cctv', 'address', 'profile'].includes(tab)) {
+                setActiveSubTab(tab as any);
+            }
+        }
+    }, []);
 
     // ── Handlers ──────────────────────────────────────────────────────────────────
     const handleLogin = (e: React.FormEvent) => {
@@ -68,13 +82,6 @@ export default function AccountPage() {
         showToast('Account created successfully!', 'success');
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('user');
-        setUserState({ isLoggedIn: false, user: null, token: null });
-        router.push('/');
-        showToast('Logged out successfully', 'success');
-    };
-
     const handleForgotPassword = (e: React.FormEvent) => {
         e.preventDefault();
         showToast('Password reset link sent to your email', 'success');
@@ -90,115 +97,199 @@ export default function AccountPage() {
     };
     const strength = getPasswordStrength(signupPassword);
 
+    const handleLogout = () => {
+        localStorage.removeItem('user');
+        setUserState({ isLoggedIn: false, user: null, token: null });
+        router.push('/');
+        showToast('Logged out successfully', 'success');
+    };
+
+    // ── Sub-component Renders ─────────────────────────────────────────────────────
+    const renderDashboard = () => (
+        <>
+            <div className="dash-stats">
+                <div className="dash-stat-card" onClick={() => setActiveSubTab('orders')}>
+                    <h4>Orders</h4>
+                    <div className="val">3</div>
+                </div>
+                <div className="dash-stat-card" onClick={() => setActiveSubTab('wishlist')}>
+                    <h4>Wishlist</h4>
+                    <div className="val">5</div>
+                </div>
+                <div className="dash-stat-card" onClick={() => setActiveSubTab('pc')}>
+                    <h4>Saved PC</h4>
+                    <div className="val">2</div>
+                </div>
+                <div className="dash-stat-card" onClick={() => setActiveSubTab('address')}>
+                    <h4>Addresses</h4>
+                    <div className="val">2</div>
+                </div>
+            </div>
+            <h3 style={{fontSize: '18px', marginBottom: '15px'}}>Recent Orders</h3>
+            <table className="dash-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#ST-20240401-001</td>
+                        <td>Apr 01, 2024</td>
+                        <td>৳12,500</td>
+                        <td><span className="badge-status delivered">Delivered</span></td>
+                        <td><button className="view-link">View Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </>
+    );
+
+    const renderOrders = () => (
+        <div className="dash-content-area">
+            <h2 className="content-title">My Orders</h2>
+            <div className="orders-list">
+                {[1,2,3].map(i => (
+                    <div key={i} className="order-item-card">
+                        <div className="order-info">
+                            <div className="id">#ST-20240{i}-00{i}</div>
+                            <div className="date">Placed on Oct {10+i}, 2024</div>
+                        </div>
+                        <div className="order-price">৳{ (i * 15400).toLocaleString() }</div>
+                        <div className="order-status"><span className={`badge-status ${i === 2 ? 'shipped' : 'delivered'}`}>{i === 2 ? 'Shipped' : 'Delivered'}</span></div>
+                        <button className="view-btn">Track Order</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const renderWishlist = () => (
+        <div className="dash-content-area">
+            <h2 className="content-title">My Wishlist</h2>
+            <div className="wishlist-grid">
+                {[1,2,3,4].map(i => (
+                    <div key={i} className="wish-card">
+                        <img src={`https://picsum.photos/200/200?random=${i}`} alt="product" />
+                        <div className="info">
+                            <h4>Premium Product {i}</h4>
+                            <div className="price">৳1,200</div>
+                            <button className="add-cart">Add to Cart</button>
+                        </div>
+                        <button className="remove-wish">&times;</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+
+    const renderSavedBuilds = (type: 'pc' | 'cctv') => (
+        <div className="dash-content-area">
+            <h2 className="content-title">Saved {type === 'pc' ? 'PC' : 'CCTV'} Builds</h2>
+            <table className="dash-table">
+                <thead>
+                    <tr>
+                        <th>Build Name</th>
+                        <th>Est. Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>My {type === 'pc' ? 'Gaming' : 'Office'} Build</td>
+                        <td>৳{type === 'pc' ? '85,000' : '45,000'}</td>
+                        <td>
+                            <div style={{display:'flex', gap:'10px'}}>
+                                <button className="dash-action-btn load">Load</button>
+                                <button className="dash-action-btn delete">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    );
+
+    const renderAddresses = () => (
+        <div className="dash-content-area">
+            <h2 className="content-title">Saved Addresses</h2>
+            <div className="address-grid">
+                <div className="address-card active">
+                    <div className="type">Home</div>
+                    <div className="details">House 12, Road 4, Sector 7, Uttara, Dhaka</div>
+                    <div className="phone">01712345678</div>
+                    <div className="actions">
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
+                </div>
+                <div className="address-card add-new">
+                    <i className="fas fa-plus"></i>
+                    <span>Add New Address</span>
+                </div>
+            </div>
+        </div>
+    );
+
+    const renderProfile = () => (
+        <div className="dash-content-area">
+            <h2 className="content-title">Profile Settings</h2>
+            <form className="profile-form" onSubmit={(e) => { e.preventDefault(); showToast('Profile updated!', 'success'); }}>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>Full Name</label>
+                        <input type="text" defaultValue={userState.user?.name} />
+                    </div>
+                    <div className="form-group">
+                        <label>Email Address</label>
+                        <input type="email" defaultValue={userState.user?.email} disabled />
+                    </div>
+                </div>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" defaultValue="01712345678" />
+                    </div>
+                </div>
+                <button type="submit" className="save-btn">Save Changes</button>
+            </form>
+        </div>
+    );
+
     // ── Render Dashboard (If Logged In) ───────────────────────────────────────────
     if (userState.isLoggedIn) {
         return (
             <div className="dashboard-container">
                 <div className="dashboard-sidebar">
-                    <h3>Hello, {userState.user?.name}</h3>
+                    <div className="sidebar-header">
+                        <div className="avatar">{(userState.user?.name || "A")[0]}</div>
+                        <h3>Hello, {userState.user?.name || "User"}</h3>
+                    </div>
                     <div className="dashboard-menu">
-                        <button className="dashboard-menu-item active"><i className="fas fa-tachometer-alt"></i> Dashboard</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-box"></i> My Orders</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-heart"></i> Wishlist</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-desktop"></i> Saved PC Builds</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-video"></i> Saved CCTV Builds</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-map-marker-alt"></i> Saved Addresses</button>
-                        <button className="dashboard-menu-item"><i className="fas fa-user-cog"></i> Profile Settings</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'dash' ? 'active' : ''}`} onClick={() => setActiveSubTab('dash')}><i className="fas fa-tachometer-alt"></i> Dashboard</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'orders' ? 'active' : ''}`} onClick={() => setActiveSubTab('orders')}><i className="fas fa-box"></i> My Orders</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'wishlist' ? 'active' : ''}`} onClick={() => setActiveSubTab('wishlist')}><i className="fas fa-heart"></i> Wishlist</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'pc' ? 'active' : ''}`} onClick={() => setActiveSubTab('pc')}><i className="fas fa-desktop"></i> Saved PC Builds</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'cctv' ? 'active' : ''}`} onClick={() => setActiveSubTab('cctv')}><i className="fas fa-video"></i> Saved CCTV Builds</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'address' ? 'active' : ''}`} onClick={() => setActiveSubTab('address')}><i className="fas fa-map-marker-alt"></i> Saved Addresses</button>
+                        <button className={`dashboard-menu-item ${activeSubTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveSubTab('profile')}><i className="fas fa-user-cog"></i> Profile Settings</button>
                         <div style={{borderTop:'1px solid #eee', margin: '10px 0'}}></div>
-                        <button className="dashboard-menu-item" onClick={handleLogout} style={{color: '#dc3545'}}><i className="fas fa-sign-out-alt" style={{color: '#dc3545'}}></i> Logout</button>
+                        <button className="dashboard-menu-item logout" onClick={handleLogout}><i className="fas fa-sign-out-alt"></i> Logout</button>
                     </div>
                 </div>
 
                 <div className="dashboard-main">
-                    <div className="dash-stats">
-                        <div className="dash-stat-card">
-                            <h4>Orders</h4>
-                            <div className="val">3</div>
-                        </div>
-                        <div className="dash-stat-card">
-                            <h4>Wishlist</h4>
-                            <div className="val">5</div>
-                        </div>
-                        <div className="dash-stat-card">
-                            <h4>Saved PC</h4>
-                            <div className="val">2</div>
-                        </div>
-                        <div className="dash-stat-card">
-                            <h4>Addresses</h4>
-                            <div className="val">2</div>
-                        </div>
-                    </div>
-
-                    <h3 style={{fontSize: '18px', marginBottom: '15px'}}>Recent Orders</h3>
-                    <table className="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#ST-20240401-001</td>
-                                <td>Apr 01, 2024</td>
-                                <td>৳12,500</td>
-                                <td><span className="badge-status delivered">Delivered</span></td>
-                                <td><button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>View Details</button></td>
-                            </tr>
-                            <tr>
-                                <td>#ST-20240328-002</td>
-                                <td>Mar 28, 2024</td>
-                                <td>৳5,600</td>
-                                <td><span className="badge-status shipped">Shipped</span></td>
-                                <td><button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>View Details</button></td>
-                            </tr>
-                            <tr>
-                                <td>#ST-20240315-003</td>
-                                <td>Mar 15, 2024</td>
-                                <td>৳2,500</td>
-                                <td><span className="badge-status delivered">Delivered</span></td>
-                                <td><button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>View Details</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h3 style={{fontSize: '18px', marginBottom: '15px', marginTop: '40px'}}>Saved PC Builds</h3>
-                    <table className="dash-table">
-                        <thead>
-                            <tr>
-                                <th>Build Name</th>
-                                <th>Est. Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Gaming PC Build 2024</td>
-                                <td>৳85,000</td>
-                                <td>
-                                    <div style={{display:'flex', gap:'10px'}}>
-                                        <button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>[Load]</button>
-                                        <button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>[Edit]</button>
-                                        <button style={{background:'none', border:'none', color:'#ff4444', cursor:'pointer', fontWeight:600}}>[Delete]</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Office PC Build</td>
-                                <td>৳35,000</td>
-                                <td>
-                                    <div style={{display:'flex', gap:'10px'}}>
-                                        <button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>[Load]</button>
-                                        <button style={{background:'none', border:'none', color:'#1B5B97', cursor:'pointer', fontWeight:600}}>[Edit]</button>
-                                        <button style={{background:'none', border:'none', color:'#ff4444', cursor:'pointer', fontWeight:600}}>[Delete]</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {activeSubTab === 'dash' && renderDashboard()}
+                    {activeSubTab === 'orders' && renderOrders()}
+                    {activeSubTab === 'wishlist' && renderWishlist()}
+                    {activeSubTab === 'pc' && renderSavedBuilds('pc')}
+                    {activeSubTab === 'cctv' && renderSavedBuilds('cctv')}
+                    {activeSubTab === 'address' && renderAddresses()}
+                    {activeSubTab === 'profile' && renderProfile()}
                 </div>
             </div>
         );

@@ -260,11 +260,15 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             
                             {/* Hover Dropdown */}
                             <div className="user-dropdown">
-                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-tachometer-alt" style={{width:'18px',textAlign:'center'}}></i> Dashboard</Link>
-                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-box" style={{width:'18px',textAlign:'center'}}></i> My Orders</Link>
-                                <Link href="/account" className="user-dropdown-item"><i className="fas fa-heart" style={{width:'18px',textAlign:'center'}}></i> Wishlist</Link>
-                                <a href="#" onClick={handleLogout} className="user-dropdown-item" style={{borderTop:'1px solid #eee'}}><i className="fas fa-sign-out-alt" style={{width:'18px',textAlign:'center'}}></i> Logout</a>
-                            </div>
+                                 <Link href="/account?tab=dash" className="user-dropdown-item"><i className="fas fa-tachometer-alt"></i> Dashboard</Link>
+                                 <Link href="/account?tab=orders" className="user-dropdown-item"><i className="fas fa-box"></i> My Orders</Link>
+                                 <Link href="/account?tab=wishlist" className="user-dropdown-item"><i className="fas fa-heart"></i> Wishlist</Link>
+                                 <Link href="/account?tab=pc" className="user-dropdown-item"><i className="fas fa-desktop"></i> Saved PC Builds</Link>
+                                 <Link href="/account?tab=cctv" className="user-dropdown-item"><i className="fas fa-video"></i> Saved CCTV Builds</Link>
+                                 <Link href="/account?tab=address" className="user-dropdown-item"><i className="fas fa-map-marker-alt"></i> Saved Addresses</Link>
+                                 <Link href="/account?tab=profile" className="user-dropdown-item"><i className="fas fa-user-cog"></i> Profile Settings</Link>
+                                 <a href="#" onClick={handleLogout} className="user-dropdown-item logout-link" style={{borderTop:'1px solid #eee'}}><i className="fas fa-sign-out-alt"></i> Logout</a>
+                             </div>
                         </div>
                     ) : (
                         <Link href="/account" className="action-item">
@@ -706,8 +710,14 @@ export const MobileDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                     </button>
                 </div>
                 <ul className="drawer-menu">
-                    <li><Link href="/account"><i className="fas fa-user-circle"></i> Login / Register</Link></li>
-                    <li><Link href="/"><i className="fas fa-home"></i> Home</Link></li>
+                    <li><Link href="/account" onClick={onClose}><i className="fas fa-user-circle"></i> Account Dashboard</Link></li>
+                    <li className="drawer-sub-menu">
+                        <Link href="/account?tab=orders" onClick={onClose}><i className="fas fa-box"></i> My Orders</Link>
+                        <Link href="/account?tab=wishlist" onClick={onClose}><i className="fas fa-heart"></i> Wishlist</Link>
+                        <Link href="/account?tab=pc" onClick={onClose}><i className="fas fa-desktop"></i> Saved PC Builds</Link>
+                        <Link href="/account?tab=profile" onClick={onClose}><i className="fas fa-user-cog"></i> Settings</Link>
+                    </li>
+                    <li><Link href="/" onClick={onClose}><i className="fas fa-home"></i> Home</Link></li>
                     <li><Link href="/cart" onClick={onClose}><i className="fas fa-shopping-cart"></i> Cart</Link></li>
                     <li><Link href="/compare" onClick={onClose}><i className="fas fa-copy"></i> Compare</Link></li>
                     <li><Link href="/pc-builder" onClick={onClose}><i className="fas fa-tools"></i> PC Builder</Link></li>
