@@ -631,7 +631,40 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 14, name: "Gadget", reactIcon: "FaCubes", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget", children: [] },
+  { 
+    id: 14, 
+    name: "Gadget", 
+    reactIcon: "FaCubes", 
+    iconColor: "#06B6D4", 
+    iconBg: "rgba(6, 182, 212, 0.12)", 
+    slug: "gadget", 
+    children: [
+      {
+        id: 1401,
+        name: "Smart Gadgets",
+        slug: "smart-gadgets",
+        subItems: ["Smartwatch", "Gimbal", "Smart Lock", "Smart Door Bell"]
+      },
+      {
+        id: 1402,
+        name: "Audio Gadgets",
+        slug: "audio-gadgets",
+        subItems: ["Earphone", "Earbuds", "Neckband", "Microphone", "Voice Recorder"]
+      },
+      {
+        id: 1403,
+        name: "Mobile Accessories",
+        slug: "mobile-accessories",
+        subItems: ["Power Bank", "Car Charger", "Wireless Charger", "Cable Organizer", "Phone Holder", "Selfie Stick"]
+      },
+      {
+        id: 1404,
+        name: "Other Gadgets",
+        slug: "other-gadgets",
+        subItems: ["Calculator"]
+      }
+    ]
+  },
   { id: 15, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone", children: [] },
   { id: 16, name: "Appliances", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "appliances", children: [] },
   { 
