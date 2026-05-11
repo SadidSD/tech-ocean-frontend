@@ -64,6 +64,18 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     ) : (
                         <i className={`fas ${product.imgIcon || 'fa-box'}`}></i>
                     )}
+                    
+                    {/* Modern Action Overlay */}
+                    <div className="product-card-actions">
+                        <button 
+                            className="modern-action-btn" 
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); const event = new CustomEvent('openQuickView', { detail: product }); window.dispatchEvent(event); }}
+                            title="Quick Look"
+                        >
+                            <i className="fas fa-search-plus"></i>
+                        </button>
+                        <CompareIconButton product={product} />
+                    </div>
                 </div>
                 <div className="product-title">{product.title}</div>
                 <StarRating rating={product.rating} count={product.reviewCount || 15} />
@@ -90,65 +102,32 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                     <i className="fas fa-cart-plus"></i> Add to Cart
                 </button>
             </div>
-            <div className="product-actions-bar hover-actions" style={{ display: 'flex', gap: '10px', padding: '0 16px 16px', marginTop: '-8px' }}>
-                <button 
-                    className="quick-spec-btn-inline" 
-                    onClick={(e) => { e.preventDefault(); const event = new CustomEvent('openQuickView', { detail: product }); window.dispatchEvent(event); }}
-                    style={{ flex: 1, padding: '8px', background: '#f8f9fa', border: '1px solid #e0e0e0', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', transition: 'all 0.2s' }}
-                    onMouseOver={e => { e.currentTarget.style.background = '#db4b27'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = '#db4b27'; }}
-                    onMouseOut={e => { e.currentTarget.style.background = '#f8f9fa'; e.currentTarget.style.color = '#555'; e.currentTarget.style.borderColor = '#e0e0e0'; }}
-                >
-                    <i className="fas fa-eye"></i> Quick Look
-                </button>
-                <CompareToggle product={product} />
-            </div>
+
         </div>
     );
 };
 
-const CompareToggle = ({ product }: { product: any }) => {
+const CompareIconButton = ({ product }: { product: any }) => {
     const { isInCompare, addToCompare, removeFromCompare } = useContext(CompareContext);
     const selected = isInCompare(product.id);
 
-    const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) {
-            addToCompare(product);
-        } else {
+    const handleToggle = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (selected) {
             removeFromCompare(product.id);
+        } else {
+            addToCompare(product);
         }
     };
 
     return (
-        <label 
-            className={`compare-checkbox-wrap ${selected ? 'selected' : ''}`} 
-            style={{ 
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', 
-                cursor: 'pointer', fontSize: '12px', padding: '8px', border: '1px solid #e0e0e0', 
-                borderRadius: '6px', background: selected ? '#fff5f2' : '#f8f9fa', 
-                color: selected ? '#db4b27' : '#555', transition: 'all 0.2s' 
-            }}
-            onMouseOver={e => { 
-                if (!selected) {
-                    e.currentTarget.style.background = '#fff5f2'; 
-                    e.currentTarget.style.color = '#db4b27'; 
-                    e.currentTarget.style.borderColor = '#db4b27'; 
-                }
-            }}
-            onMouseOut={e => { 
-                if (!selected) {
-                    e.currentTarget.style.background = '#f8f9fa'; 
-                    e.currentTarget.style.color = '#555'; 
-                    e.currentTarget.style.borderColor = '#e0e0e0'; 
-                }
-            }}
+        <button 
+            className={`modern-action-btn ${selected ? 'active' : ''}`} 
+            onClick={handleToggle}
+            title={selected ? "Remove from Compare" : "Add to Compare"}
         >
-            <input 
-                type="checkbox" 
-                checked={selected}
-                onChange={handleToggle}
-                style={{ width: '15px', height: '15px', cursor: 'pointer', accentColor: '#db4b27' }}
-            />
-            <span>Compare</span>
-        </label>
+            <i className={selected ? "fas fa-check" : "fas fa-exchange-alt"}></i>
+        </button>
     );
 };
