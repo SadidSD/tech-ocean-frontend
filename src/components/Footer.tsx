@@ -66,8 +66,16 @@ export default function Footer() {
               </div>
             </div>
             
-            <div className="footer-copyright">
-              <p>&copy; 2026 Tech X Ocean. All Rights Reserved.</p>
+            <div className="footer-copyright" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <p style={{ margin: 0 }}>&copy; 2026 Tech X Ocean. All Rights Reserved.</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: '#888' }}>Developed by</span>
+                  <a href="https://www.bleertcg.com/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src="/img/WhatsApp Image 2026-05-11 at 11.45.35 PM.jpeg" alt="Bleer" style={{ height: '22px', width: 'auto', borderRadius: '4px' }} />
+                  </a>
+                </div>
+              </div>
               <div className="payment-methods">
                 <img src="/img/credit-card-debit-card-payment-card-bank-visa.jpg" alt="Visa" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
                 <img src="/img/logo-mastercard-vector-graphics-font-visa-png-favpng-g7QRvD5wzLbqfgH0T0WjAe90s.jpg" alt="Mastercard" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
