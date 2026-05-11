@@ -541,7 +541,44 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 12, name: "Accessories", reactIcon: "FaKeyboard", iconColor: "#F97316", iconBg: "rgba(249, 115, 22, 0.12)", slug: "accessories", children: [] },
+  { 
+    id: 12, 
+    name: "Accessories", 
+    reactIcon: "FaKeyboard", 
+    iconColor: "#F97316", 
+    iconBg: "rgba(249, 115, 22, 0.12)", 
+    slug: "accessories", 
+    children: [
+      {
+        id: 1201,
+        name: "Connectivity & Power",
+        slug: "connectivity-power",
+        subItems: [
+          "Cable / Converter / HUB", "Bluetooth Adapter", "Electrical Power", "Power Strip", "DryCell Battery", "Blower", "Power Cable", "Socket", "Mini UPS", "Power Station", "Solar Panel"
+        ]
+      },
+      {
+        id: 1202,
+        name: "Digital Tools",
+        slug: "digital-tools",
+        subItems: ["Signature Pad", "Digital Pen"]
+      },
+      {
+        id: 1203,
+        name: "Tablet & Phone",
+        slug: "tablet-phone",
+        subItems: [
+          "Tablet Accessories", "Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner", "Tablet PC Case"
+        ]
+      },
+      {
+        id: 1204,
+        name: "Bags & Carrying",
+        slug: "bags-carrying",
+        subItems: ["Bag"]
+      }
+    ]
+  },
   { id: 13, name: "Software", reactIcon: "FaCode", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "software", children: [] },
   { id: 14, name: "Gadget", reactIcon: "FaCubes", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget", children: [] },
   { id: 15, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone", children: [] },
