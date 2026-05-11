@@ -76,6 +76,21 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                 </div>
             </Link>
             
+            <div className="desktop-add-to-cart" style={{ padding: '0 16px 16px', position: 'relative', zIndex: 2 }}>
+                <button 
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (addToCart) addToCart(product); }} 
+                    style={{ 
+                        width: '100%', padding: '8px', background: '#f8faff', color: '#1B5B97', border: '1px solid #dde3ea', 
+                        borderRadius: '4px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', 
+                        justifyContent: 'center', gap: '6px', transition: 'all 0.2s' 
+                    }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = '#1B5B97'; e.currentTarget.style.color = 'white'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = '#f8faff'; e.currentTarget.style.color = '#1B5B97'; }}
+                >
+                    <i className="fas fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+            
             <button className="quick-spec-btn" onClick={(e) => { e.preventDefault(); const event = new CustomEvent('openQuickView', { detail: product }); window.dispatchEvent(event); }}>
                 <i className="fas fa-eye"></i> Quick Look
             </button>
