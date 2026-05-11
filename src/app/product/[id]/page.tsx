@@ -23,9 +23,25 @@ const DeliveryEstimator = ({ price = 0 }) => {
     return (
         <div className="delivery-section">
             <h3 className="delivery-title"><i className="fas fa-truck" style={{color: '#ff6b00', marginRight: '8px'}}></i> Delivery Estimator</h3>
-            <div className="delivery-row">
-                <span className="delivery-label">Location</span>
-                <select className="delivery-select" value={zone} onChange={(e) => setZone(e.target.value)} style={{ border: 'none', background: 'transparent', fontWeight: 600, color: '#1B5B97', textAlign: 'right', cursor: 'pointer' }}>
+            <div className="delivery-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
+                <span className="delivery-label" style={{ whiteSpace: 'nowrap' }}>Location</span>
+                <select 
+                    className="delivery-select" 
+                    value={zone} 
+                    onChange={(e) => setZone(e.target.value)} 
+                    style={{ 
+                        border: 'none', 
+                        background: 'transparent', 
+                        fontWeight: 600, 
+                        color: '#1B5B97', 
+                        textAlign: 'right', 
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        maxWidth: '180px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                    }}
+                >
                     {zones.map(z => <option key={z.name} value={z.name}>{z.name}</option>)}
                 </select>
             </div>
