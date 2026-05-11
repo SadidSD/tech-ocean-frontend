@@ -183,7 +183,64 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 5, name: "Tablet PC", reactIcon: "FaTabletAlt", iconColor: "#8B5CF6", iconBg: "rgba(139, 92, 246, 0.12)", slug: "tablet-pc", children: [] },
+  { 
+    id: 5, 
+    name: "Tablet PC", 
+    reactIcon: "FaTabletAlt", 
+    iconColor: "#8B5CF6", 
+    iconBg: "rgba(139, 92, 246, 0.12)", 
+    slug: "tablet-pc", 
+    children: [
+      {
+        id: 501,
+        name: "Regular Tablet",
+        slug: "regular-tablet",
+        subItems: ["Amazon", "CHUWI", "HONOR", "Lenovo", "Samsung", "Teclast", "Xiaomi"]
+      },
+      {
+        id: 502,
+        name: "Kids Tablet",
+        slug: "kids-tablet",
+        subItems: ["Teclast"]
+      },
+      {
+        id: 503,
+        name: "Graphics Tablet",
+        slug: "graphics-tablet",
+        subItems: ["Huion", "Wacom", "XP-Pen"]
+      },
+      {
+        id: 504,
+        name: "Apple Tablet",
+        slug: "apple-tablet",
+        subItems: ["iPad"]
+      },
+      {
+        id: 505,
+        name: "Digital Signature Pad",
+        slug: "digital-signature-pad",
+        subItems: []
+      },
+      {
+        id: 506,
+        name: "Stylus Pen",
+        slug: "stylus-pen",
+        subItems: []
+      },
+      {
+        id: 507,
+        name: "Tablet Accessories",
+        slug: "tablet-accessories",
+        subItems: ["Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner"]
+      },
+      {
+        id: 508,
+        name: "Tablet PC Case",
+        slug: "tablet-pc-case",
+        subItems: []
+      }
+    ]
+  },
   { id: 6, name: "Printer", reactIcon: "FaPrint", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "printer", children: [] },
   { id: 7, name: "Camera", reactIcon: "FaCamera", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "camera", children: [] },
   { id: 8, name: "Security", reactIcon: "FaShieldAlt", iconColor: "#10B981", iconBg: "rgba(16, 185, 129, 0.12)", slug: "security", children: [] },
