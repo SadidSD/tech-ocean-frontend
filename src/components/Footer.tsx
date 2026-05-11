@@ -69,10 +69,10 @@ export default function Footer() {
             <div className="footer-copyright">
               <p>&copy; 2026 Tech X Ocean. All Rights Reserved.</p>
               <div className="payment-methods">
-                <img src="/icons/visa.svg" alt="Visa" />
-                <img src="/icons/mastercard.svg" alt="Mastercard" />
-                <img src="/icons/bkash.svg" alt="bKash" />
-                <img src="/icons/nagad.svg" alt="Nagad" />
+                <img src="/img/credit-card-debit-card-payment-card-bank-visa.jpg" alt="Visa" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
+                <img src="/img/logo-mastercard-vector-graphics-font-visa-png-favpng-g7QRvD5wzLbqfgH0T0WjAe90s.jpg" alt="Mastercard" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
+                <img src="/img/bkash-logo-bkash-logo-with-origami-pink-bird-Ur5y5Ta5.jpg" alt="bKash" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
+                <img src="/img/496-4962280_nagad-logo-transparent-bkash-logo-png-png-download.png" alt="Nagad" style={{ height: '28px', width: 'auto', objectFit: 'contain', borderRadius: '3px' }} />
               </div>
             </div>
         </footer>
