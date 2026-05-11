@@ -31,6 +31,17 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
                 {children}
             </main>
             <Footer />
+            
+            {/* Floating WhatsApp Icon */}
+            <a 
+                href="https://wa.me/8801332437029" 
+                className="floating-whatsapp" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Contact us on WhatsApp"
+            >
+                <i className="fab fa-whatsapp"></i>
+            </a>
         </>
     );
 }

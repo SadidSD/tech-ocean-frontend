@@ -11,9 +11,9 @@ export default function Footer() {
                     Your trusted partner for CCTV systems, PC components, and tech solutions in Bangladesh.
                   </p>
                   <div className="social-icons">
-                    <a href="#"><i className="fab fa-facebook"></i></a>
+                    <a href="https://www.facebook.com/TechXOcean" target="_blank" rel="noopener noreferrer"><i className="fab fa-facebook"></i></a>
                     <a href="#"><i className="fab fa-twitter"></i></a>
-                    <a href="#"><i className="fab fa-instagram"></i></a>
+                    <a href="https://www.instagram.com/techxocean/" target="_blank" rel="noopener noreferrer"><i className="fab fa-instagram"></i></a>
                     <a href="#"><i className="fab fa-youtube"></i></a>
                   </div>
                 </div>
