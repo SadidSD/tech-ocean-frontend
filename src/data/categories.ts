@@ -579,7 +579,58 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 13, name: "Software", reactIcon: "FaCode", iconColor: "#3B82F6", iconBg: "rgba(59, 130, 246, 0.12)", slug: "software", children: [] },
+  { 
+    id: 13, 
+    name: "Software", 
+    reactIcon: "FaCode", 
+    iconColor: "#3B82F6", 
+    iconBg: "rgba(59, 130, 246, 0.12)", 
+    slug: "software", 
+    children: [
+      {
+        id: 1301,
+        name: "Antivirus and Security",
+        slug: "antivirus-security",
+        subItems: ["Bitdefender", "eScan", "ESET", "Kaspersky", "Panda"]
+      },
+      {
+        id: 1302,
+        name: "Office Application",
+        slug: "office-application",
+        subItems: ["Adobe", "Microsoft", "Nitro"]
+      },
+      {
+        id: 1303,
+        name: "Operating System and DB",
+        slug: "os-db",
+        subItems: ["Microsoft"]
+      },
+      {
+        id: 1304,
+        name: "Graphics Editing",
+        slug: "graphics-editing",
+        subItems: ["Adobe"]
+      },
+      {
+        id: 1305,
+        name: "Engineering Design",
+        slug: "engineering-design",
+        subItems: ["Autodesk", "STAAD"]
+      },
+      {
+        id: 1306,
+        name: "Bangla Typing Application",
+        slug: "bangla-typing",
+        subItems: ["Bijoy"]
+      },
+      {
+        id: 1307,
+        name: "Remote Management",
+        slug: "remote-management",
+        subItems: ["AnyDesk", "TeamViewer"]
+      }
+    ]
+  },
   { id: 14, name: "Gadget", reactIcon: "FaCubes", iconColor: "#06B6D4", iconBg: "rgba(6, 182, 212, 0.12)", slug: "gadget", children: [] },
   { id: 15, name: "Mobile Phone", reactIcon: "FaMobileAlt", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "mobile-phone", children: [] },
   { id: 16, name: "Appliances", reactIcon: "FaHome", iconColor: "#EAB308", iconBg: "rgba(234, 179, 8, 0.12)", slug: "appliances", children: [] },
