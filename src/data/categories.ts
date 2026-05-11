@@ -384,7 +384,54 @@ export const MOCK_CATEGORIES = [
       }
     ]
   },
-  { id: 9, name: "Network", reactIcon: "FaNetworkWired", iconColor: "#6366F1", iconBg: "rgba(99, 102, 241, 0.12)", slug: "network", children: [] },
+  { 
+    id: 9, 
+    name: "Network", 
+    reactIcon: "FaNetworkWired", 
+    iconColor: "#6366F1", 
+    iconBg: "rgba(99, 102, 241, 0.12)", 
+    slug: "network", 
+    children: [
+      {
+        id: 901,
+        name: "Satellite Internet",
+        slug: "satellite-internet",
+        subItems: ["STARLINK", "STARLINK Accessories"]
+      },
+      {
+        id: 902,
+        name: "Network Device",
+        slug: "network-device",
+        subItems: [
+          { name: "Network Router", dropdown: ["All Brands", "ASUS", "C-Net", "Cisco", "Cudy", "D-Link", "Dahua", "Hikvision", "Huawei", "MERCUSYS", "MikroTik", "Netgear", "Netis", "Prolink", "Ruijie", "Synology", "Tenda", "TP-Link"] },
+          { name: "Access Point", dropdown: ["All Brands", "Cisco", "Cudy", "D-Link", "Fortinet", "Grandstream", "Huawei", "IP-Com", "MikroTik", "Netgear", "Ruijie", "Tenda", "TP-Link", "Ubiquiti"] },
+          "Range Extender",
+          { name: "Network Switch", dropdown: ["All Brands", "C-Data", "Cisco", "Cudy", "D-Link", "Dahua", "Fortinet", "Grandstream", "Hikvision", "Huawei", "IP-Com", "K2", "LevelOne", "MERCUSYS", "Micronet", "MikroTik", "Netgear", "Netis", "Ruijie", "Safenet", "SOLITINE", "Tenda", "TP-Link", "UGREEN"] }
+        ]
+      },
+      {
+        id: 903,
+        name: "Connectivity",
+        slug: "connectivity",
+        subItems: [
+          "Lan Card", "Wifi Adapter",
+          { name: "Network Cable", dropdown: ["All Brands", "Baseus", "CommScope", "D-Link", "G-Link", "Hikvision", "Micronet", "NexaKey", "Revenger", "Rosenberger", "UGREEN", "Vention", "Vivanco", "Yuanxin", "ZKTeco"] }
+        ]
+      },
+      {
+        id: 904,
+        name: "Fiber / Advanced",
+        slug: "fiber-advanced",
+        subItems: ["Optical Line Termination (OLT)", "Optical Network Unit (ONU)", "Network Storage", "Edge Modem", "Splicer Machine"]
+      },
+      {
+        id: 905,
+        name: "Network Accessories",
+        slug: "network-accessories",
+        subItems: ["Connector", "Face Plate", "Cable Lan", "Crimping Tool", "Management Cable", "Patch Panel", "Modular", "Extender"]
+      }
+    ]
+  },
   { id: 10, name: "Sound", reactIcon: "FaVolumeUp", iconColor: "#F43F5E", iconBg: "rgba(244, 63, 94, 0.12)", slug: "sound", children: [] },
   { id: 11, name: "Office Items", reactIcon: "FaBriefcase", iconColor: "#F59E0B", iconBg: "rgba(245, 158, 11, 0.12)", slug: "office-items", children: [] },
   { id: 12, name: "Accessories", reactIcon: "FaKeyboard", iconColor: "#F97316", iconBg: "rgba(249, 115, 22, 0.12)", slug: "accessories", children: [] },
