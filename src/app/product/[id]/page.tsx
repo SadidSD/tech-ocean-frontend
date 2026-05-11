@@ -52,6 +52,8 @@ export default function ProductDetail() {
     const [showStickyCart, setShowStickyCart] = useState(false);
     const [activeTab, setActiveTab] = useState<'specs'|'reviews'|'qa'>('specs');
     const [activeImage, setActiveImage] = useState(0);
+    const [reviewForm, setReviewForm] = useState({ rating: 5, title: '', content: '' });
+    const [questionForm, setQuestionForm] = useState('');
     const cartTriggerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -188,37 +190,74 @@ export default function ProductDetail() {
                     )}
                     {activeTab === 'reviews' && (
                         <div className="reviews-section" style={{maxWidth:'800px'}}>
-                            <div className="review-summary">
+                            <div className="review-summary" style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'30px'}}>
                                 <div className="review-score">
                                     <div className="score">{product.rating || 0}</div>
                                     <StarRating rating={product.rating || 0} />
-                                    <div className="count">Based on {product.reviewCount || 0} verified purchases</div>
+                                    <div className="count">Based on {product.reviewCount || 0} reviews</div>
                                 </div>
+                                <button className="quick-spec-btn" style={{position:'static', transform:'none', opacity:1, pointerEvents:'auto'}} onClick={() => document.getElementById('review-form-scroll')?.scrollIntoView({ behavior: 'smooth' })}>Write a Review</button>
                             </div>
-                            {product.reviews?.length > 0 ? product.reviews.map((r: any) => (
-                                <div key={r.id} className="review-card" style={{padding:'20px', border:'1px solid #eee', borderRadius:'12px', marginBottom:'15px', background:'white'}}>
-                                    <div style={{display:'flex', justifyContent:'space-between'}}>
-                                        <div>
-                                            <StarRating rating={r.rating} />
-                                            {r.title && <h4 style={{marginTop:'10px', fontSize:'16px', fontWeight:600}}>{r.title}</h4>}
-                                            <p style={{color:'#666', fontSize:'14px', marginTop:'5px'}}>{r.content}</p>
-                                        </div>
-                                        <div style={{textAlign:'right', color:'#888', fontSize:'12px', minWidth:'100px'}}>
-                                            <div><strong>{r.user?.name || r.guestName || 'Anonymous'}</strong>{r.verifiedPurchase && ' ✓'}</div>
-                                            <div>{new Date(r.createdAt).toLocaleDateString()}</div>
-                                        </div>
+
+                            {/* Review Form */}
+                            <div id="review-form-scroll" style={{padding:'25px', background:'#fbfbfb', borderRadius:'12px', border:'1px solid #eee', marginBottom:'40px'}}>
+                                <h3 style={{fontSize:'18px', fontWeight:700, marginBottom:'20px'}}>Write a Review</h3>
+                                <div style={{marginBottom:'15px'}}>
+                                    <label style={{display:'block', fontSize:'13px', fontWeight:600, marginBottom:'8px'}}>Rating</label>
+                                    <div style={{display:'flex', gap:'5px', fontSize:'24px', color:'#ccc', cursor:'pointer'}}>
+                                        {[1,2,3,4,5].map(s => (
+                                            <span key={s} onClick={() => setReviewForm({...reviewForm, rating: s})} style={{color: s <= reviewForm.rating ? '#ff6b00' : '#ccc'}}>★</span>
+                                        ))}
                                     </div>
                                 </div>
-                            )) : (
-                                <p style={{color:'#888', marginTop:'20px'}}>No reviews yet. Be the first to review this product!</p>
-                            )}
+                                <div style={{marginBottom:'15px'}}>
+                                    <label style={{display:'block', fontSize:'13px', fontWeight:600, marginBottom:'8px'}}>Review Title</label>
+                                    <input type="text" style={{width:'100%', padding:'10px', borderRadius:'6px', border:'1px solid #ddd'}} value={reviewForm.title} onChange={e => setReviewForm({...reviewForm, title: e.target.value})} placeholder="Example: Great product!" />
+                                </div>
+                                <div style={{marginBottom:'20px'}}>
+                                    <label style={{display:'block', fontSize:'13px', fontWeight:600, marginBottom:'8px'}}>Your Review</label>
+                                    <textarea style={{width:'100%', padding:'10px', borderRadius:'6px', border:'1px solid #ddd', minHeight:'100px'}} value={reviewForm.content} onChange={e => setReviewForm({...reviewForm, content: e.target.value})} placeholder="Tell us about your experience..."></textarea>
+                                </div>
+                                <button className="add-to-cart-btn" style={{width:'auto', padding:'10px 25px'}} onClick={() => { alert('Thank you for your review! It has been submitted for moderation.'); setReviewForm({rating:5, title:'', content:''})}}>Submit Review</button>
+                            </div>
+
+                            <div className="reviews-list">
+                                {product.reviews?.length > 0 ? product.reviews.map((r: any) => (
+                                    <div key={r.id} className="review-card" style={{padding:'20px', border:'1px solid #eee', borderRadius:'12px', marginBottom:'15px', background:'white'}}>
+                                        <div style={{display:'flex', justifyContent:'space-between'}}>
+                                            <div>
+                                                <StarRating rating={r.rating} />
+                                                {r.title && <h4 style={{marginTop:'10px', fontSize:'16px', fontWeight:600}}>{r.title}</h4>}
+                                                <p style={{color:'#666', fontSize:'14px', marginTop:'5px'}}>{r.content}</p>
+                                            </div>
+                                            <div style={{textAlign:'right', color:'#888', fontSize:'12px', minWidth:'100px'}}>
+                                                <div><strong>{r.user?.name || r.guestName || 'Anonymous'}</strong>{r.verifiedPurchase && ' ✓'}</div>
+                                                <div>{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : 'Recently'}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )) : (
+                                    <p style={{color:'#888', marginTop:'20px'}}>No reviews yet. Be the first to review this product!</p>
+                                )}
+                            </div>
                         </div>
                     )}
                     {activeTab === 'qa' && (
-                        <div className="qa-section">
-                            <p style={{color:'#888'}}>No questions yet.</p>
+                        <div className="qa-section" style={{maxWidth:'800px'}}>
+                            <div style={{padding:'25px', background:'#fbfbfb', borderRadius:'12px', border:'1px solid #eee', marginBottom:'40px'}}>
+                                <h3 style={{fontSize:'18px', fontWeight:700, marginBottom:'20px'}}>Ask a Question</h3>
+                                <div style={{marginBottom:'20px'}}>
+                                    <textarea style={{width:'100%', padding:'10px', borderRadius:'6px', border:'1px solid #ddd', minHeight:'100px'}} value={questionForm} onChange={e => setQuestionForm(e.target.value)} placeholder="Type your question here..."></textarea>
+                                </div>
+                                <button className="add-to-cart-btn" style={{width:'auto', padding:'10px 25px'}} onClick={() => { alert('Your question has been submitted. We will answer it soon!'); setQuestionForm('')}}>Ask Question</button>
+                            </div>
+                            
+                            <div className="qa-list">
+                                <p style={{color:'#888'}}>No questions yet. Have a doubt? Ask away!</p>
+                            </div>
                         </div>
                     )}
+
                 </div>
             </div>
 
