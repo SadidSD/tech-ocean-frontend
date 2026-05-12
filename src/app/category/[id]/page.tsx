@@ -94,7 +94,7 @@ export default function CategoryPage() {
     };
 
     return (
-        <div className="container mt-4" style={{minHeight: '60vh'}}>
+        <div className="container mt-4 category-page-container" style={{minHeight: '60vh'}}>
             <div className="page-header" style={{marginBottom: '20px'}}>
                 <div className="breadcrumb"><Link href="/">Home</Link> / {category.name}</div>
                 <h1 className="page-title">{category.name}</h1>

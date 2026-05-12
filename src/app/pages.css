@@ -5808,3 +5808,31 @@ body {
     font-size: 20px;
   }
 }
+
+/* ── CATEGORY PAGE GRID STRETCH (DESKTOP) ── */
+@media (min-width: 1024px) {
+  .category-page-container {
+    max-width: 1600px !important;
+    width: 96% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: 24px !important;
+  }
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.modern-action-btn.big-btn {
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
