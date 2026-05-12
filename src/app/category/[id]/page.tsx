@@ -24,10 +24,10 @@ export default function CategoryPage() {
     const [inStockOnly, setInStockOnly] = useState(false);
     const [allBrands, setAllBrands] = useState<string[]>([]);
 
-    const findCategory = (cats: any[], id: string): any => {
+    const findCategory = (cats: any[], idOrSlug: string): any => {
         for (const c of cats) {
-            if (String(c.id) === String(id)) return c;
-            if (c.children) { const sub = findCategory(c.children, id); if (sub) return sub; }
+            if (String(c.id) === String(idOrSlug) || c.slug === idOrSlug) return c;
+            if (c.children) { const sub = findCategory(c.children, idOrSlug); if (sub) return sub; }
         }
         return null;
     };
@@ -39,7 +39,7 @@ export default function CategoryPage() {
         setLoading(true);
 
         // Demo logic: Use mock products for Laptop category if API is unavailable or for testing
-        if (params.id === '101' || params.id === '1') {
+        if (params.id === '101' || params.id === '1' || params.id === 'laptop' || params.id === 'all-laptop') {
             const filtered = MOCK_PRODUCTS.filter(p => p.category.id === 1 || p.category.id === 101);
             setProducts(filtered);
             setTotal(filtered.length);
