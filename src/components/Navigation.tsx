@@ -460,9 +460,9 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             visibility: activeId === cat.id ? 'visible' : 'hidden',
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
                                             display: 'grid',
-                                            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                                            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                                             gap: '30px 40px',
-                                            minWidth: '900px',
+                                            width: '100%',
                                             padding: '30px 40px',
                                         }}>
                                             {cat.children.map(group => (
@@ -474,7 +474,7 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                     </div>
                                                     <div style={{ 
                                                         display: 'grid', 
-                                                        gridTemplateColumns: (group.subItems || []).length > 6 ? 'repeat(2, 1fr)' : '1fr', 
+                                                        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', 
                                                         gap: '8px 15px'
                                                     }}>
                                                         {(group.subItems || []).map((item, idx) => {
