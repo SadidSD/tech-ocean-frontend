@@ -5968,3 +5968,71 @@ body {
     border-right: none !important;
   }
 }
+
+/* Extreme Print Compaction */
+@media print {
+  .sr-toolbar, .sr-progress-area, .sr-toggle, .section-title-wrapper, .sr-header p, .sr-subtitle, .sr-section-label, .dyn-badge {
+    display: none !important;
+  }
+  .sr-page, .pc-builder-page {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .sr-header {
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .sr-title {
+    font-size: 18pt !important;
+    text-align: center !important;
+  }
+  .sr-rows {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .component-row, .component-row-compact {
+    padding: 4px 8px !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    border: 1px solid #eee !important;
+    border-top: none !important;
+  }
+  .sr-img, .crc-icon {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 10px !important;
+  }
+  .sr-comp-label, .component-name-compact {
+    font-size: 9pt !important;
+    margin: 0 !important;
+  }
+  .sr-product-name, .component-status-compact {
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+  }
+  .sr-price, .component-price-compact {
+    font-size: 10pt !important;
+    min-width: 80px !important;
+  }
+  .sr-summary-bar, .summary-bar-compact {
+    margin-top: 15px !important;
+    padding: 10px !important;
+    border-width: 1px !important;
+  }
+  .sr-summary-stat-val--price, .stat-value {
+    font-size: 16pt !important;
+  }
+  .sr-summary-stat {
+    padding: 0 10px !important;
+  }
+  /* Scale down everything slightly */
+  html, body {
+    zoom: 90%;
+  }
+}
+
+@media print { .brand-section-title { display: none !important; } }
+
+@media print { .sr-stats button, .sr-summary-actions { display: none !important; } }
