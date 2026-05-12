@@ -5836,3 +5836,6 @@ body {
   flex: 1;
   min-width: 0;
 }
+
+@keyframes searchFadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes skeletonPulse { 0% { background-color: #f1f5f9; } 50% { background-color: #e2e8f0; } 100% { background-color: #f1f5f9; } }

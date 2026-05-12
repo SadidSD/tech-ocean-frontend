@@ -22,6 +22,7 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     const [compareItems, setCompareItems] = useState<any[]>([]);
     const [toastData, setToastData]       = useState<{ msg: string, type: string } | null>(null);
     const [userState, setUserState]       = useState<{ isLoggedIn: boolean, user: any, token: string | null }>({ isLoggedIn: false, user: null, token: null });
+    const [recentlyViewed, setRecentlyViewed] = useState<any[]>([]);
 
     // ── Auth persistence ──────────────────────────────────────────────
     useEffect(() => {
@@ -46,6 +47,15 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     useEffect(() => {
         localStorage.setItem('techXocean_compare', JSON.stringify(compareItems));
     }, [compareItems]);
+
+    // ── Recently Viewed persistence ──────────────────────────────────
+    useEffect(() => {
+        const saved = localStorage.getItem('techXocean_recent');
+        if (saved) { try { setRecentlyViewed(JSON.parse(saved)); } catch {} }
+    }, []);
+    useEffect(() => {
+        localStorage.setItem('techXocean_recent', JSON.stringify(recentlyViewed));
+    }, [recentlyViewed]);
 
     // ── Toast helper ──────────────────────────────────────────────────
     const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
@@ -116,6 +126,14 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
     };
     const isInCompare  = (productId: any) => compareItems.some(p => p.id === productId);
 
+    // ── Recently Viewed actions ───────────────────────────────────────
+    const addToRecentlyViewed = (product: any) => {
+        setRecentlyViewed(prev => {
+            const filtered = prev.filter(p => p.id !== product.id);
+            return [product, ...filtered].slice(0, 10); // Keep last 10
+        });
+    };
+
     const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const subtotal = cartItems.reduce((sum, item) => sum + (parseFloat(String(item.price).replace(/,/g,'').replace('৳','')) * item.quantity), 0);
 
@@ -132,6 +150,7 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
         <AuthContext.Provider value={{ userState, setUserState, showToast }}>
         <CartContext.Provider value={{ cartItems, setCartItems, addToCart, cartCount, isCartDrawerOpen, setIsCartDrawerOpen }}>
         <CompareContext.Provider value={{ compareItems, addToCompare, removeFromCompare, clearCompare, isInCompare }}>
+        <RecentContext.Provider value={{ recentlyViewed, addToRecentlyViewed }}>
             <div className="app-container" style={{ position: 'relative', zIndex: 1 }}>
                 <main className="app-main-wrapper" style={{ minHeight: '60vh', position: 'relative', zIndex: 1 }}>
                     {children}
@@ -175,50 +194,88 @@ export default function ClientApplication({ children }: ClientApplicationProps) 
                     </div>
                 </div>
 
-                {/* ─ Quick View Modal ─ */}
-                {quickViewItem && (
-                    <div className="drawer-overlay visible" style={{display:'flex', alignItems:'center', justifyContent:'center', padding:'20px'}}>
-                        <div className="quickview-modal" style={{background: 'white', borderRadius: '24px', maxWidth: '800px', width: '100%', position: 'relative', overflow: 'hidden', padding: '40px', display: 'flex', gap: '30px', boxShadow: '0 25px 50px rgba(0,0,0,0.2)'}}>
-                            <button onClick={() => setQuickViewItem(null)} style={{position: 'absolute', top: '20px', right: '20px', background: '#f5f5f5', border: 'none', width: '36px', height: '36px', borderRadius: '50%', cursor: 'pointer', fontSize: '18px'}}>&times;</button>
-                            <div style={{width: '350px'}}>
-                                <img src={quickViewItem.imgUrl || '/images/placeholder.png'} style={{width: '100%', objectFit: 'contain'}} />
+                {/* ─ Quick View Side Panel ─ */}
+                <div className={`drawer-overlay ${quickViewItem ? 'visible' : ''}`} onClick={() => setQuickViewItem(null)}></div>
+                <div className={`quickview-drawer ${quickViewItem ? 'open' : ''}`} style={{
+                    position: 'fixed', top: 0, right: 0, width: '100%', maxWidth: '500px', height: '100%', 
+                    background: 'white', zIndex: 1002, boxShadow: '-10px 0 30px rgba(0,0,0,0.15)', 
+                    display: 'flex', flexDirection: 'column', transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)', 
+                    transform: quickViewItem ? 'translateX(0)' : 'translateX(100%)',
+                    overflowY: 'auto'
+                }}>
+                    {quickViewItem && (
+                        <div style={{padding: '30px'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px'}}>
+                                <span style={{background: '#fff5f2', color: '#db4b27', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '4px', textTransform: 'uppercase'}}>Quick View</span>
+                                <button onClick={() => setQuickViewItem(null)} style={{background: '#f1f5f9', border: 'none', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}><i className="fas fa-times"></i></button>
                             </div>
-                            <div style={{flex: 1}}>
-                                <h1 style={{fontSize: '24px', fontWeight: 700, marginBottom: '10px'}}>{quickViewItem.title}</h1>
-                                <div style={{color: '#ff6b00', fontSize: '26px', fontWeight: 800, marginBottom: '20px'}}>{quickViewItem.price}</div>
-                                <ul style={{color: '#555', lineHeight: 1.8, marginBottom: '30px', paddingLeft: '20px', fontSize: '14px'}}>
-                                    {quickViewItem.features?.map((f:string, i:number) => <li key={i}>{f}</li>)}
+                            
+                            <div style={{background: '#f8fafc', borderRadius: '16px', padding: '20px', marginBottom: '25px', display: 'flex', justifyContent: 'center'}}>
+                                <img src={quickViewItem.imgUrl || '/images/placeholder.png'} style={{width: '280px', height: '280px', objectFit: 'contain'}} alt={quickViewItem.title} />
+                            </div>
+
+                            <h1 style={{fontSize: '22px', fontWeight: 800, color: '#0f172a', lineHeight: 1.3, marginBottom: '12px'}}>{quickViewItem.title}</h1>
+                            
+                            <div style={{display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px'}}>
+                                <div style={{color: '#ff6b00', fontSize: '28px', fontWeight: 900}}>{quickViewItem.price}</div>
+                                {quickViewItem.oldPrice && <div style={{color: '#94a3b8', fontSize: '18px', textDecoration: 'line-through'}}>৳{quickViewItem.oldPrice}</div>}
+                            </div>
+
+                            <div style={{marginBottom: '30px'}}>
+                                <h4 style={{fontSize: '14px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px'}}>Key Features</h4>
+                                <ul style={{padding: 0, listStyle: 'none'}}>
+                                    {quickViewItem.features?.map((f:string, i:number) => (
+                                        <li key={i} style={{fontSize: '13px', color: '#334155', marginBottom: '10px', display: 'flex', gap: '10px'}}>
+                                            <i className="fas fa-check-circle" style={{color: '#10b981', marginTop: '3px'}}></i>
+                                            {f}
+                                        </li>
+                                    ))}
                                 </ul>
-                                <div style={{ display: 'flex', gap: '10px' }}>
-                                    <button className="btn-add-cart" onClick={() => {addToCart(quickViewItem, 1, false); setQuickViewItem(null);}} style={{flex: 2}}>Add to Cart</button>
+                            </div>
+
+                            <div style={{display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '30px'}}>
+                                <button className="btn-add-cart" onClick={() => {addToCart(quickViewItem, 1, false); setQuickViewItem(null);}} style={{width: '100%', padding: '16px', fontSize: '15px'}}>
+                                    <i className="fas fa-shopping-cart" style={{marginRight: '10px'}}></i> Add to Shopping Cart
+                                </button>
+                                <div style={{display: 'flex', gap: '10px'}}>
                                     <button 
                                         onClick={() => {
-                                            if (compareItems.some(p => p.id === quickViewItem.id)) {
-                                                removeFromCompare(quickViewItem.id);
-                                            } else {
-                                                addToCompare(quickViewItem);
-                                            }
+                                            if (isInCompare(quickViewItem.id)) { removeFromCompare(quickViewItem.id); } 
+                                            else { addToCompare(quickViewItem); }
                                         }}
                                         style={{
-                                            flex: 1, padding: '12px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer',
-                                            background: compareItems.some(p => p.id === quickViewItem.id) ? '#fff5f2' : '#f8f9fa',
-                                            color: compareItems.some(p => p.id === quickViewItem.id) ? '#db4b27' : '#555',
-                                            border: '1px solid ' + (compareItems.some(p => p.id === quickViewItem.id) ? '#db4b27' : '#ddd')
+                                            flex: 1, padding: '12px', borderRadius: '10px', fontWeight: 700, cursor: 'pointer',
+                                            background: isInCompare(quickViewItem.id) ? '#fff5f2' : '#f1f5f9',
+                                            color: isInCompare(quickViewItem.id) ? '#db4b27' : '#475569',
+                                            border: '1px solid ' + (isInCompare(quickViewItem.id) ? '#db4b27' : '#e2e8f0'),
+                                            fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
                                         }}
                                     >
-                                        {compareItems.some(p => p.id === quickViewItem.id) ? 'Selected' : 'Compare'}
+                                        <i className={isInCompare(quickViewItem.id) ? "fas fa-check" : "fas fa-exchange-alt"}></i>
+                                        {isInCompare(quickViewItem.id) ? 'Selected' : 'Compare'}
                                     </button>
+                                    <Link href={`/product/${quickViewItem.id}`} onClick={() => setQuickViewItem(null)} style={{
+                                        flex: 1, padding: '12px', background: '#1B5B97', color: 'white', 
+                                        borderRadius: '10px', fontWeight: 700, textDecoration: 'none', 
+                                        fontSize: '13px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                                    }}>
+                                        <i className="fas fa-info-circle"></i> Full Details
+                                    </Link>
                                 </div>
-                                <div style={{textAlign: 'center', marginTop: '15px'}}><Link href={`/product/${quickViewItem.id}`} onClick={() => setQuickViewItem(null)} style={{color: '#1B5B97', fontSize: '14px', fontWeight: 600, textDecoration: 'none'}}>View Full Details &rarr;</Link></div>
+                            </div>
+
+                            <div style={{borderTop: '1px solid #f1f5f9', paddingTop: '20px', textAlign: 'center'}}>
+                                <p style={{fontSize: '12px', color: '#94a3b8'}}>Secure transactions and fast shipping available on all orders.</p>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
 
 
                 {toastData && <Toast msg={toastData.msg} type={toastData.type} />}
             </div>
+        </RecentContext.Provider>
         </CompareContext.Provider>
         </CartContext.Provider>
         </AuthContext.Provider>
@@ -266,4 +323,13 @@ export const AuthContext = React.createContext<{
     userState: { isLoggedIn: false, user: null, token: null },
     setUserState: () => {},
     showToast: () => {}
+});
+
+// ── Recently Viewed Context ───────────────────────────────────────────
+export const RecentContext = React.createContext<{
+    recentlyViewed: any[],
+    addToRecentlyViewed: (product: any) => void
+}>({
+    recentlyViewed: [],
+    addToRecentlyViewed: () => {}
 });

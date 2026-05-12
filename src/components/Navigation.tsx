@@ -157,45 +157,60 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     </form>
 
                     {showSearch && searchQuery.length >= 2 && (
-                        <div className="search-autocomplete-dropdown" style={{position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', borderRadius: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', zIndex: 2000, marginTop: '5px', overflow: 'hidden', border: '1px solid #eee'}}>
+                        <div className="search-autocomplete-dropdown" style={{position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.18)', zIndex: 2000, marginTop: '10px', overflow: 'hidden', border: '1px solid #eee', animation: 'searchFadeIn 0.2s ease-out'}}>
                             {suggestions.length > 0 ? (
-                                <>
+                                <div style={{maxHeight: '450px', overflowY: 'auto'}}>
+                                    <div style={{padding: '12px 18px', background: '#f8fafc', fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '1px solid #f1f5f9'}}>
+                                        Quick Suggestions
+                                    </div>
                                     {suggestions.map((item, index) => (
                                         <div 
                                             key={index} 
                                             onClick={() => handleSuggestionClick(item.url)} 
-                                            style={{display: 'flex', alignItems: 'center', padding: '12px 15px', borderBottom: '1px solid #f5f5f5', cursor: 'pointer', transition: 'background 0.2s'}}
-                                            onMouseEnter={e => e.currentTarget.style.background = '#f8f9fa'}
-                                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                                            style={{display: 'flex', alignItems: 'center', padding: '14px 18px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer', transition: 'all 0.2s'}}
+                                            onMouseEnter={e => { e.currentTarget.style.background = '#fff5f2'; e.currentTarget.style.paddingLeft = '22px'; }}
+                                            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.paddingLeft = '18px'; }}
                                         >
-                                            <div style={{width: '45px', height: '45px', background: '#f8f9fa', borderRadius: '6px', overflow: 'hidden', marginRight: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                            <div style={{width: '50px', height: '50px', background: '#f1f5f9', borderRadius: '10px', overflow: 'hidden', marginRight: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid #e2e8f0'}}>
                                                 {item.image ? (
                                                     <img src={item.image} alt={item.title} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
                                                 ) : (
-                                                    <span style={{fontSize: '20px'}}>{item.type === 'category' ? '📁' : '📝'}</span>
+                                                    <i className={item.type === 'category' ? 'fas fa-folder' : 'fas fa-file-alt'} style={{fontSize: '20px', color: '#94a3b8'}}></i>
                                                 )}
                                             </div>
-                                            <div style={{flex: 1}}>
-                                                <div style={{fontSize: '14px', fontWeight: 600, color: '#1e293b'}}>{item.title}</div>
-                                                <div style={{fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px'}}>{item.type}</div>
+                                            <div style={{flex: 1, minWidth: 0}}>
+                                                <div style={{fontSize: '14px', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{item.title}</div>
+                                                <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px'}}>
+                                                    <span style={{fontSize: '10px', color: 'white', background: item.type === 'category' ? '#1B5B97' : '#db4b27', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.3px'}}>{item.type}</span>
+                                                    {item.brand && <span style={{fontSize: '11px', color: '#64748b'}}>in {item.brand}</span>}
+                                                </div>
                                             </div>
-                                            {item.price && <div style={{fontSize: '15px', fontWeight: 800, color: '#ff6b00'}}>{item.price}</div>}
+                                            {item.price && (
+                                                <div style={{textAlign: 'right', marginLeft: '12px'}}>
+                                                    <div style={{fontSize: '15px', fontWeight: 800, color: '#ff6b00'}}>৳{parseFloat(String(item.price).replace(/[^\d.]/g, '')).toLocaleString()}</div>
+                                                    <div style={{fontSize: '10px', color: '#10b981', fontWeight: 700}}>In Stock</div>
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                     <div 
                                         onClick={handleSearchSubmit}
-                                        style={{padding: '14px', textAlign: 'center', background: '#f1f5f9', fontSize: '13px', fontWeight: 700, color: '#1B5B97', cursor: 'pointer'}}
+                                        style={{padding: '16px', textAlign: 'center', background: '#f8fafc', fontSize: '14px', fontWeight: 700, color: '#1B5B97', cursor: 'pointer', transition: 'color 0.2s'}}
+                                        onMouseEnter={e => e.currentTarget.style.color = '#db4b27'}
+                                        onMouseLeave={e => e.currentTarget.style.color = '#1B5B97'}
                                     >
-                                        <i className="fas fa-search"></i> See all results for "{searchQuery}"
+                                        <i className="fas fa-search" style={{marginRight: '8px'}}></i> See all results for "{searchQuery}"
                                     </div>
-                                </>
+                                </div>
                             ) : !isLoading && (
-                                <div style={{padding: '20px', textAlign: 'center', color: '#64748b', fontSize: '14px'}}>
-                                    No results found matching "{searchQuery}"
+                                <div style={{padding: '40px 20px', textAlign: 'center'}}>
+                                    <i className="fas fa-search-minus" style={{fontSize: '40px', color: '#e2e8f0', marginBottom: '15px'}}></i>
+                                    <div style={{color: '#64748b', fontSize: '15px', fontWeight: 600}}>No results matching "{searchQuery}"</div>
+                                    <div style={{color: '#94a3b8', fontSize: '13px', marginTop: '5px'}}>Try a different keyword or check spelling</div>
                                 </div>
                             )}
                         </div>
-                    )}
+                    )}    )}
                 </div>
                 <div className="header-actions">
                     <Link href="/" className="action-item">

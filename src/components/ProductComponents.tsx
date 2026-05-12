@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
-import { CompareContext } from '@/components/ClientApplication';
+import { CompareContext, RecentContext } from '@/components/ClientApplication';
 
 export const StarRating = ({ rating = 0, count = 0 }: { rating?: number, count?: number }) => {
     const normalizedRating = Math.round(rating * 2) / 2;
@@ -34,6 +34,19 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
     const oldPrice = product.oldPrice ?? (product.salePrice ? fmtBDT(product.salePrice) : null);
     const status  = product.status ?? (product.stock > 0 ? 'In Stock' : 'Out of Stock');
 
+    const { addToRecentlyViewed } = useContext(RecentContext);
+    const [isAdded, setIsAdded] = useState(false);
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (addToCart) {
+            addToCart(product);
+            setIsAdded(true);
+            setTimeout(() => setIsAdded(false), 2000);
+        }
+    };
+
     const idNum = parseInt(product.id.toString().replace(/\D/g,'')) || 0;
     
     let badge = null;
@@ -51,7 +64,12 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
 
     return (
         <div className="product-card" style={{ position: 'relative' }}>
-            <Link href={`/product/${product.id}`} className="product-card-link" style={{ textDecoration: 'none', color: 'inherit', display: 'block', minHeight: '44px', cursor: 'pointer', zIndex: 1, position: 'relative' }}>
+            <Link 
+                href={`/product/${product.id}`} 
+                className="product-card-link" 
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block', minHeight: '44px', cursor: 'pointer', zIndex: 1, position: 'relative' }}
+                onClick={() => addToRecentlyViewed(product)}
+            >
                 <div className={`product-status ${status.includes('Stock') ? 'instock' : 'out'}`} style={{zIndex: 3}}>
                     {status}
                 </div>
@@ -90,16 +108,20 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
             
             <div className="desktop-add-to-cart" style={{ padding: '0 16px 16px', position: 'relative', zIndex: 2 }}>
                 <button 
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); if (addToCart) addToCart(product); }} 
+                    onClick={handleAddToCart} 
                     style={{ 
-                        width: '100%', padding: '8px', background: '#fff5f2', color: '#db4b27', border: '1px solid #fca5a5', 
+                        width: '100%', padding: '8px', 
+                        background: isAdded ? '#10b981' : '#fff5f2', 
+                        color: isAdded ? 'white' : '#db4b27', 
+                        border: '1px solid ' + (isAdded ? '#10b981' : '#fca5a5'), 
                         borderRadius: '4px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', 
-                        justifyContent: 'center', gap: '6px', transition: 'all 0.2s' 
+                        justifyContent: 'center', gap: '6px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' 
                     }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = '#db4b27'; e.currentTarget.style.color = 'white'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = '#fff5f2'; e.currentTarget.style.color = '#db4b27'; }}
+                    onMouseOver={(e) => { if(!isAdded) { e.currentTarget.style.background = '#db4b27'; e.currentTarget.style.color = 'white'; } }}
+                    onMouseOut={(e) => { if(!isAdded) { e.currentTarget.style.background = '#fff5f2'; e.currentTarget.style.color = '#db4b27'; } }}
                 >
-                    <i className="fas fa-cart-plus"></i> Add to Cart
+                    <i className={isAdded ? "fas fa-check" : "fas fa-cart-plus"}></i> 
+                    {isAdded ? 'Added!' : 'Add to Cart'}
                 </button>
             </div>
 
@@ -129,5 +151,37 @@ const CompareBigButton = ({ product }: { product: any }) => {
             <i className={selected ? "fas fa-check" : "fas fa-exchange-alt"} style={{ display: 'block', color: '#333' }}></i>
             <span>{selected ? 'Added' : 'Compare'}</span>
         </button>
+    );
+};
+
+export const RecentlyViewedSection = () => {
+    const { recentlyViewed } = useContext(RecentContext);
+    
+    if (recentlyViewed.length === 0) return null;
+
+    return (
+        <div className="recently-viewed-section" style={{ marginTop: '50px', paddingTop: '40px', borderTop: '1px solid #f1f5f9' }}>
+            <div className="container">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px' }}>
+                    <div>
+                        <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', marginBottom: '5px' }}>Recently Viewed</h2>
+                        <p style={{ fontSize: '14px', color: '#64748b' }}>Pick up where you left off</p>
+                    </div>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
+                    {recentlyViewed.map(product => (
+                        <div key={product.id} style={{ background: '#fff', borderRadius: '12px', padding: '15px', border: '1px solid #f1f5f9', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+                            <Link href={`/product/${product.id}`} style={{ textDecoration: 'none' }}>
+                                <div style={{ height: '120px', background: '#f8fafc', borderRadius: '8px', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
+                                    <img src={product.imgUrl || '/images/placeholder.png'} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt={product.title} />
+                                </div>
+                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', marginBottom: '8px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', height: '36px', lineHeight: 1.4 }}>{product.title}</div>
+                                <div style={{ fontSize: '15px', fontWeight: 800, color: '#ff6b00' }}>{typeof product.price === 'number' ? `৳${product.price.toLocaleString('en-IN')}` : product.price}</div>
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 };

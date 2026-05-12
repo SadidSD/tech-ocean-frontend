@@ -107,46 +107,97 @@ export default function CategoryPage() {
 
                     <div style={{marginBottom: '25px'}}>
                         <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Max Price</strong>
-                        <input type="range" min="0" max="200000" step="1000" value={priceMax} onChange={e => { setPriceMax(Number(e.target.value)); setPage(1); }} style={{width: '100%', accentColor: '#ff6b00'}} />
-                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#666', marginTop: '5px'}}>
-                            <span>৳0</span><span>৳{priceMax.toLocaleString('en-IN')}</span>
+                        <div style={{position: 'relative', height: '6px', background: '#e2e8f0', borderRadius: '3px', marginBottom: '15px'}}>
+                            <div style={{position: 'absolute', height: '100%', background: '#ff6b00', borderRadius: '3px', width: `${(priceMax/200000)*100}%`}}></div>
+                            <input type="range" min="0" max="200000" step="1000" value={priceMax} onChange={e => { setPriceMax(Number(e.target.value)); setPage(1); }} style={{position: 'absolute', top: '-5px', width: '100%', opacity: 1, cursor: 'pointer', appearance: 'none', background: 'transparent', accentColor: '#ff6b00'}} />
+                        </div>
+                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#64748b', fontWeight: 600}}>
+                            <span style={{padding: '4px 8px', background: '#f1f5f9', borderRadius: '4px'}}>৳0</span>
+                            <span style={{padding: '4px 8px', background: '#fff5f2', color: '#db4b27', borderRadius: '4px'}}>৳{priceMax.toLocaleString()}</span>
                         </div>
                     </div>
 
                     {allBrands.length > 0 && (
                         <div style={{marginBottom: '25px'}}>
-                            <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Brand</strong>
-                            {allBrands.slice(0, 8).map(brand => (
-                                <div key={brand} style={{marginBottom: '8px', fontSize: '13px'}}>
-                                    <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'}}>
-                                        <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => toggleBrand(brand)} /> {brand}
-                                    </label>
-                                </div>
-                            ))}
+                            <strong style={{display: 'block', marginBottom: '12px', fontSize: '14px'}}>Brands</strong>
+                            <div style={{maxHeight: '200px', overflowY: 'auto', paddingRight: '5px'}}>
+                                {allBrands.map(brand => (
+                                    <div key={brand} style={{marginBottom: '10px'}}>
+                                        <label style={{display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '13px', color: selectedBrands.includes(brand) ? '#0f172a' : '#64748b', fontWeight: selectedBrands.includes(brand) ? 600 : 400}}>
+                                            <input type="checkbox" checked={selectedBrands.includes(brand)} onChange={() => toggleBrand(brand)} style={{width: '16px', height: '16px', accentColor: '#ff6b00'}} /> 
+                                            {brand}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    <div>
-                        <strong style={{display: 'block', marginBottom: '10px', fontSize: '14px'}}>Availability</strong>
-                        <label style={{display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px'}}>
-                            <input type="checkbox" checked={inStockOnly} onChange={e => { setInStockOnly(e.target.checked); setPage(1); }} /> In Stock Only
+                    <div style={{paddingTop: '15px', borderTop: '1px solid #f1f5f9'}}>
+                        <strong style={{display: 'block', marginBottom: '12px', fontSize: '14px'}}>Stock Availability</strong>
+                        <label style={{display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '13px', color: inStockOnly ? '#0f172a' : '#64748b', fontWeight: inStockOnly ? 600 : 400}}>
+                            <div style={{width: '34px', height: '18px', background: inStockOnly ? '#10b981' : '#e2e8f0', borderRadius: '10px', position: 'relative', transition: 'all 0.3s'}}>
+                                <div style={{width: '14px', height: '14px', background: 'white', borderRadius: '50%', position: 'absolute', top: '2px', left: inStockOnly ? '18px' : '2px', transition: 'all 0.3s'}}></div>
+                                <input type="checkbox" checked={inStockOnly} onChange={e => { setInStockOnly(e.target.checked); setPage(1); }} style={{position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer'}} />
+                            </div>
+                            In Stock Only
                         </label>
                     </div>
                 </aside>
 
                 <div className="category-main" style={{flex: 1}}>
-                    <div style={{background: '#fff', padding:'15px', borderRadius:'8px', marginBottom:'20px', boxShadow:'0 2px 4px rgba(0,0,0,0.05)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                        <span>{loading ? 'Loading…' : `Showing ${products.length} of ${total} products`}</span>
-                        <select className="form-control" style={{width:'auto', margin:0}} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
-                            <option value="newest">Newest First</option>
-                            <option value="price_asc">Price: Low → High</option>
-                            <option value="price_desc">Price: High → Low</option>
-                            <option value="rating">Top Rated</option>
-                        </select>
+                    <div style={{background: '#fff', padding:'12px 20px', borderRadius:'12px', marginBottom:'20px', boxShadow:'0 2px 10px rgba(0,0,0,0.03)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                        <div style={{fontSize: '14px', color: '#64748b'}}>
+                            {loading ? 'Analyzing inventory...' : (
+                                <span>Found <strong>{total}</strong> products in {category.name}</span>
+                            )}
+                        </div>
+                        <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+                            <span style={{fontSize: '13px', color: '#94a3b8'}}>Sort by:</span>
+                            <select className="form-control" style={{width:'auto', margin:0, border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '13px', fontWeight: 600}} value={sort} onChange={e => { setSort(e.target.value); setPage(1); }}>
+                                <option value="newest">Newest First</option>
+                                <option value="price_asc">Price: Low → High</option>
+                                <option value="price_desc">Price: High → Low</option>
+                                <option value="rating">Top Rated</option>
+                            </select>
+                        </div>
                     </div>
 
+                    {/* Active Filters */}
+                    {(selectedBrands.length > 0 || inStockOnly || priceMax < 200000) && (
+                        <div style={{display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '20px', alignItems: 'center'}}>
+                            <span style={{fontSize: '12px', color: '#94a3b8', marginRight: '5px', fontWeight: 700, textTransform: 'uppercase'}}>Active Filters:</span>
+                            {selectedBrands.map(b => (
+                                <button key={b} onClick={() => toggleBrand(b)} style={{padding: '5px 12px', background: '#eff6ff', color: '#1B5B97', border: '1px solid #bfdbfe', borderRadius: '20px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'}}>
+                                    {b} <i className="fas fa-times" style={{fontSize: '10px'}}></i>
+                                </button>
+                            ))}
+                            {inStockOnly && (
+                                <button onClick={() => setInStockOnly(false)} style={{padding: '5px 12px', background: '#ecfdf5', color: '#10b981', border: '1px solid #a7f3d0', borderRadius: '20px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'}}>
+                                    In Stock <i className="fas fa-times" style={{fontSize: '10px'}}></i>
+                                </button>
+                            )}
+                            {priceMax < 200000 && (
+                                <button onClick={() => setPriceMax(200000)} style={{padding: '5px 12px', background: '#fff7ed', color: '#ea580c', border: '1px solid #ffedd5', borderRadius: '20px', fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer'}}>
+                                    Max ৳{priceMax.toLocaleString()} <i className="fas fa-times" style={{fontSize: '10px'}}></i>
+                                </button>
+                            )}
+                            <button onClick={() => { setSelectedBrands([]); setInStockOnly(false); setPriceMax(200000); }} style={{fontSize: '12px', color: '#db4b27', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, textDecoration: 'underline'}}>Clear All</button>
+                        </div>
+                    )}
+
                     {loading ? (
-                        <div style={{textAlign:'center', padding:'60px'}}><i className="fas fa-spinner fa-spin" style={{fontSize:'32px', color:'#1B5B97'}}></i></div>
+                        <div className="products-grid">
+                            {[1,2,3,4,5,6,7,8].map(i => (
+                                <div key={i} style={{background: '#fff', borderRadius: '16px', padding: '15px', height: '380px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', overflow: 'hidden'}}>
+                                    <div style={{width: '100%', height: '180px', background: '#f1f5f9', borderRadius: '12px', animation: 'skeletonPulse 1.5s infinite'}}></div>
+                                    <div style={{marginTop: '20px', height: '20px', width: '80%', background: '#f1f5f9', borderRadius: '4px', animation: 'skeletonPulse 1.5s infinite'}}></div>
+                                    <div style={{marginTop: '10px', height: '14px', width: '40%', background: '#f1f5f9', borderRadius: '4px', animation: 'skeletonPulse 1.5s infinite'}}></div>
+                                    <div style={{marginTop: '20px', height: '30px', width: '50%', background: '#f1f5f9', borderRadius: '4px', animation: 'skeletonPulse 1.5s infinite'}}></div>
+                                    <div style={{marginTop: '25px', height: '40px', width: '100%', background: '#f1f5f9', borderRadius: '8px', animation: 'skeletonPulse 1.5s infinite'}}></div>
+                                </div>
+                            ))}
+                        </div>
                     ) : products.length === 0 ? (
                         <div style={{padding:'50px', textAlign:'center', gridColumn:'1/-1'}}>
                             <i className="fas fa-box-open" style={{fontSize:'40px', color:'#ccc', marginBottom:'15px'}}></i>
