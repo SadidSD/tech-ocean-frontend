@@ -467,7 +467,7 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             minWidth: '500px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '220px', flex: '1 1 220px', maxWidth: '400px' }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '250px', flex: '1 1 300px', maxWidth: '600px' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <Link href={`/category/${cat.slug || cat.id}?group=${group.slug || group.name.toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                                                             <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333', transition: 'color 0.2s', textAlign: 'center' }} onMouseEnter={e => e.currentTarget.style.color = '#db4b27'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>{group.name}</h4>
@@ -592,14 +592,14 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            minWidth: brands.length > 8 ? '480px' : '280px',
+                                            minWidth: brands.length > 8 ? '800px' : '500px',
                                         }}>
                                             <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                 <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#db4b27', textTransform: 'uppercase' }}>Shop by Brand</h4>
                                             </div>
                                             <div style={{
                                                 display: 'grid',
-                                                gridTemplateColumns: brands.length > 8 ? 'repeat(3, 1fr)' : brands.length > 4 ? 'repeat(2, 1fr)' : '1fr',
+                                                gridTemplateColumns: brands.length > 12 ? 'repeat(4, 1fr)' : brands.length > 8 ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)',
                                                 gap: '6px'
                                             }}>
                                                 {brands.map(brand => (
