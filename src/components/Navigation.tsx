@@ -210,7 +210,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                                 </div>
                             )}
                         </div>
-                    )}    )}
+                    )}
                 </div>
                 <div className="header-actions">
                     <Link href="/" className="action-item">
