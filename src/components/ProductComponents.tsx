@@ -71,7 +71,7 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
                             className="modern-action-btn big-btn" 
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); const event = new CustomEvent('openQuickView', { detail: product }); window.dispatchEvent(event); }}
                         >
-                            <i className="fas fa-eye"></i>
+                            <i className="fas fa-eye" style={{ display: 'block', color: '#333' }}></i>
                             <span>Quick Look</span>
                         </button>
                         <CompareBigButton product={product} />
@@ -126,7 +126,7 @@ const CompareBigButton = ({ product }: { product: any }) => {
             className={`modern-action-btn big-btn ${selected ? 'active' : ''}`} 
             onClick={handleToggle}
         >
-            <i className={selected ? "fas fa-check" : "fas fa-copy"}></i>
+            <i className={selected ? "fas fa-check" : "fas fa-exchange-alt"} style={{ display: 'block', color: '#333' }}></i>
             <span>{selected ? 'Added' : 'Compare'}</span>
         </button>
     );
