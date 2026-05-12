@@ -283,7 +283,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                     )}
                     <Link href="/compare" className="action-item compare-item">
                         <div className="action-icon" style={{position:'relative'}}>
-                            <i className="fas fa-copy"></i>
+                            <i className="fas fa-exchange-alt"></i>
                             {compareItems.length > 0 && <span className="cart-badge compare-badge-desktop">{compareItems.length}</span>}
                         </div>
                         <div className="action-text">
@@ -719,7 +719,7 @@ export const MobileDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: ()
                     </li>
                     <li><Link href="/" onClick={onClose}><i className="fas fa-home"></i> Home</Link></li>
                     <li><Link href="/cart" onClick={onClose}><i className="fas fa-shopping-cart"></i> Cart</Link></li>
-                    <li><Link href="/compare" onClick={onClose}><i className="fas fa-copy"></i> Compare</Link></li>
+                    <li><Link href="/compare" onClick={onClose}><i className="fas fa-exchange-alt"></i> Compare</Link></li>
                     <li><Link href="/pc-builder" onClick={onClose}><i className="fas fa-tools"></i> PC Builder</Link></li>
                     <li><Link href="/cctv-builder" onClick={onClose}><i className="fas fa-video"></i> CCTV Builder</Link></li>
                     <li><Link href="/categories"><i className="fas fa-box"></i> Products</Link></li>
