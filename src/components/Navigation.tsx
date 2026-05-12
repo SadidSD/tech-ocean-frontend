@@ -459,15 +459,14 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             opacity: activeId === cat.id ? 1 : 0,
                                             visibility: activeId === cat.id ? 'visible' : 'hidden',
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            flexWrap: 'wrap',
-                                            justifyContent: 'space-around',
-                                            gap: '20px',
-                                            minWidth: '500px',
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                                            gap: '30px 40px',
+                                            minWidth: '900px',
+                                            padding: '30px 40px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '250px', flex: '1 1 300px', maxWidth: '600px' }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <Link href={`/category/${cat.slug || cat.id}?group=${group.slug || group.name.toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                                                             <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333', transition: 'color 0.2s', textAlign: 'left' }} onMouseEnter={e => e.currentTarget.style.color = '#db4b27'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>{group.name}</h4>
@@ -475,8 +474,8 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                     </div>
                                                     <div style={{ 
                                                         display: 'grid', 
-                                                        gridTemplateColumns: 'repeat(4, 1fr)', 
-                                                        gap: '6px 20px'
+                                                        gridTemplateColumns: (group.subItems || []).length > 6 ? 'repeat(2, 1fr)' : '1fr', 
+                                                        gap: '8px 15px'
                                                     }}>
                                                         {(group.subItems || []).map((item, idx) => {
                                                             if (typeof item === 'string') {
@@ -484,8 +483,8 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                     <Link
                                                                         key={item}
                                                                         href={`/category/${cat.slug || cat.id}?filter=${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 0', borderRadius: '6px', transition: 'all 0.15s', display: 'block', textAlign: 'left' }}
-                                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '4px'; }}
+                                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 12px 6px 0', borderRadius: '6px', transition: 'all 0.15s', display: 'block', textAlign: 'left', position: 'relative' }}
+                                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '8px'; }}
                                                                         onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '0px'; }}
                                                                     >
                                                                         {item}
@@ -501,7 +500,7 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                                         <Link
                                                                             href="#"
                                                                             className="nested-btn"
-                                                                            style={{ display: 'block', textAlign: 'center', position: 'relative', fontSize: '13px', color: '#555', padding: '6px 10px', borderRadius: '6px', transition: 'all 0.15s' }}
+                                                                            style={{ display: 'block', textAlign: 'left', position: 'relative', fontSize: '13px', color: '#555', padding: '6px 25px 6px 0', borderRadius: '6px', transition: 'all 0.15s' }}
                                                                             onClick={e => {
                                                                                 e.preventDefault();
                                                                                 // Close all other nested menus in this dropdown
@@ -606,9 +605,9 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                     <Link
                                                         key={brand}
                                                         href={`/category/${cat.slug || cat.id}?brand=${brand.toLowerCase().replace(/\s+/g, '-')}`}
-                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 0', borderRadius: '6px', transition: 'all 0.15s', textAlign: 'left' }}
-                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '14px'; }}
-                                                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                        style={{ fontSize: '13px', color: '#555', padding: '6px 20px 6px 0', borderRadius: '6px', transition: 'all 0.15s', textAlign: 'left', position: 'relative' }}
+                                                        onMouseEnter={e => { e.currentTarget.style.background = '#fff5f3'; e.currentTarget.style.color = '#db4b27'; e.currentTarget.style.paddingLeft = '10px'; }}
+                                                        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#555'; e.currentTarget.style.paddingLeft = '0px'; }}
                                                     >
                                                         {brand}
                                                     </Link>
