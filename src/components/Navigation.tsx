@@ -462,12 +462,12 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             display: 'flex',
                                             flexDirection: 'row',
                                             flexWrap: 'wrap',
-                                            justifyContent: 'center',
-                                            gap: '40px',
+                                            justifyContent: 'space-around',
+                                            gap: '20px',
                                             minWidth: '500px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '180px' }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', minWidth: '220px', flex: '1 1 220px', maxWidth: '400px' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <Link href={`/category/${cat.slug || cat.id}?group=${group.slug || group.name.toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                                                             <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333', transition: 'color 0.2s', textAlign: 'center' }} onMouseEnter={e => e.currentTarget.style.color = '#db4b27'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>{group.name}</h4>
