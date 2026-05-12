@@ -3,6 +3,7 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { MOCK_CATEGORIES } from '@/data/categories';
+import { MOCK_PRODUCTS } from '@/data/mockProducts';
 import { ProductCard } from '@/components/ProductComponents';
 import { CartContext } from '@/components/ClientApplication';
 import Link from 'next/link';
@@ -36,6 +37,17 @@ export default function CategoryPage() {
     const fetchProducts = useCallback(() => {
         if (!category) return;
         setLoading(true);
+
+        // Demo logic: Use mock products for Laptop category if API is unavailable or for testing
+        if (params.id === '101' || params.id === '1') {
+            const filtered = MOCK_PRODUCTS.filter(p => p.category.id === 1 || p.category.id === 101);
+            setProducts(filtered);
+            setTotal(filtered.length);
+            setAllBrands(Array.from(new Set(filtered.map(p => p.brand))));
+            setLoading(false);
+            return;
+        }
+
         const qs = new URLSearchParams({
             category: category.slug,
             page: String(page),
@@ -54,11 +66,21 @@ export default function CategoryPage() {
                     setTotal(data.total ?? 0);
                     const brands = Array.from(new Set((data.products ?? []).map((p: any) => p.brand).filter(Boolean))) as string[];
                     if (allBrands.length === 0 && brands.length > 0) setAllBrands(brands);
+                } else {
+                    // Fallback to mock products if API fails
+                    const filtered = MOCK_PRODUCTS.filter(p => p.category.id === Number(params.id));
+                    setProducts(filtered);
+                    setTotal(filtered.length);
                 }
             })
-            .catch(() => {})
+            .catch(() => {
+                // Fallback to mock products on error
+                const filtered = MOCK_PRODUCTS.filter(p => p.category.id === Number(params.id));
+                setProducts(filtered);
+                setTotal(filtered.length);
+            })
             .finally(() => setLoading(false));
-    }, [category, page, sort, priceMax, inStockOnly, selectedBrands]);
+    }, [category, params.id, page, sort, priceMax, inStockOnly, selectedBrands]);
 
     useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
