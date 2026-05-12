@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import BrandSectionTitle from '@/components/BrandSectionTitle';
 import { HeroBanner, DesktopFeaturesBar, MobileContactSection, CategoryList, LatestBlogs } from '@/components/HomeComponents';
-import { ProductCard } from '@/components/ProductComponents';
+import { ProductCard, RecentlyViewedSection } from '@/components/ProductComponents';
 import { MOCK_CATEGORIES } from '@/data/categories';
 import { CartContext } from '@/components/ClientApplication';
 
@@ -78,6 +78,7 @@ export default function Home() {
             )}
 
             <LatestBlogs blogs={[]} />
+            <RecentlyViewedSection />
             <MobileContactSection />
         </div>
     );

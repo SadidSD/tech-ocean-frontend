@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { MOCK_CATEGORIES } from '@/data/categories';
 import { MOCK_PRODUCTS } from '@/data/mockProducts';
-import { ProductCard } from '@/components/ProductComponents';
+import { ProductCard, RecentlyViewedSection } from '@/components/ProductComponents';
 import { CartContext } from '@/components/ClientApplication';
 import Link from 'next/link';
 
@@ -224,6 +224,7 @@ export default function CategoryPage() {
                     )}
                 </div>
             </div>
+            <RecentlyViewedSection />
         </div>
     );
 }
