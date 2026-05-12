@@ -106,7 +106,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                   </Link>
                 </div>
                 
-                <button className="mobile-cart-icon" onClick={() => setIsCartDrawerOpen(true)}>
+                <button id="mobileCartIcon" className="mobile-cart-icon" onClick={() => setIsCartDrawerOpen(true)}>
                   <i className="fas fa-shopping-cart"></i>
                   {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                 </button>
@@ -306,7 +306,7 @@ export const MainHeader = ({ cartCount, compareCount, onMenuToggle }: { cartCoun
                             <span className="text-bottom">Product</span>
                         </div>
                     </Link>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setIsCartDrawerOpen(true); }} className="action-item cart-item">
+                    <a href="#" id="desktopCartIcon" onClick={(e) => { e.preventDefault(); setIsCartDrawerOpen(true); }} className="action-item cart-item">
                         <div className="action-icon" style={{position:'relative'}}>
                             <i className="fas fa-shopping-cart"></i>
                             {cartCount > 0 && <span className="cart-badge desktop-cart-badge">{cartCount}</span>}

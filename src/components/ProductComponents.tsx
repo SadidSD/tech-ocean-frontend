@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import Link from 'next/link';
 import { CompareContext, RecentContext } from '@/components/ClientApplication';
 
@@ -36,11 +36,53 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
 
     const { addToRecentlyViewed } = useContext(RecentContext);
     const [isAdded, setIsAdded] = useState(false);
+    const imgRef = useRef<HTMLImageElement>(null);
+
+    const flyToCart = () => {
+        const cart = document.getElementById('desktopCartIcon') || document.getElementById('mobileCartIcon');
+        const img = imgRef.current;
+        if (!cart || !img) return;
+
+        const imgRect = img.getBoundingClientRect();
+        const cartRect = cart.getBoundingClientRect();
+
+        const clone = img.cloneNode(true) as HTMLImageElement;
+        clone.style.position = 'fixed';
+        clone.style.top = `${imgRect.top}px`;
+        clone.style.left = `${imgRect.left}px`;
+        clone.style.width = `${imgRect.width}px`;
+        clone.style.height = `${imgRect.height}px`;
+        clone.style.zIndex = '9999';
+        clone.style.transition = 'all 0.8s cubic-bezier(0.42, 0, 0.58, 1)';
+        clone.style.borderRadius = '50%';
+        clone.style.objectFit = 'contain';
+        clone.style.pointerEvents = 'none';
+
+        document.body.appendChild(clone);
+
+        requestAnimationFrame(() => {
+            clone.style.top = `${cartRect.top + 10}px`;
+            clone.style.left = `${cartRect.left + 10}px`;
+            clone.style.width = '20px';
+            clone.style.height = '20px';
+            clone.style.opacity = '0';
+            clone.style.transform = 'scale(0.1) rotate(360deg)';
+        });
+
+        setTimeout(() => {
+            if (document.body.contains(clone)) {
+                document.body.removeChild(clone);
+            }
+            cart.style.transform = 'scale(1.2)';
+            setTimeout(() => cart.style.transform = 'scale(1)', 200);
+        }, 800);
+    };
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         if (addToCart) {
+            flyToCart();
             addToCart(product);
             setIsAdded(true);
             setTimeout(() => setIsAdded(false), 2000);
@@ -78,9 +120,9 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
 
                 <div className="product-img-wrap">
                     {imgUrl ? (
-                        <img src={imgUrl} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        <img ref={imgRef} src={imgUrl} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                     ) : (
-                        <i className={`fas ${product.imgIcon || 'fa-box'}`}></i>
+                        <i ref={imgRef as any} className={`fas ${product.imgIcon || 'fa-box'}`}></i>
                     )}
                     
                     {/* Modern Action Overlay */}
