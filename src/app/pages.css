@@ -6036,3 +6036,10 @@ body {
 @media print { .brand-section-title { display: none !important; } }
 
 @media print { .sr-stats button, .sr-summary-actions { display: none !important; } }
+
+/* Premium Tab UI */
+.tab-headers { background: #f8fafc; padding: 10px; gap: 10px !important; }
+.tab-header { border-radius: 10px !important; border: 1px solid transparent !important; padding: 10px 20px !important; font-weight: 700 !important; color: #64748b !important; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+.tab-header:hover { background: white; color: #1B5B97 !important; }
+.tab-header.active { background: white !important; color: #1B5B97 !important; border-color: #e2e8f0 !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+.tab-header.active::after { display: none !important; }
