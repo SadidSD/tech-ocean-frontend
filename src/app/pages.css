@@ -5818,10 +5818,10 @@ body {
     margin-right: auto !important;
   }
 
-  .products-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
-    gap: 24px !important;
+  .category-page-container .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
   }
 }
 
