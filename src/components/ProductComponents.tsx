@@ -151,19 +151,10 @@ export const ProductCard = ({ product, addToCart }: { product: any, addToCart?: 
             <div className="desktop-add-to-cart" style={{ padding: '0 16px 16px', position: 'relative', zIndex: 2 }}>
                 <button 
                     onClick={handleAddToCart} 
-                    style={{ 
-                        width: '100%', padding: '8px', 
-                        background: isAdded ? '#10b981' : '#fff5f2', 
-                        color: isAdded ? 'white' : '#db4b27', 
-                        border: '1px solid ' + (isAdded ? '#10b981' : '#fca5a5'), 
-                        borderRadius: '4px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', 
-                        justifyContent: 'center', gap: '6px', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' 
-                    }}
-                    onMouseOver={(e) => { if(!isAdded) { e.currentTarget.style.background = '#db4b27'; e.currentTarget.style.color = 'white'; } }}
-                    onMouseOut={(e) => { if(!isAdded) { e.currentTarget.style.background = '#fff5f2'; e.currentTarget.style.color = '#db4b27'; } }}
+                    className={`premium-add-cart-btn ${isAdded ? 'added' : ''}`}
                 >
                     <i className={isAdded ? "fas fa-check" : "fas fa-cart-plus"}></i> 
-                    {isAdded ? 'Added!' : 'Add to Cart'}
+                    {isAdded ? 'Added to Cart' : 'Add to Cart'}
                 </button>
             </div>
 
