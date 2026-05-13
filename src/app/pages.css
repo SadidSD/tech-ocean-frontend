@@ -6051,13 +6051,5 @@ body {
 .premium-add-cart-btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 25px rgba(239, 74, 35, 0.4); background: linear-gradient(135deg, #ff5f38 0%, #ef4a23 100%); }
 .premium-add-cart-btn:active { transform: translateY(-1px) scale(0.98); }
 .premium-add-cart-btn.added { background: #10b981 !important; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2) !important; }
-.premium-add-cart-btn i { font-size: 16px; transition: transform 0.3s ease; }
 .premium-add-cart-btn:hover i { transform: rotate(-10deg) scale(1.2); }
-
-/* Product Detail Premium Buttons */
-.add-to-cart-btn { background: linear-gradient(135deg, #1B5B97 0%, #114171 100%) !important; border: none !important; border-radius: 10px !important; color: white !important; font-weight: 700 !important; transition: all 0.3s ease !important; box-shadow: 0 4px 15px rgba(27, 91, 151, 0.2) !important; }
-.add-to-cart-btn:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 25px rgba(27, 91, 151, 0.4) !important; }
-.buy-now-btn { background: linear-gradient(135deg, #ef4a23 0%, #db4b27 100%) !important; border: none !important; border-radius: 10px !important; color: white !important; font-weight: 700 !important; transition: all 0.3s ease !important; box-shadow: 0 4px 15px rgba(239, 74, 35, 0.2) !important; }
-.buy-now-btn:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 25px rgba(239, 74, 35, 0.4) !important; }
-
-@media (min-width: 992px) { .add-to-cart-btn, .buy-now-btn { padding: 10px 20px !important; font-size: 13px !important; } }
+.premium-add-cart-btn i { font-size: 16px; transition: transform 0.3s ease; }
