@@ -19,7 +19,7 @@ export interface ComponentCategoryMetadata {
 export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
   // --- CORE COMPONENTS ---
   cpu: {
-    id: "processor",
+    id: "cpu",
     name: "Processor (CPU)",
     icon: "BsCpu",
     requiredInBuilder: true,
@@ -96,7 +96,7 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     ]
   },
   gpu: {
-    id: "graphics-card",
+    id: "gpu",
     name: "Graphics Card (GPU)",
     icon: "BsGpuCard",
     requiredInBuilder: false,
@@ -139,7 +139,135 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     ]
   },
 
-  // --- MAIN CATEGORIES ---
+  // --- PERIPHERALS ---
+  monitor: {
+    id: "monitor",
+    name: "Monitor",
+    icon: "FaDesktop",
+    requiredInBuilder: false,
+    displayOrder: 20,
+    brands: ["ASUS", "MSI", "Gigabyte", "Samsung", "LG", "Acer", "Dell", "HP", "Lenovo", "ViewSonic"],
+    builderGroup: 'peripherals',
+    filterAttributes: [
+      { id: "size", name: "Screen Size", type: "multiple", options: ["22\"", "24\"", "27\"", "32\"", "34\"+"] },
+      { id: "panel", name: "Panel Type", type: "select", options: ["IPS", "VA", "TN", "OLED"] },
+      { id: "refresh", name: "Refresh Rate", type: "multiple", options: ["60Hz", "75Hz", "144Hz", "165Hz", "240Hz+"] }
+    ]
+  },
+  ups: {
+    id: "ups",
+    name: "UPS",
+    icon: "FaBatteryFull",
+    requiredInBuilder: false,
+    displayOrder: 60,
+    brands: ["PowerGuard", "Microtek", "APC", "Luminous", "Walton"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+  keyboard: {
+    id: "keyboard",
+    name: "Keyboard",
+    icon: "FaKeyboard",
+    requiredInBuilder: false,
+    displayOrder: 61,
+    brands: ["A4TECH", "ASUS", "CORSAIR", "Logitech", "Razer", "Redragon", "SteelSeries"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+  mouse: {
+    id: "mouse",
+    name: "Mouse",
+    icon: "FaMouse",
+    requiredInBuilder: false,
+    displayOrder: 62,
+    brands: ["A4TECH", "ASUS", "Logitech", "Razer", "Redragon", "SteelSeries"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+  headphone: {
+    id: "headphone",
+    name: "Headphone",
+    icon: "FaHeadphones",
+    requiredInBuilder: false,
+    displayOrder: 63,
+    brands: ["ASUS", "CORSAIR", "Havit", "HyperX", "Logitech", "Razer", "SteelSeries"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+  speaker: {
+    id: "speaker",
+    name: "Speaker",
+    icon: "FaVolumeUp",
+    requiredInBuilder: false,
+    displayOrder: 64,
+    brands: ["Edifier", "F&D", "Logitech", "Microlab", "Sony"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+  webcam: {
+    id: "webcam",
+    name: "Webcam",
+    icon: "FaVideo",
+    requiredInBuilder: false,
+    displayOrder: 65,
+    brands: ["Logitech", "A4TECH", "Rapoo"],
+    builderGroup: 'peripherals',
+    filterAttributes: []
+  },
+
+  // --- ACCESSORIES & OTHERS ---
+  mousepad: {
+    id: "mousepad",
+    name: "Mousepad",
+    icon: "FaSquare",
+    requiredInBuilder: false,
+    displayOrder: 70,
+    brands: ["Fantech", "Razer", "Logitech"],
+    builderGroup: 'accessories',
+    filterAttributes: []
+  },
+  gamingChair: {
+    id: "gamingChair",
+    name: "Gaming Chair",
+    icon: "FaChair",
+    requiredInBuilder: false,
+    displayOrder: 71,
+    brands: ["Fantech", "Cougar", "ASUS", "Razer"],
+    builderGroup: 'accessories',
+    filterAttributes: []
+  },
+  thermalPaste: {
+    id: "thermalPaste",
+    name: "Thermal Paste",
+    icon: "FaTint",
+    requiredInBuilder: false,
+    displayOrder: 72,
+    brands: ["Arctic", "Cooler Master", "Noctua", "Thermal Grizzly"],
+    builderGroup: 'accessories',
+    filterAttributes: []
+  },
+  ledStrip: {
+    id: "ledStrip",
+    name: "LED Strip",
+    icon: "FaLightbulb",
+    requiredInBuilder: false,
+    displayOrder: 73,
+    brands: ["Phanteks", "Deepcool"],
+    builderGroup: 'accessories',
+    filterAttributes: []
+  },
+  "casing-fan": {
+    id: "casing-fan",
+    name: "Casing Fan",
+    icon: "GiComputerFan",
+    requiredInBuilder: false,
+    displayOrder: 74,
+    brands: ["Antec", "Cooler Master", "Corsair", "DeepCool", "Lian Li", "NZXT"],
+    builderGroup: 'accessories',
+    filterAttributes: []
+  },
+
+  // --- MAIN CATEGORIES (Not in Builder Groups) ---
   laptop: {
     id: "laptop",
     name: "Laptop",
@@ -149,20 +277,6 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     brands: ["Apple", "ASUS", "MSI", "Gigabyte", "HP", "Dell", "Lenovo", "Razer", "Acer", "Microsoft Surface", "Xiaomi", "Huawei"],
     builderGroup: 'main',
     filterAttributes: []
-  },
-  monitor: {
-    id: "monitor",
-    name: "Monitor",
-    icon: "FaDesktop",
-    requiredInBuilder: false,
-    displayOrder: 20,
-    brands: ["ASUS", "MSI", "Gigabyte", "Samsung", "LG", "Acer", "Dell", "HP", "Lenovo", "ViewSonic"],
-    builderGroup: 'main',
-    filterAttributes: [
-      { id: "size", name: "Screen Size", type: "multiple", options: ["22\"", "24\"", "27\"", "32\"", "34\"+"] },
-      { id: "panel", name: "Panel Type", type: "select", options: ["IPS", "VA", "TN", "OLED"] },
-      { id: "refresh", name: "Refresh Rate", type: "multiple", options: ["60Hz", "75Hz", "144Hz", "165Hz", "240Hz+"] }
-    ]
   },
   networking: {
     id: "networking",
@@ -224,14 +338,4 @@ export const COMPONENT_METADATA: Record<string, ComponentCategoryMetadata> = {
     builderGroup: 'main',
     filterAttributes: []
   },
-  ups: {
-    id: "ups",
-    name: "UPS",
-    icon: "FaBatteryFull",
-    requiredInBuilder: false,
-    displayOrder: 60,
-    brands: ["PowerGuard", "Microtek", "APC", "Luminous", "Walton"],
-    builderGroup: 'peripherals',
-    filterAttributes: []
-  }
 };
