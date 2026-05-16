@@ -589,11 +589,26 @@
   width: 280px;
   height: 100%;
   background: white !important;
-  z-index: 1000; margin-bottom: 0 !important;
+  z-index: 1000;
+  margin-bottom: 0 !important;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-content-scroll {
+  flex: 1;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ef4a23 #f0f0f0;
+}
+
+.drawer-menu-compact {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .mobile-drawer.open {

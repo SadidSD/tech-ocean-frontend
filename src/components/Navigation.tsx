@@ -710,37 +710,111 @@ export const MobileBottomNav = () => {
     );
 };
 
-export const MobileDrawer = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+export const MobileDrawer = ({ isOpen, onClose, categories }: { isOpen: boolean, onClose: () => void, categories: Category[] }) => {
+    const [expandedCat, setExpandedCat] = useState<number | null>(null);
+    const [expandedSub, setExpandedSub] = useState<number | null>(null);
+
     return (
         <>
             <div className={`drawer-overlay ${isOpen ? 'visible' : ''}`} onClick={onClose}></div>
             <div className={`mobile-drawer ${isOpen ? 'open' : ''}`}>
                 <div className="drawer-header">
-                    <Link href="/">
+                    <Link href="/" onClick={onClose}>
                         <img src="/img/main website logo.png" alt="Tech X Ocean" style={{ height: '35px' }} />
                     </Link>
                     <button className="drawer-close" onClick={onClose}>
                         <i className="fas fa-times"></i>
                     </button>
                 </div>
-                <ul className="drawer-menu">
-                    <li><Link href="/account" onClick={onClose}><i className="fas fa-user-circle"></i> Account Dashboard</Link></li>
-                    <li className="drawer-sub-menu">
-                        <Link href="/account?tab=orders" onClick={onClose}><i className="fas fa-box"></i> My Orders</Link>
-                        <Link href="/account?tab=wishlist" onClick={onClose}><i className="fas fa-heart"></i> Wishlist</Link>
-                        <Link href="/account?tab=pc" onClick={onClose}><i className="fas fa-desktop"></i> Saved PC Builds</Link>
-                        <Link href="/account?tab=profile" onClick={onClose}><i className="fas fa-user-cog"></i> Settings</Link>
-                    </li>
-                    <li><Link href="/" onClick={onClose}><i className="fas fa-home"></i> Home</Link></li>
-                    <li><Link href="/cart" onClick={onClose}><i className="fas fa-shopping-cart"></i> Cart</Link></li>
-                    <li><Link href="/compare" onClick={onClose}><i className="fas fa-exchange-alt"></i> Compare</Link></li>
-                    <li><Link href="/pc-builder" onClick={onClose}><i className="fas fa-tools"></i> PC Builder</Link></li>
-                    <li><Link href="/cctv-builder" onClick={onClose}><i className="fas fa-video"></i> CCTV Builder</Link></li>
-                    <li><Link href="/categories"><i className="fas fa-box"></i> Products</Link></li>
-                    <li><Link href="/offers"><i className="fas fa-tags"></i> Offers</Link></li>
-                    <li><Link href="/contact"><i className="fas fa-phone"></i> Contact Us</Link></li>
-                </ul>
-                <div className="drawer-footer">
+                
+                <div className="drawer-content-scroll">
+                    <div style={{ padding: '15px 20px', fontSize: '14px', fontWeight: 700, color: '#ef4a23', borderBottom: '1px solid #f0f0f0', background: '#fff' }}>
+                        CATEGORY
+                    </div>
+                    
+                    <ul className="drawer-menu-compact">
+                        {categories.map(cat => (
+                            <li key={cat.id} style={{ borderBottom: '1px solid #f8f8f8' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Link 
+                                        href={`/category/${cat.slug || cat.id}`} 
+                                        onClick={onClose}
+                                        style={{ flex: 1, padding: '14px 20px', color: '#333', fontSize: '14px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '10px' }}
+                                    >
+                                        {cat.name}
+                                    </Link>
+                                    {cat.children && cat.children.length > 0 && (
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setExpandedCat(expandedCat === cat.id ? null : cat.id); }}
+                                            style={{ padding: '14px 20px', background: 'transparent', border: 'none', color: '#999' }}
+                                        >
+                                            <i className={`fas fa-chevron-${expandedCat === cat.id ? 'down' : 'right'}`} style={{ fontSize: '12px' }}></i>
+                                        </button>
+                                    )}
+                                </div>
+
+                                {expandedCat === cat.id && cat.children && (
+                                    <ul style={{ background: '#fcfcfc', listStyle: 'none', padding: 0 }}>
+                                        {cat.children.map(sub => (
+                                            <li key={sub.id} style={{ borderTop: '1px solid #f0f0f0' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '15px' }}>
+                                                    <Link 
+                                                        href={`/category/${sub.slug}`} 
+                                                        onClick={onClose}
+                                                        style={{ flex: 1, padding: '12px 20px', color: '#555', fontSize: '13.5px' }}
+                                                    >
+                                                        {sub.name}
+                                                    </Link>
+                                                    {sub.subItems && sub.subItems.length > 0 && (
+                                                        <button 
+                                                            onClick={(e) => { e.stopPropagation(); setExpandedSub(expandedSub === sub.id ? null : sub.id); }}
+                                                            style={{ padding: '12px 20px', background: 'transparent', border: 'none', color: '#aaa' }}
+                                                        >
+                                                            <i className={`fas fa-chevron-${expandedSub === sub.id ? 'down' : 'right'}`} style={{ fontSize: '11px' }}></i>
+                                                        </button>
+                                                    )}
+                                                </div>
+
+                                                {expandedSub === sub.id && sub.subItems && (
+                                                    <ul style={{ background: '#fff', listStyle: 'none', padding: '0 0 10px 35px' }}>
+                                                        {sub.subItems.map((item, idx) => {
+                                                            const name = typeof item === 'string' ? item : item.name;
+                                                            return (
+                                                                <li key={idx}>
+                                                                    <Link 
+                                                                        href={`/category/${sub.slug}?q=${encodeURIComponent(name)}`} 
+                                                                        onClick={onClose}
+                                                                        style={{ display: 'block', padding: '8px 20px', color: '#777', fontSize: '13px' }}
+                                                                    >
+                                                                        {name}
+                                                                    </Link>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                    
+                    <div style={{ marginTop: '20px', borderTop: '4px solid #f4f4f4', paddingTop: '10px' }}>
+                        <Link href="/pc-builder" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
+                            <i className="fas fa-tools" style={{ color: '#ef4a23' }}></i> PC Builder
+                        </Link>
+                        <Link href="/cctv-builder" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
+                            <i className="fas fa-video" style={{ color: '#ef4a23' }}></i> CCTV Builder
+                        </Link>
+                        <Link href="/offers" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
+                            <i className="fas fa-tags" style={{ color: '#ef4a23' }}></i> Offers
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="drawer-footer" style={{ borderTop: '1px solid #eee' }}>
                     <i className="fas fa-phone-alt"></i> Call +8801332437029 (09AM-08PM)
                 </div>
             </div>
@@ -755,7 +829,7 @@ export default function Navigation({ cartCount, compareCount, categories }: Navi
         <>
             <MainHeader cartCount={cartCount} compareCount={compareCount} onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
             <MegaMenu isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={() => setIsMobileMenuOpen(false)} categories={categories} />
-            <MobileDrawer isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+            <MobileDrawer isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} categories={categories} />
             <MobileBottomNav />
         </>
     );
