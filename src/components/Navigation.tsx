@@ -739,14 +739,14 @@ export const MobileDrawer = ({ isOpen, onClose, categories }: { isOpen: boolean,
                                     <Link 
                                         href={`/category/${cat.slug || cat.id}`} 
                                         onClick={onClose}
-                                        style={{ flex: 1, padding: '14px 20px', color: '#333', fontSize: '14px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '10px' }}
+                                        style={{ flex: 1, padding: '14px 20px', color: '#ef4a23', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}
                                     >
                                         {cat.name}
                                     </Link>
                                     {cat.children && cat.children.length > 0 && (
                                         <button 
                                             onClick={(e) => { e.stopPropagation(); setExpandedCat(expandedCat === cat.id ? null : cat.id); }}
-                                            style={{ padding: '14px 20px', background: 'transparent', border: 'none', color: '#999' }}
+                                            style={{ padding: '14px 20px', background: 'transparent', border: 'none', color: '#ef4a23' }}
                                         >
                                             <i className={`fas fa-chevron-${expandedCat === cat.id ? 'down' : 'right'}`} style={{ fontSize: '12px' }}></i>
                                         </button>
@@ -768,7 +768,7 @@ export const MobileDrawer = ({ isOpen, onClose, categories }: { isOpen: boolean,
                                                     {sub.subItems && sub.subItems.length > 0 && (
                                                         <button 
                                                             onClick={(e) => { e.stopPropagation(); setExpandedSub(expandedSub === sub.id ? null : sub.id); }}
-                                                            style={{ padding: '12px 20px', background: 'transparent', border: 'none', color: '#aaa' }}
+                                                            style={{ padding: '12px 20px', background: 'transparent', border: 'none', color: '#ef4a23' }}
                                                         >
                                                             <i className={`fas fa-chevron-${expandedSub === sub.id ? 'down' : 'right'}`} style={{ fontSize: '11px' }}></i>
                                                         </button>
