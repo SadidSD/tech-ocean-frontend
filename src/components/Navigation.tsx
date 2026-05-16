@@ -808,6 +808,9 @@ export const MobileDrawer = ({ isOpen, onClose, categories }: { isOpen: boolean,
                         <Link href="/cctv-builder" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
                             <i className="fas fa-video" style={{ color: '#ef4a23' }}></i> CCTV Builder
                         </Link>
+                        <Link href="/compare" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
+                            <i className="fas fa-exchange-alt" style={{ color: '#ef4a23' }}></i> Compare
+                        </Link>
                         <Link href="/offers" onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', color: '#333', fontSize: '14px' }}>
                             <i className="fas fa-tags" style={{ color: '#ef4a23' }}></i> Offers
                         </Link>
