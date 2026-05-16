@@ -915,5 +915,6 @@
   .mobile-categories { order: 3 !important; }
   .mobile-products-section { order: 4 !important; }
   .mobile-blogs-section { order: 5 !important; }
-  .mobile-contact-section { order: 6 !important; }
+  .recently-viewed-section { order: 6 !important; }
+  .mobile-contact-section { order: 7 !important; }
 }
