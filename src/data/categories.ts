@@ -43,7 +43,6 @@ export const MOCK_CATEGORIES = [
           { name: "Brand Desktop PC", dropdown: ["All Brands", "Acer", "ASUS", "Dell", "Gigabyte", "HP", "Lenovo", "MSI"] },
           { name: "All In One PC", dropdown: ["All Brands", "Acer", "ASUS", "Dell", "Gigabyte", "HP", "Lenovo", "MSI"] },
           { name: "Mini PC", dropdown: ["All Brands", "Apple", "ASUS", "Lenovo"] },
-          "Ryans PC",
           "AI Workstation PC"
         ]
       },
@@ -141,7 +140,6 @@ export const MOCK_CATEGORIES = [
           "Gaming Desk",
           "Gaming Sofa",
           "Gaming Component Accessories",
-          "Ryans PC",
           "Gaming Desktop Component",
           "Motherboard",
           "Desktop Ram",
