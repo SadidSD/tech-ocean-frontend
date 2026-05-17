@@ -476,7 +476,7 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
                                             display: cat.slug === 'appliances' ? 'block' : 'grid',
                                             gridTemplateColumns: cat.slug === 'appliances' ? undefined : 'repeat(auto-fit, minmax(250px, 1fr))',
-                                            columnWidth: cat.slug === 'appliances' ? '250px' : undefined,
+                                            columnCount: cat.slug === 'appliances' ? 5 : undefined,
                                             columnGap: cat.slug === 'appliances' ? '40px' : undefined,
                                             gap: cat.slug === 'appliances' ? undefined : '30px 40px',
                                             width: '100%',
