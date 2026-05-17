@@ -474,22 +474,14 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                             opacity: activeId === cat.id ? 1 : 0,
                                             visibility: activeId === cat.id ? 'visible' : 'hidden',
                                             transform: activeId === cat.id ? 'translateY(0)' : 'translateY(10px)',
-                                            display: cat.slug === 'appliances' ? 'block' : 'grid',
-                                            gridTemplateColumns: cat.slug === 'appliances' ? undefined : 'repeat(auto-fit, minmax(250px, 1fr))',
-                                            columnWidth: cat.slug === 'appliances' ? '250px' : undefined,
-                                            columnGap: cat.slug === 'appliances' ? '40px' : undefined,
-                                            gap: cat.slug === 'appliances' ? undefined : '30px 40px',
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                                            gap: '30px 40px',
                                             width: '100%',
                                             padding: '30px 40px',
                                         }}>
                                             {cat.children.map(group => (
-                                                <div key={group.id} style={{ 
-                                                    display: cat.slug === 'appliances' ? 'inline-block' : 'flex', 
-                                                    flexDirection: cat.slug === 'appliances' ? undefined : 'column',
-                                                    width: '100%',
-                                                    breakInside: cat.slug === 'appliances' ? 'avoid' : undefined,
-                                                    marginBottom: cat.slug === 'appliances' ? '30px' : undefined
-                                                }}>
+                                                <div key={group.id} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                                                     <div style={{ marginBottom: '14px', paddingBottom: '10px', borderBottom: '2px solid #f0f0f0' }}>
                                                         <Link href={`/category/${cat.slug || cat.id}?group=${group.slug || group.name.toLowerCase().replace(/\s+/g, '-')}`} style={{ textDecoration: 'none' }}>
                                                             <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#333', transition: 'color 0.2s', textAlign: 'left' }} onMouseEnter={e => e.currentTarget.style.color = '#db4b27'} onMouseLeave={e => e.currentTarget.style.color = '#333'}>{group.name}</h4>
