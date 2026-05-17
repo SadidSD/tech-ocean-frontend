@@ -214,28 +214,10 @@ export const MOCK_CATEGORIES = [
         subItems: ["iPad"]
       },
       {
-        id: 505,
-        name: "Digital Signature Pad",
-        slug: "digital-signature-pad",
-        subItems: []
-      },
-      {
-        id: 506,
-        name: "Stylus Pen",
-        slug: "stylus-pen",
-        subItems: []
-      },
-      {
         id: 507,
         name: "Tablet Accessories",
         slug: "tablet-accessories",
         subItems: ["Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner"]
-      },
-      {
-        id: 508,
-        name: "Tablet PC Case",
-        slug: "tablet-pc-case",
-        subItems: []
       }
     ]
   },
@@ -566,7 +548,7 @@ export const MOCK_CATEGORIES = [
         name: "Tablet & Phone",
         slug: "tablet-phone",
         subItems: [
-          "Tablet Accessories", "Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner", "Tablet PC Case"
+          "Tablet Accessories", "Power Bank", "Car Charger", "Wireless Charger", "Wall Charger", "Cable Organizer", "Phone Holder", "Selfie Stick", "Screen Cleaner"
         ]
       },
       {
