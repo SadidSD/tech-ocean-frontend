@@ -489,8 +489,9 @@ export const MegaMenu = ({ isMobileMenuOpen, onCloseMobileMenu, categories }: { 
                                                     </div>
                                                     <div style={{ 
                                                         display: 'grid', 
-                                                        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', 
-                                                        gap: '8px 15px'
+                                                        gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', 
+                                                        gap: '10px 20px',
+                                                        wordBreak: 'break-word'
                                                     }}>
                                                         {(group.subItems || []).map((item, idx) => {
                                                             if (typeof item === 'string') {
