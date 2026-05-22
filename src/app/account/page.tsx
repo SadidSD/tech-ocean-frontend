@@ -133,6 +133,7 @@ export default function AccountPage() {
                         <th>Date</th>
                         <th>Amount</th>
                         <th>Status</th>
+                        <th>Warranty</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -142,6 +143,7 @@ export default function AccountPage() {
                         <td>Apr 01, 2024</td>
                         <td>৳12,500</td>
                         <td><span className="badge-status delivered">Delivered</span></td>
+                        <td><span className="badge-status warranty">1 Year Brand Warranty</span></td>
                         <td><button className="view-link">View Details</button></td>
                     </tr>
                 </tbody>
