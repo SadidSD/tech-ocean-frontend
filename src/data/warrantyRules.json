@@ -1,0 +1,12 @@
+{
+  "cpu": { "standard": "3", "extended": "4", "premium": "5" },
+  "motherboard": { "standard": "3", "extended": "4", "premium": "5" },
+  "ram": { "standard": "Lifetime", "extended": "Lifetime", "premium": "Lifetime" },
+  "ssd": { "standard": "5", "extended": "6", "premium": "7" },
+  "hdd": { "standard": "2", "extended": "3", "premium": "5" },
+  "psu": { "standard": "5", "extended": "7", "premium": "10" },
+  "monitor": { "standard": "3", "extended": "4", "premium": "5" },
+  "cctv_camera": { "standard": "1", "extended": "2", "premium": "3" },
+  "nvr": { "standard": "1", "extended": "2", "premium": "3" },
+  "dvr": { "standard": "1", "extended": "2", "premium": "3" }
+}

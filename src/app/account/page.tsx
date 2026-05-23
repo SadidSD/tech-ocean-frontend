@@ -5,9 +5,177 @@ import { AuthContext } from '@/components/ClientApplication';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+// ── Warranty Countdown Component ────────────────────────────────────────────
+interface WarrantyCountdownProps {
+    startDate: string;
+    endDate: string;
+    showToast: (msg: string, type: 'success' | 'error') => void;
+}
+
+const WarrantyCountdown: React.FC<WarrantyCountdownProps> = ({ startDate, endDate, showToast }) => {
+    const [timeLeft, setTimeLeft] = useState({
+        years: 0,
+        months: 0,
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        percentRemaining: 100,
+        isExpired: false
+    });
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const start = new Date(startDate).getTime();
+            const end = new Date(endDate).getTime();
+            const now = new Date().getTime();
+            const totalDuration = end - start;
+            const remaining = end - now;
+
+            if (remaining <= 0) {
+                setTimeLeft(prev => ({ ...prev, percentRemaining: 0, isExpired: true }));
+                return;
+            }
+
+            const years = Math.floor(remaining / (1000 * 60 * 60 * 24 * 365));
+            const months = Math.floor((remaining % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+            const days = Math.floor((remaining % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+            const percentRemaining = Math.max(0, Math.min(100, (remaining / totalDuration) * 100));
+
+            setTimeLeft({ years, months, days, hours, minutes, seconds, percentRemaining, isExpired: false });
+        };
+
+        calculateTimeLeft();
+        const interval = setInterval(calculateTimeLeft, 1000);
+        return () => clearInterval(interval);
+    }, [startDate, endDate]);
+
+    if (timeLeft.isExpired) {
+        return (
+            <div className="tech-warranty-expired">
+                <div className="tech-expiry-status">
+                    <span className="status-blink red"></span>
+                    <span className="expired-text">WARRANTY EXPIRED</span>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="tech-countdown-container" style={{ width: '100%' }}>
+            <div className="tech-digital-timer">
+                <div className="tech-time-slot">
+                    <span className="tech-digit">{timeLeft.years.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">YEARS</span>
+                </div>
+                <div className="tech-time-divider">:</div>
+                <div className="tech-time-slot">
+                    <span className="tech-digit">{timeLeft.months.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">MONTHS</span>
+                </div>
+                <div className="tech-time-divider">:</div>
+                <div className="tech-time-slot">
+                    <span className="tech-digit">{timeLeft.days.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">DAYS</span>
+                </div>
+                <div className="tech-time-divider tech-sub-divider">:</div>
+                <div className="tech-time-slot tech-sub-time">
+                    <span className="tech-digit small-digit">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">HOURS</span>
+                </div>
+                <div className="tech-time-divider tech-sub-divider">:</div>
+                <div className="tech-time-slot tech-sub-time">
+                    <span className="tech-digit small-digit">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">MINUTES</span>
+                </div>
+                <div className="tech-time-divider tech-sub-divider">:</div>
+                <div className="tech-time-slot tech-sub-time">
+                    <span className="tech-digit small-digit">{timeLeft.seconds.toString().padStart(2, '0')}</span>
+                    <span className="tech-digit-label">SECONDS</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// ── Warranty End Date Calculator ─────────────────────────────────────────────
+function calculateWarrantyEnd(purchaseDate: string, category: string, warrantyRules: any): string {
+    const rules = warrantyRules || {};
+    const cat = rules[category] || { standard: 1 };
+    let years = parseInt(cat.standard) || 1;
+    if (typeof cat.standard === 'string' && cat.standard.toLowerCase() === 'lifetime') {
+        years = 25;
+    }
+    const end = new Date(purchaseDate);
+    end.setFullYear(end.getFullYear() + years);
+    return end.toISOString();
+}
+
+// ── MOCK ORDERS DATA ─────────────────────────────────────────────────────────
+const MOCK_ORDERS_BASE = [
+    {
+        id: '#ST-20240401-001',
+        status: 'delivered',
+        statusLabel: 'Delivered',
+        createdAt: '2024-04-01T10:00:00Z',
+        totalAmount: 85000,
+        primaryCategory: 'cpu',
+        items: [
+            { name: 'Intel Core i9-14900K Processor', image: '/images/cpu.png', quantity: 1, category: 'cpu' },
+            { name: 'ASUS ROG STRIX Z790-E Motherboard', image: '/images/motherboard.png', quantity: 1, category: 'motherboard' },
+            { name: 'Corsair Vengeance 32GB DDR5 RAM', image: '/images/ram.png', quantity: 2, category: 'ram' },
+            { name: 'Samsung 980 Pro 2TB NVMe SSD', image: '/images/ssd.png', quantity: 1, category: 'ssd' },
+        ]
+    },
+    {
+        id: '#ST-20240215-002',
+        status: 'delivered',
+        statusLabel: 'Delivered',
+        createdAt: '2024-02-15T14:30:00Z',
+        totalAmount: 42500,
+        primaryCategory: 'cctv_camera',
+        items: [
+            { name: 'Hikvision DS-2CD2143G2 4MP Camera', image: '/images/cctv.png', quantity: 4, category: 'cctv_camera' },
+            { name: 'Dahua 16CH NVR Network Recorder', image: '/images/nvr.png', quantity: 1, category: 'nvr' },
+        ]
+    },
+    {
+        id: '#ST-20241010-003',
+        status: 'shipped',
+        statusLabel: 'Shipped',
+        createdAt: '2024-10-10T09:15:00Z',
+        totalAmount: 28900,
+        primaryCategory: 'monitor',
+        items: [
+            { name: 'Dell UltraSharp 27" 4K Monitor', image: '/images/monitor.png', quantity: 1, category: 'monitor' },
+            { name: 'Seasonic Focus GX 850W PSU', image: '/images/psu.png', quantity: 1, category: 'psu' },
+        ]
+    },
+];
+
 export default function AccountPage() {
     const { userState, setUserState, showToast } = useContext(AuthContext);
     const router = useRouter();
+
+    const [warrantyRules, setWarrantyRules] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchRules = async () => {
+            try {
+                const res = await fetch('/api/settings/warranty');
+                if (res.ok) {
+                    const data = await res.json();
+                    setWarrantyRules(data);
+                }
+            } catch (err) {
+                console.error('Failed to load warranty rules:', err);
+            }
+        };
+        fetchRules();
+    }, []);
 
     // ── Local UI States ─────────────────────────────────────────────────────────────
     const [activeTab, setActiveTab] = useState<'login' | 'signup' | 'forgot'>('login');
@@ -151,24 +319,149 @@ export default function AccountPage() {
         </>
     );
 
-    const renderOrders = () => (
-        <div className="dash-content-area">
-            <h2 className="content-title">My Orders</h2>
-            <div className="orders-list">
-                {[1,2,3].map(i => (
-                    <div key={i} className="order-item-card">
-                        <div className="order-info">
-                            <div className="id">#ST-20240{i}-00{i}</div>
-                            <div className="date">Placed on Oct {10+i}, 2024</div>
+    const renderOrders = () => {
+        // Build orders with dynamic warranty end dates
+        const orders = MOCK_ORDERS_BASE.map(order => ({
+            ...order,
+            warrantyEndDate: calculateWarrantyEnd(order.createdAt, order.primaryCategory, warrantyRules)
+        }));
+
+        return (
+            <div className="dash-content-area">
+                <h2 className="content-title">My Orders</h2>
+                <div className="orders-list">
+                    {orders.map((order, i) => (
+                        <div key={i} className="order-card">
+                            {/* Order Header */}
+                            <div className="order-header">
+                                <div className="order-header-left">
+                                    <div className="order-id">{order.id}</div>
+                                    <div className="order-date-small">
+                                        Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </div>
+                                </div>
+                                <span className={`badge-status ${order.status}`}>{order.statusLabel}</span>
+                            </div>
+
+                            {/* Tech Telemetry Grid: Order Date | Warranty Till | Total Amount */}
+                            <div className="tech-order-dashboard">
+                                <div className="tech-telemetry-grid">
+                                    {/* Block 1: Purchase Date */}
+                                    <div className="tech-telemetry-block blue">
+                                        <div className="block-accent"></div>
+                                        <div className="block-header">
+                                            <span className="block-code">[SYS_PURCHASE_DATE]</span>
+                                            <i className="fas fa-calendar-alt block-icon"></i>
+                                        </div>
+                                        <div className="block-body">
+                                            <span className="block-label">Order Date</span>
+                                            <span className="block-value">
+                                                {new Date(order.createdAt).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Block 2: Warranty Expiry */}
+                                    <div className="tech-telemetry-block green">
+                                        <div className="block-accent"></div>
+                                        <div className="block-header">
+                                            <span className="block-code">[SYS_WARRANTY_EXPIRY]</span>
+                                            <i className="fas fa-shield-alt block-icon"></i>
+                                        </div>
+                                        <div className="block-body">
+                                            <span className="block-label">Warranty Till</span>
+                                            <span className="block-value">
+                                                {new Date(order.warrantyEndDate).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Block 3: Total Amount */}
+                                    <div className="tech-telemetry-block teal">
+                                        <div className="block-accent"></div>
+                                        <div className="block-header">
+                                            <span className="block-code">[SYS_NET_TRANSACTION]</span>
+                                            <i className="fas fa-wallet block-icon"></i>
+                                        </div>
+                                        <div className="block-body">
+                                            <span className="block-label">Total Amount</span>
+                                            <span className="block-value amount">৳{order.totalAmount.toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Products in this order */}
+                            <div className="order-products">
+                                <h4>Products in this order:</h4>
+                                <div className="products-mini-list">
+                                    {order.items.slice(0, 3).map((item, idx) => (
+                                        <div key={idx} className="mini-product">
+                                            <img src={item.image} alt={item.name}
+                                                onError={(e) => {
+                                                    (e.target as HTMLImageElement).src = 'https://placehold.co/64x64/f8fafc/94a3b8?text=IMG';
+                                                }}
+                                            />
+                                            <div className="mini-product-info">
+                                                <span className="mini-product-name">{item.name}</span>
+                                                <span className="mini-product-qty">x{item.quantity}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {order.items.length > 3 && (
+                                        <div className="more-products">+{order.items.length - 3} more item(s)</div>
+                                    )}
+                                </div>
+
+                                {/* Live Warranty Countdown — below products */}
+                                <div className="order-warranty-countdown-wrapper">
+                                    <div className="countdown-header-label">
+                                        <i className="fas fa-clock" style={{ color: '#db4b27' }}></i>
+                                        <span>Time Remaining on Warranty:</span>
+                                    </div>
+                                    <WarrantyCountdown
+                                        startDate={order.createdAt}
+                                        endDate={order.warrantyEndDate}
+                                        showToast={showToast}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Order Actions */}
+                            <div className="tech-order-actions">
+                                <button
+                                    type="button"
+                                    className="tech-action-btn track"
+                                    onClick={() => showToast('Tracking info: Your order is on the way!', 'success')}
+                                >
+                                    <i className="fas fa-map-marker-alt"></i> Track Order
+                                </button>
+                                <button
+                                    type="button"
+                                    className="tech-action-btn invoice"
+                                    onClick={() => showToast('Invoice download started!', 'success')}
+                                >
+                                    <i className="fas fa-file-invoice"></i> Download Invoice
+                                </button>
+                            </div>
                         </div>
-                        <div className="order-price">৳{ (i * 15400).toLocaleString() }</div>
-                        <div className="order-status"><span className={`badge-status ${i === 2 ? 'shipped' : 'delivered'}`}>{i === 2 ? 'Shipped' : 'Delivered'}</span></div>
-                        <button className="view-btn">Track Order</button>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     const renderWishlist = () => (
         <div className="dash-content-area">

@@ -1309,6 +1309,161 @@ const BannersView = ({ token, onUnauthorized }: { token: string; onUnauthorized:
   );
 };
 
+// ─── Warranty Settings ────────────────────────────────────────────────────────
+const WarrantySettingsView = ({ token, onUnauthorized }: { token: string; onUnauthorized: () => void }) => {
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState<{ text: string; ok: boolean } | null>(null);
+
+  const [periods, setPeriods] = useState<Record<string, { standard: string | number; extended: string | number; premium: string | number }>>({
+    cpu: { standard: 3, extended: 4, premium: 5 },
+    motherboard: { standard: 3, extended: 4, premium: 5 },
+    ram: { standard: 'Lifetime', extended: 'Lifetime', premium: 'Lifetime' },
+    ssd: { standard: 5, extended: 6, premium: 7 },
+    hdd: { standard: 2, extended: 3, premium: 5 },
+    psu: { standard: 5, extended: 7, premium: 10 },
+    monitor: { standard: 3, extended: 4, premium: 5 },
+    cctv_camera: { standard: 1, extended: 2, premium: 3 },
+    nvr: { standard: 1, extended: 2, premium: 3 },
+    dvr: { standard: 1, extended: 2, premium: 3 },
+  });
+
+  useEffect(() => {
+    const fetchRules = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch('/api/settings/warranty');
+        if (res.ok) {
+          const data = await res.json();
+          setPeriods(data);
+        } else {
+          console.error('Failed to load warranty rules from API');
+        }
+      } catch (err) {
+        console.error('Network error loading warranty rules:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRules();
+  }, []);
+
+  const categoryNames: Record<string, string> = {
+    cpu: 'Processor (CPU)',
+    motherboard: 'Motherboard',
+    ram: 'RAM',
+    ssd: 'SSD',
+    hdd: 'HDD',
+    psu: 'Power Supply',
+    monitor: 'Monitor',
+    cctv_camera: 'CCTV Camera',
+    nvr: 'NVR',
+    dvr: 'DVR'
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setMsg(null);
+    try {
+      const res = await fetch('/api/settings/warranty', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(periods)
+      });
+      if (res.ok) {
+        setMsg({ text: 'Warranty settings saved successfully!', ok: true });
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        setMsg({ text: errorData.error || 'Failed to save warranty settings', ok: false });
+      }
+    } catch (err: any) {
+      setMsg({ text: 'Network error saving settings: ' + err.message, ok: false });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleChange = (cat: string, field: 'standard' | 'extended' | 'premium', value: string) => {
+    setPeriods(prev => ({
+      ...prev,
+      [cat]: {
+        ...prev[cat],
+        [field]: value
+      }
+    }));
+  };
+
+  if (loading) return <Spinner />;
+
+  return (
+    <div>
+      <PageHeader title="Warranty Configuration">
+        <Btn onClick={handleSave} disabled={saving}>
+          <i className="fas fa-save" style={{ fontSize: '11px' }}></i> {saving ? 'Saving…' : 'Save Warranty Settings'}
+        </Btn>
+      </PageHeader>
+
+      {msg && (
+        <div style={{
+          marginBottom: '16px',
+          padding: '10px 16px',
+          borderRadius: '6px',
+          fontSize: '13px',
+          background: msg.ok ? '#f0fdf4' : '#fff1f2',
+          color: msg.ok ? C.green : C.red,
+          border: `1px solid ${msg.ok ? '#bbf7d0' : '#fecdd3'}`
+        }}>
+          {msg.text}
+        </div>
+      )}
+
+      <Card>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <TH>Category</TH>
+              <TH>Standard (years)</TH>
+              <TH>Extended (years)</TH>
+              <TH>Premium (years)</TH>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(periods).map(cat => (
+              <tr key={cat} style={{ transition: 'background 0.1s' }} onMouseEnter={e => (e.currentTarget.style.background = C.bg)} onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                <TD style={{ fontWeight: 600, width: '250px' }}>{categoryNames[cat] || cat}</TD>
+                <TD>
+                  <Input
+                    type="text"
+                    value={periods[cat].standard}
+                    onChange={e => handleChange(cat, 'standard', e.target.value)}
+                    style={{ width: '120px' }}
+                  />
+                </TD>
+                <TD>
+                  <Input
+                    type="text"
+                    value={periods[cat].extended}
+                    onChange={e => handleChange(cat, 'extended', e.target.value)}
+                    style={{ width: '120px' }}
+                  />
+                </TD>
+                <TD>
+                  <Input
+                    type="text"
+                    value={periods[cat].premium}
+                    onChange={e => handleChange(cat, 'premium', e.target.value)}
+                    style={{ width: '120px' }}
+                  />
+                </TD>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+    </div>
+  );
+};
+
 // ─── Sidebar nav item ─────────────────────────────────────────────────────────
 const NavItem = ({ icon, label, section, current, onClick, badge }: { icon: string; label: string; section: string; current: string; onClick: (s: string) => void; badge?: number }) => {
   const active = current === section || (section === 'inventory' && (current === 'add-product' || current === 'edit-product'));
@@ -1418,6 +1573,7 @@ export default function AdminPage() {
     { icon: 'fa-star', label: 'Reviews', section: 'reviews', badge: pendingReviews > 0 ? pendingReviews : undefined },
     { icon: 'fa-users', label: 'Users', section: 'users' },
     { icon: 'fa-images', label: 'Banners', section: 'banners' },
+    { icon: 'fa-shield-alt', label: 'Warranty Rules', section: 'warranty' },
   ];
 
   return (
@@ -1451,6 +1607,7 @@ export default function AdminPage() {
         {currentView === 'reviews' && <ReviewsView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'users' && <UsersView token={token} onUnauthorized={handleLogout} />}
         {currentView === 'banners' && <BannersView token={token} onUnauthorized={handleLogout} />}
+        {currentView === 'warranty' && <WarrantySettingsView token={token} onUnauthorized={handleLogout} />}
       </main>
     </div>
   );
